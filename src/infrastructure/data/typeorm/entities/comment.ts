@@ -1,26 +1,17 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CommentEntity } from "./comment";
 import { UserEntity } from "./user";
+import { VideoEntity } from "./video";
 
 @Entity()
-export class VideoEntity extends BaseEntity{
+export class CommentEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({type: "varchar", nullable: false})
-    title: string 
-    
-    @Column({type: "varchar", nullable: false})
-    thumbnail: string 
-
-    @Column({type: "varchar", nullable: false})
-    path: string 
+    content: string 
 
     @ManyToOne(() => UserEntity, (user) => user.videos, {eager: true})
     created_by: UserEntity
-
-    @Column({type: "int", default: 0})
-    viewsCount: number 
 
     @Column({type: "int", default: 0})
     likesCount: number 
@@ -31,9 +22,18 @@ export class VideoEntity extends BaseEntity{
     @CreateDateColumn()
     createdAt: Date;
 
-    @Column({type: "varchar", nullable: true})
-    description: string 
+    @ManyToOne(() => VideoEntity, (video) => video.comments)
+    video: VideoEntity
 
-    @OneToMany(() => CommentEntity, (comment) => comment.video)
+    @Column({type: "int", nullable: true})
+    videoId: number
+
+    @ManyToOne(() => CommentEntity, (comment) => comment.comments)
+    comment: CommentEntity
+
+    @Column({type: "int", nullable: true})
+    commentId: number
+
+    @OneToMany(() => CommentEntity, (comment) => comment.comment)
     comments: CommentEntity[]
 }

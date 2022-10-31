@@ -15,6 +15,9 @@ export class UserEntity extends BaseEntity{
     @Column({type: "varchar", nullable: false})
     name: string  
 
+    @Column({type: "varchar", default: "default_avatar.png"})
+    avatar: string 
+
     @OneToMany(() => VideoEntity, (video) => video.created_by)
     videos: VideoEntity[]
 }

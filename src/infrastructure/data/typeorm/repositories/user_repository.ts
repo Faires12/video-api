@@ -1,14 +1,18 @@
 import { User } from "../../../../domain/entities/user";
-import { UserRepositoryInterface } from "../../../../domain/repositories/user_repository";
+import { CreateUserInterface, UserRepositoryInterface } from "../../../../domain/repositories/user_repository";
 import {UserEntity} from '../entities/user'
 
 
 export class UserRepository implements UserRepositoryInterface{
-    async create(user: User): Promise<User> {
+    async create(user: CreateUserInterface): Promise<User> {
         const userEntity = new UserEntity()
-        userEntity.email = user.email
-        userEntity.name = user.name
-        userEntity.password = user.password
+        if(user.email && user.name && user.password){
+            userEntity.email = user.email
+            userEntity.name = user.name
+            userEntity.password = user.password   
+        }       
+        if(user.avatar)
+            userEntity.avatar = user.avatar
         await userEntity.save()
         return userEntity
     }

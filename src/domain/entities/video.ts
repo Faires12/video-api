@@ -1,9 +1,11 @@
+import { User } from "./user"
+
 export interface Video{
     id?: number
     title: string
     thumbnail: string
     path: string
-    created_by: number
+    created_by?: User
     viewsCount?: number
     likesCount?: number
     deslikesCount?: number

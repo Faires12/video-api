@@ -12,7 +12,7 @@ export class LoginService implements Login {
 
   async login(email: string, password: string): Promise<string | null> {
     const existingUser = await this.userRepository.getByEmail(email);
-    if (!existingUser) return null;
+    if (!existingUser || !existingUser.password) return null;
     if (!await this.decrypter.decrypt(existingUser.password, password)) return null;
     return await this.jwtEncrypter.encrypt({id: existingUser.id});
   }

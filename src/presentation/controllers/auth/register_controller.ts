@@ -1,31 +1,38 @@
+import { FileInterface } from "../../../application/interfaces/file_interface";
 import { Login } from "../../../domain/usecases/auth/login";
 import { Register } from "../../../domain/usecases/auth/register";
-import { badRequest, forbidden, ok, serverError } from "../../helpers/http";
+import {forbidden, ok} from "../../helpers/http";
 import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
-export class RegisterController implements Controller {
-    constructor(private readonly validation : Validation, private readonly registerService: Register,
-        private readonly loginService : Login) {}
+export class RegisterController extends Controller {
+  constructor(
+    validation: Validation,
+    private readonly registerService: Register,
+    private readonly loginService: Login
+  ) {
+    super(validation);
+  }
 
-    async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-        try {
-            const error = this.validation.validate(httpRequest.body)
-            if(error)
-                return badRequest(error)
+  async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { email, name, password } = httpRequest.body;
 
-            const {email, name, password} = httpRequest.body
-
-            const user = await this.registerService.register({email, name, password})
-            if(!user)
-                return forbidden(new Error("User with email already exists"))
-            const accessToken = await this.loginService.login(email, password)
-            if(!accessToken)
-                return forbidden(new Error("Incorrect email or password"))
-            
-            return ok(accessToken)
-        } catch (error) {
-            return serverError()
-        }
+    let avatar;
+    if (httpRequest.files && httpRequest.files.avatar) {
+      avatar = httpRequest.files.avatar as FileInterface;
     }
+
+    const user = await this.registerService.register({
+      email,
+      name,
+      password,
+      avatarFile: avatar,
+    });
+    if (!user) return forbidden(new Error("User with email already exists"));
+    const accessToken = await this.loginService.login(email, password);
+    if (!accessToken)
+      return forbidden(new Error("Incorrect email or password"));
+
+    return ok(accessToken);
+  }
 }

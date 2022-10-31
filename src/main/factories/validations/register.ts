@@ -1,5 +1,5 @@
 import { ValidatorAdapter } from "../../../infrastructure/adapters/validator_adapter";
-import { EmailValidation, MinLengthValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../presentation/validations";
+import { EmailValidation, FileValidation, MinLengthValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../presentation/validations";
 
 export default function makeRegisterValidation() : Validation {
     const validations : Validation[] = []
@@ -10,5 +10,7 @@ export default function makeRegisterValidation() : Validation {
     for(const fieldname of ['password', 'name']){
         validations.push(new MinLengthValidation(fieldname, 3))
     }
+    validations.push(new FileValidation('avatar', 5000, ["image/jpeg", "image/png"], true))
+
     return new ValidationComposite(validations)
 }
