@@ -1,26 +1,21 @@
 import { GetUserByToken } from "../../domain/usecases/auth/get_user_by_token";
-import { badRequest, Unauthorized, ok, serverError } from "../helpers/http";
+import { Unauthorized } from "../helpers/http";
 import { HttpRequest, HttpResponse, Middleware } from "../interfaces/http";
 import { Validation } from "../validations";
 
-export class AuthenticationMiddleware implements Middleware {
-    constructor(private readonly validation: Validation,
-        private readonly getUserByTokenService: GetUserByToken) {}
+export class AuthenticationMiddleware extends Middleware {
+  constructor(
+    validation: Validation,
+    private readonly getUserByTokenService: GetUserByToken
+  ) {
+    super(validation);
+  }
 
-    async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-        try {
-            const error = this.validation.validate(httpRequest.headers)
-            if(error)
-                return badRequest(error)
+  async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { token } = httpRequest.headers;
 
-            const {token} = httpRequest.headers
-
-            const user = await this.getUserByTokenService.getByToken(token)
-            if(user == null)
-                return Unauthorized()
-            return ok({userId: user.id})
-        } catch (error) {
-            return serverError()
-        }
-    }
+    const user = await this.getUserByTokenService.getByToken(token);
+    if (user == null) return Unauthorized();
+    return await this.handleNext({ body: { userId: user.id } });
+  }
 }

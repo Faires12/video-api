@@ -23,8 +23,8 @@ app.set("port", process.env.PORT || 3000)
 
 app.post('/api/register', adaptRoute(makeRegisterController()))
 app.post('/api/login', adaptRoute(makeLoginController()))
-app.post('/api/video', adaptMiddleware(makeAuthMiddleware()), adaptRoute(makeUploadVideoController()))
-app.post('/api/comment/video', adaptMiddleware(makeAuthMiddleware()), adaptRoute(makeCreateVideoCommentController()))
-app.post('/api/comment/response', adaptMiddleware(makeAuthMiddleware()), adaptRoute(makeCreateResponseCommentController()))
+app.post('/api/video', adaptMiddleware(makeAuthMiddleware(false)), adaptRoute(makeUploadVideoController()))
+app.post('/api/comment/video', adaptMiddleware(makeAuthMiddleware(false)), adaptRoute(makeCreateVideoCommentController()))
+app.post('/api/comment/response', adaptMiddleware(makeAuthMiddleware(false)), adaptRoute(makeCreateResponseCommentController()))
 
 export default app
