@@ -1,13 +1,12 @@
 import { InvalidParamError } from "../errors";
 import { Validation } from "./validation";
 
-export class MinLengthValidation implements Validation{
-    constructor(private readonly fieldname: string, private readonly minLength: number) {}
+export class BooleanValidation implements Validation{
+    constructor(private readonly fieldname : string){}
 
     validate(input: any): Error | null {
-        if(input[this.fieldname].length < this.minLength)
+        if(!(typeof input[this.fieldname] === "boolean"))
             return new InvalidParamError(this.fieldname)
         return null
     }
-    
 }

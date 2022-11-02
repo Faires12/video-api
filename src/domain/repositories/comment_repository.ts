@@ -13,4 +13,5 @@ export interface CommentRepositoryInterface{
     getAll() : Promise<Comment[]>
     getById(id: number) : Promise<Comment | null>
     delete(id: number) : Promise<Comment>
+    changeEvaluations(id: number, isLike: boolean, isPositive: boolean) : Promise<void>
 }

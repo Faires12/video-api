@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { CommentEntity } from "./entities/comment";
+import { EvaluationEntity } from "./entities/evaluation";
 import { UserEntity } from "./entities/user";
 import { VideoEntity } from "./entities/video";
 
@@ -12,6 +13,6 @@ export const AppDataSource = new DataSource({
   database: "cleannode",
   synchronize: true,
   // logging: true,
-  entities: [UserEntity, VideoEntity, CommentEntity],
+  entities: [UserEntity, VideoEntity, CommentEntity, EvaluationEntity],
 });
 

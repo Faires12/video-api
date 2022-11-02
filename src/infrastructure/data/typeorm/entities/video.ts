@@ -1,5 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CommentEntity } from "./comment";
+import { EvaluationEntity } from "./evaluation";
 import { UserEntity } from "./user";
 
 @Entity()
@@ -36,4 +37,7 @@ export class VideoEntity extends BaseEntity{
 
     @OneToMany(() => CommentEntity, (comment) => comment.video)
     comments: CommentEntity[]
+
+    @OneToMany(() => EvaluationEntity, (comment) => comment.video)
+    evaluations: EvaluationEntity[]
 }

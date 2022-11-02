@@ -14,4 +14,5 @@ export interface VideoRepositoryInterface{
     getAll() : Promise<Video[]>
     getById(id: number) : Promise<Video | null>
     delete(id: number) : Promise<Video>
+    changeEvaluations(id: number, isLike: boolean, isPositive: boolean) : Promise<void>
 }

@@ -1,4 +1,6 @@
 import { BaseEntity, PrimaryGeneratedColumn, Entity, Column, OneToMany } from "typeorm";
+import { CommentEntity } from "./comment";
+import { EvaluationEntity } from "./evaluation";
 import { VideoEntity } from "./video";
 
 @Entity()
@@ -20,4 +22,10 @@ export class UserEntity extends BaseEntity{
 
     @OneToMany(() => VideoEntity, (video) => video.created_by)
     videos: VideoEntity[]
+
+    @OneToMany(() => CommentEntity, (comment) => comment.created_by)
+    comments: CommentEntity[]
+
+    @OneToMany(() => EvaluationEntity, (evaluation) => evaluation.created_by)
+    evaluations: EvaluationEntity[]
 }

@@ -1,4 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { EvaluationEntity } from "./evaluation";
 import { UserEntity } from "./user";
 import { VideoEntity } from "./video";
 
@@ -10,7 +11,7 @@ export class CommentEntity extends BaseEntity{
     @Column({type: "varchar", nullable: false})
     content: string 
 
-    @ManyToOne(() => UserEntity, (user) => user.videos, {eager: true})
+    @ManyToOne(() => UserEntity, (user) => user.comments, {eager: true})
     created_by: UserEntity
 
     @Column({type: "int", default: 0})
@@ -36,4 +37,7 @@ export class CommentEntity extends BaseEntity{
 
     @OneToMany(() => CommentEntity, (comment) => comment.comment)
     comments: CommentEntity[]
+
+    @OneToMany(() => EvaluationEntity, (evaluation => evaluation.comment))
+    evaluations: EvaluationEntity[]
 }
