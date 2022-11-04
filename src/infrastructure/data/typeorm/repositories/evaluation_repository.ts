@@ -1,6 +1,6 @@
-import { Evaluation } from "../../../../domain/entities/Evaluation";
-import { CreateEvaluationInterface, EvaluationRepositoryInterface, UpdateEvaluationInterface } from "../../../../domain/repositories/evaluation_repository";
-import { EvaluationEntity } from "../entities/evaluation";
+import { Evaluation } from "../../../../domain/entities"
+import { CreateEvaluationInterface, EvaluationRepositoryInterface, UpdateEvaluationInterface } from "../../../../domain/repositories"
+import { EvaluationEntity } from "../entities"
 
 export class EvaluationRepository implements EvaluationRepositoryInterface{
     async create(evaluation: CreateEvaluationInterface): Promise<Evaluation> {

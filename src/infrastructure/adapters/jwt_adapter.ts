@@ -1,6 +1,5 @@
-import { JwtEncrypter } from "../../application/interfaces/jwt_encrypter";
 import jwt from 'jsonwebtoken'
-import { JwtDecrypter } from "../../application/interfaces/jwt_decrypter";
+import { JwtDecrypter, JwtEncrypter } from '../../application/interfaces'
 
 export class JwtAdapter implements JwtEncrypter, JwtDecrypter{
     constructor(private readonly secret : string){}

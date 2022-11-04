@@ -1,7 +1,7 @@
-import { GetVideoComments } from "../../../domain/usecases/comment/get_video_comments";
-import { forbidden, ok } from "../../helpers/http";
-import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
-import { Validation } from "../../validations";
+import { GetVideoComments } from "../../../domain/usecases"
+import { forbidden, ok } from "../../helpers/http"
+import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http"
+import { Validation } from "../../validations"
 
 export class GetVideoCommentsController extends Controller{
     constructor(validation: Validation, private readonly getVideoCommentsService: GetVideoComments) {super(validation)}

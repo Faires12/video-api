@@ -1,5 +1,4 @@
-import { FileInterface } from "../../../application/interfaces/file_interface";
-import { Video } from "../../entities/video";
+import { FileInterface, Video } from "../../entities";
 
 export interface UploadVideoInterface{
     title: string

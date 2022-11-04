@@ -1,4 +1,4 @@
-import { Evaluation } from "../entities/Evaluation"
+import { Evaluation } from "../entities"
 
 export interface CreateEvaluationInterface{
     created_by: number,

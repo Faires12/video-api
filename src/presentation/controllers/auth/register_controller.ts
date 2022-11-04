@@ -1,11 +1,11 @@
-import { FileInterface } from "../../../application/interfaces/file_interface";
-import { Login } from "../../../domain/usecases/auth/login";
-import { Register } from "../../../domain/usecases/auth/register";
-import {forbidden, ok} from "../../helpers/http";
+import { FileInterface } from "../../../domain/entities";
+import { Login, Register } from "../../../domain/usecases";
+import { forbidden, ok } from "../../helpers/http";
 import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
-export class RegisterController extends Controller {
+
+export class RegisterController extends Controller  {
   constructor(
     validation: Validation,
     private readonly registerService: Register,

@@ -1,6 +1,5 @@
-import { Base64Validator, EmailValidator } from "../../presentation/interfaces/validators";
+import { Base64Validator, EmailValidator, JwtValidator } from "../../presentation/interfaces/validators";
 import validator from "validator";
-import { JwtValidator } from "../../presentation/interfaces/validators/jwt_validator";
 
 export class ValidatorAdapter implements EmailValidator, JwtValidator, Base64Validator {
     validateJwt(jwt: string): boolean {

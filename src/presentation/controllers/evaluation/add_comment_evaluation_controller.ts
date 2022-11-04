@@ -1,7 +1,7 @@
-import { AddEvaluationService } from "../../../application/services/add_evaluation_service";
-import { forbidden, ok } from "../../helpers/http";
-import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
-import { Validation } from "../../validations";
+import { AddEvaluationService } from "../../../application/services"
+import { forbidden, ok } from "../../helpers/http"
+import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http"
+import { Validation } from "../../validations"
 
 export class AddCommentEvaluationController extends Controller{
     constructor(validation : Validation, private readonly addEvaluationService : AddEvaluationService) {super(validation)}

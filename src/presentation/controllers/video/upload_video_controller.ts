@@ -1,7 +1,7 @@
-import { FileInterface } from "../../../application/interfaces/file_interface";
-import { UploadVideo } from "../../../domain/usecases/video/upload_video";
+import { FileInterface } from "../../../domain/entities";
+import { UploadVideo } from "../../../domain/usecases";
 import { ok } from "../../helpers/http";
-import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
+import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http"
 import { Validation } from "../../validations";
 
 export class UploadVideoController extends Controller {

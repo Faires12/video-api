@@ -1,7 +1,8 @@
-import { GetUserByToken } from "../../domain/usecases/auth/get_user_by_token";
+import { GetUserByToken } from "../../domain/usecases";
+import { Middleware, HttpRequest, HttpResponse } from "../interfaces/http"
 import { Unauthorized } from "../helpers/http";
-import { HttpRequest, HttpResponse, Middleware } from "../interfaces/http";
 import { Validation } from "../validations";
+
 
 export class AuthenticationMiddleware extends Middleware {
   constructor(

@@ -1,11 +1,10 @@
-import { GetUserByTokenService } from "../../../application/services/get_user_by_token_service";
-import { JwtAdapter } from "../../../infrastructure/adapters/jwt_adapter";
-import { UserRepository } from "../../../infrastructure/data/typeorm/repositories/user_repository";
-import { AuthenticationMiddleware } from "../../../presentation/middlewares/authentication_middleware";
-import { AuthorizationMiddleware } from "../../../presentation/middlewares/authorization_middleware";
-import makeAuthValidation from "../validations/auth";
+import { GetUserByTokenService } from "../../../application/services"
+import { JwtAdapter } from "../../../infrastructure/adapters"
+import { UserRepository } from "../../../infrastructure/data/typeorm/repositories"
+import { AuthenticationMiddleware, AuthorizationMiddleware } from "../../../presentation/middlewares"
+import { makeAuthValidation } from "../validations"
 
-export default function makeAuthMiddleware(needAuthorization: boolean) : AuthenticationMiddleware {
+export function makeAuthMiddleware(needAuthorization: boolean) : AuthenticationMiddleware {
     const userRepository = new UserRepository()
     const jwtAdapter = new JwtAdapter(process.env.SECRET || "adsas")
     const getUserByTokenService = new GetUserByTokenService(userRepository, jwtAdapter)

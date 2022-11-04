@@ -1,4 +1,4 @@
-import { Comment } from "../../entities/comment";
+import { Comment } from "../../entities";
 
 export interface CreateCommentInterface{
     userId: number

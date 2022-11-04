@@ -1,4 +1,4 @@
-import { Video } from "../entities/video"
+import { Video } from "../entities"
 
 export interface CreateVideoInterface{
     title: string,

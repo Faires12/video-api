@@ -1,7 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CommentEntity } from "./comment";
-import { EvaluationEntity } from "./evaluation";
-import { UserEntity } from "./user";
+import { CommentEntity, EvaluationEntity, UserEntity } from "./";
 
 @Entity()
 export class VideoEntity extends BaseEntity{

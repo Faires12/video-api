@@ -1,5 +1,4 @@
-import { FileInterface } from "../../../application/interfaces/file_interface";
-import { User } from "../../entities/user";
+import { FileInterface, User } from "../../entities";
 
 export interface RegisterInterface {
     email: string

@@ -1,7 +1,6 @@
 import { BaseEntity, PrimaryGeneratedColumn, Entity, Column, OneToMany } from "typeorm";
-import { CommentEntity } from "./comment";
-import { EvaluationEntity } from "./evaluation";
-import { VideoEntity } from "./video";
+import { CommentEntity, EvaluationEntity, VideoEntity } from "./";
+
 
 @Entity()
 export class UserEntity extends BaseEntity{

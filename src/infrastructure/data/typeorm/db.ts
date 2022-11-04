@@ -1,8 +1,5 @@
 import { DataSource } from "typeorm";
-import { CommentEntity } from "./entities/comment";
-import { EvaluationEntity } from "./entities/evaluation";
-import { UserEntity } from "./entities/user";
-import { VideoEntity } from "./entities/video";
+import { CommentEntity, EvaluationEntity, UserEntity, VideoEntity } from "./entities";
 
 export const AppDataSource = new DataSource({
   type: "postgres",

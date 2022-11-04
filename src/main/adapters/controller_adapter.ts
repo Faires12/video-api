@@ -1,4 +1,4 @@
-import { query, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { Controller, HttpRequest } from '../../presentation/interfaces/http'
 
 export const adaptRoute = (controller : Controller) => {

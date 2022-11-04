@@ -1,11 +1,6 @@
-import { Comment } from "../../../../domain/entities/comment";
-import {
-  CommentRepositoryInterface,
-  CreateCommentInterface,
-  GetVideoCommentsInterface,
-} from "../../../../domain/repositories/comment_repository";
-import { CommentEntity } from "../entities/comment";
-import { UserEntity } from "../entities/user";
+import { Comment } from "../../../../domain/entities";
+import { CommentRepositoryInterface, CreateCommentInterface, GetVideoCommentsInterface } from "../../../../domain/repositories";
+import { CommentEntity, UserEntity } from "../entities";
 
 export class CommentRepository implements CommentRepositoryInterface {
   async getByVideo(infos: GetVideoCommentsInterface): Promise<Comment[]> {

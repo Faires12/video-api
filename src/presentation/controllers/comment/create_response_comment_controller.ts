@@ -1,7 +1,8 @@
-import { CreateComment } from "../../../domain/usecases/comment/create_comment";
+import { CreateComment } from "../../../domain/usecases";
 import { forbidden, ok } from "../../helpers/http";
 import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
+
 
 export class CreateResponseCommentController extends Controller {
   constructor(

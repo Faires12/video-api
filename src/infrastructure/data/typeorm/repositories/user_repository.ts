@@ -1,7 +1,6 @@
-import { User } from "../../../../domain/entities/user";
-import { CreateUserInterface, UserRepositoryInterface } from "../../../../domain/repositories/user_repository";
-import {UserEntity} from '../entities/user'
-
+import { User } from "../../../../domain/entities"
+import { CreateUserInterface, UserRepositoryInterface } from "../../../../domain/repositories"
+import { UserEntity } from "../entities"
 
 export class UserRepository implements UserRepositoryInterface{
     async create(user: CreateUserInterface): Promise<User> {

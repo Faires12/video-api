@@ -1,10 +1,6 @@
-import { Video } from "../../../../domain/entities/video";
-import {
-  CreateVideoInterface,
-  VideoRepositoryInterface,
-} from "../../../../domain/repositories/video_repository";
-import { UserEntity } from "../entities/user";
-import { VideoEntity } from "../entities/video";
+import { Video } from "../../../../domain/entities";
+import { CreateVideoInterface, VideoRepositoryInterface } from "../../../../domain/repositories";
+import { UserEntity, VideoEntity } from "../entities";
 
 export class VideoRepository implements VideoRepositoryInterface {
   async changeEvaluations(
