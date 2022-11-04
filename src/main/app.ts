@@ -13,6 +13,8 @@ import { makeCreateVideoCommentController } from './factories/controllers/create
 import { makeCreateResponseCommentController } from './factories/controllers/create_response_comment'
 import { makeAddVideoEvaluationController } from './factories/controllers/add_video_evaluation'
 import { makeAddCommentEvaluationController } from './factories/controllers/add_comment_evaluation'
+import { makeGetVideoCommentsController } from './factories/controllers/get_video_comments'
+import { makeGetVideoController } from './factories/controllers/get_video'
 
 const app = express()
 
@@ -25,7 +27,9 @@ app.set("port", process.env.PORT || 3000)
 
 app.post('/api/register', adaptRoute(makeRegisterController()))
 app.post('/api/login', adaptRoute(makeLoginController()))
+app.get('/api/video/:id', adaptRoute(makeGetVideoController()))
 app.post('/api/video', adaptMiddleware(makeAuthMiddleware(false)), adaptRoute(makeUploadVideoController()))
+app.get('/api/comment/video/:videoId', adaptRoute(makeGetVideoCommentsController()))
 app.post('/api/comment/video', adaptMiddleware(makeAuthMiddleware(false)), adaptRoute(makeCreateVideoCommentController()))
 app.post('/api/comment/response', adaptMiddleware(makeAuthMiddleware(false)), adaptRoute(makeCreateResponseCommentController()))
 app.post('/api/evaluation/video', adaptMiddleware(makeAuthMiddleware(false)), adaptRoute(makeAddVideoEvaluationController()))

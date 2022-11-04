@@ -10,19 +10,31 @@ export class VideoRepository implements VideoRepositoryInterface {
   async changeEvaluations(
     id: number,
     isLike: boolean,
-    isPositive: boolean
+    isPositive: boolean,
+    isChange?: boolean
   ): Promise<void> {
     const video = await VideoEntity.findOneBy({ id });
-    if (!video) throw new Error("Video not found");
+    if (!video) throw new Error("Comment not found");
     if (isLike) {
-      if (isPositive) video.likesCount++;
-      else video.likesCount--;
+      if (isChange) {
+        video.likesCount++;
+        video.deslikesCount--;
+      } else {
+        if (isPositive) video.likesCount++;
+        else video.likesCount--;
+      }
     } else {
-      if (isPositive) video.deslikesCount++;
-      else video.deslikesCount--;
+      if (isChange) {
+        video.deslikesCount++;
+        video.likesCount--;
+      } else {
+        if (isPositive) video.deslikesCount++;
+        else video.deslikesCount--;
+      }
     }
-    await video.save()
+    await video.save();
   }
+
   async create(video: CreateVideoInterface): Promise<Video> {
     const videoEntity = new VideoEntity();
 
@@ -44,12 +56,15 @@ export class VideoRepository implements VideoRepositoryInterface {
       description: videoEntity.description,
     };
   }
+
   update(video: Video): Promise<Video> {
     throw new Error("Method not implemented.");
   }
+
   getAll(): Promise<Video[]> {
     throw new Error("Method not implemented.");
   }
+
   async getById(id: number): Promise<Video | null> {
     const video = await VideoEntity.findOneBy({ id });
     if (!video) return null;
@@ -70,6 +85,7 @@ export class VideoRepository implements VideoRepositoryInterface {
       deslikesCount: video.deslikesCount,
     };
   }
+  
   delete(id: number): Promise<Video> {
     throw new Error("Method not implemented.");
   }

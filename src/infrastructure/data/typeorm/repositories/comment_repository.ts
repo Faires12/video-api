@@ -2,25 +2,58 @@ import { Comment } from "../../../../domain/entities/comment";
 import {
   CommentRepositoryInterface,
   CreateCommentInterface,
+  GetVideoCommentsInterface,
 } from "../../../../domain/repositories/comment_repository";
 import { CommentEntity } from "../entities/comment";
 import { UserEntity } from "../entities/user";
-import { VideoEntity } from "../entities/video";
 
 export class CommentRepository implements CommentRepositoryInterface {
+  async getByVideo(infos: GetVideoCommentsInterface): Promise<Comment[]> {
+    const comments = await CommentEntity.find({
+      where: { videoId: infos.videoId },
+      take: infos.rows,
+      skip: (infos.page - 1) * infos.rows,
+    });
+
+    return comments.map((c) => {
+      return {
+        id: c.id,
+        created_by: {
+          name: c.created_by.name,
+          email: c.created_by.email,
+          avatar: c.created_by.avatar,
+        },
+        content: c.content,
+        likesCount: c.likesCount,
+        deslikesCount: c.deslikesCount,
+      };
+    });
+  }
+
   async changeEvaluations(
     id: number,
     isLike: boolean,
-    isPositive: boolean
+    isPositive: boolean,
+    isChange?: boolean
   ): Promise<void> {
     const comment = await CommentEntity.findOneBy({ id });
     if (!comment) throw new Error("Comment not found");
     if (isLike) {
-      if (isPositive) comment.likesCount++;
-      else comment.likesCount--;
+      if (isChange) {
+        comment.likesCount++;
+        comment.deslikesCount--;
+      } else {
+        if (isPositive) comment.likesCount++;
+        else comment.likesCount--;
+      }
     } else {
-      if (isPositive) comment.deslikesCount++;
-      else comment.deslikesCount--;
+      if (isChange) {
+        comment.deslikesCount++;
+        comment.likesCount--;
+      } else {
+        if (isPositive) comment.deslikesCount++;
+        else comment.deslikesCount--;
+      }
     }
     await comment.save();
   }
@@ -29,16 +62,9 @@ export class CommentRepository implements CommentRepositoryInterface {
     newComment.content = comment.content;
     const user = await UserEntity.findOneBy({ id: comment.created_by });
     if (user) newComment.created_by = user;
-    if (comment.video_id) {
-      const video = await VideoEntity.findOneBy({ id: comment.video_id });
-      if (video) newComment.video = video;
-    }
-    if (comment.comment_id) {
-      const existingComment = await CommentEntity.findOneBy({
-        id: comment.comment_id,
-      });
-      if (existingComment) newComment.comment = existingComment;
-    }
+    if (comment.video_id) newComment.videoId = comment.video_id;
+    if (comment.comment_id) newComment.commentId = comment.comment_id;
+
     await newComment.save();
     return {
       id: newComment.id,

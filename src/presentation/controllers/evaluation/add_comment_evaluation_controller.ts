@@ -18,7 +18,7 @@ export class AddCommentEvaluationController extends Controller{
         if(!evaluation)
             return forbidden(new Error("Comment not found!"))
 
-        return ok(evaluation)
+        return ok("Evaluation created successfully")
     }
     
 }

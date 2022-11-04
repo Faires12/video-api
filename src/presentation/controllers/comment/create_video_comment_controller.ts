@@ -21,6 +21,6 @@ export class CreateVideoCommentController extends Controller {
     });
     if (comment === null) return forbidden(new Error("Video not found"));
 
-    return ok(comment);
+    return ok("Comment created successfully");
   }
 }

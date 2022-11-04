@@ -18,7 +18,7 @@ export class AddVideoEvaluationController extends Controller{
         if(!evaluation)
             return forbidden(new Error("Video not found!"))
 
-        return ok(evaluation)
+        return ok("Evaluation created successfully")
     }
     
 }

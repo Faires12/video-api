@@ -25,6 +25,6 @@ export class UploadVideoController extends Controller {
       description,
     });
 
-    return ok(newVideo);
+    return ok(newVideo.id);
   }
 }

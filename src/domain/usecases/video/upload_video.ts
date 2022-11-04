@@ -10,5 +10,5 @@ export interface UploadVideoInterface{
 }
 
 export interface UploadVideo{
-    upload(uploadVideo : UploadVideoInterface) : Promise<Video | null>
+    upload(uploadVideo : UploadVideoInterface) : Promise<Video>
 }

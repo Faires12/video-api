@@ -21,6 +21,8 @@ export abstract class Controller {
       const error = this.validation.validate({
         ...httpRequest.body,
         ...httpRequest.files,
+        ...httpRequest.query,
+        ...httpRequest.params
       });
       if (error) return badRequest(error);
       return await this.perform(httpRequest);

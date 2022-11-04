@@ -21,6 +21,6 @@ export class CreateResponseCommentController extends Controller {
     });
     if (comment === null) return forbidden(new Error("Comment not found"));
 
-    return ok(comment);
+    return ok("Reponse created successfully");
   }
 }
