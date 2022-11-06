@@ -1,5 +1,9 @@
 import { Comment } from "../../../../domain/entities";
-import { CommentRepositoryInterface, CreateCommentInterface, GetVideoCommentsInterface } from "../../../../domain/repositories";
+import {
+  CommentRepositoryInterface,
+  CreateCommentInterface,
+  GetVideoCommentsInterface,
+} from "../../../../domain/repositories";
 import { CommentEntity, UserEntity } from "../entities";
 
 export class CommentRepository implements CommentRepositoryInterface {
@@ -9,7 +13,14 @@ export class CommentRepository implements CommentRepositoryInterface {
       take: infos.rows,
       skip: (infos.page - 1) * infos.rows,
     });
-
+    for (const comment of comments) {
+      const responses = await CommentEntity.find({
+        where: { commentId: comment.id },
+        take: 3,
+        skip: 0,
+      })
+      comment.comments = responses;
+    }
     return comments.map((c) => {
       return {
         id: c.id,
@@ -21,6 +32,19 @@ export class CommentRepository implements CommentRepositoryInterface {
         content: c.content,
         likesCount: c.likesCount,
         deslikesCount: c.deslikesCount,
+        responses: c.comments.map((c) => {
+          return {
+            id: c.id,
+            created_by: {
+              name: c.created_by.name,
+              email: c.created_by.email,
+              avatar: c.created_by.avatar,
+            },
+            content: c.content,
+            likesCount: c.likesCount,
+            deslikesCount: c.deslikesCount,
+          };
+        }),
       };
     });
   }
@@ -74,12 +98,6 @@ export class CommentRepository implements CommentRepositoryInterface {
       comment_id: newComment.commentId,
     };
   }
-  update(comment: Comment): Promise<Comment> {
-    throw new Error("Method not implemented.");
-  }
-  getAll(): Promise<Comment[]> {
-    throw new Error("Method not implemented.");
-  }
   async getById(id: number): Promise<Comment | null> {
     const comment = await CommentEntity.findOneBy({ id });
     if (!comment) return null;
@@ -97,8 +115,5 @@ export class CommentRepository implements CommentRepositoryInterface {
       deslikesCount: comment.deslikesCount,
       content: comment.content,
     };
-  }
-  delete(id: number): Promise<Comment> {
-    throw new Error("Method not implemented.");
   }
 }

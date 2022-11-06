@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColu
 import { CommentEntity, UserEntity, VideoEntity  } from "./";
 
 
-@Entity()
+@Entity("tb_evaluation")
 export class EvaluationEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;

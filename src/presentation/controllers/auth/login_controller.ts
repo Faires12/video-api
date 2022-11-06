@@ -14,8 +14,6 @@ export class LoginController extends Controller {
         const {email, password} = httpRequest.body
 
         const accessToken = await this.loginService.login(email, password)
-        if(!accessToken)
-            return forbidden(new Error("Incorrect email or password"))
         
         return ok(accessToken)
     }

@@ -15,13 +15,6 @@ export class UserRepository implements UserRepositoryInterface{
         await userEntity.save()
         return userEntity
     }
-    
-    update(user: User): Promise<User> {
-        throw new Error("Method not implemented.");
-    }
-    getAll(): Promise<User[]> {
-        throw new Error("Method not implemented.");
-    }
     async getById(id: number): Promise<User | null> {
         const user = await UserEntity.findOneBy({id})
         return user
@@ -30,8 +23,4 @@ export class UserRepository implements UserRepositoryInterface{
         const user = await UserEntity.findOneBy({email})
         return user
     }
-    delete(id: number): Promise<User> {
-        throw new Error("Method not implemented.");
-    }
-
 }

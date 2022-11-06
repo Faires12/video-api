@@ -10,8 +10,6 @@ export class GetVideoCommentsController extends Controller{
         const {page, rows} = httpRequest.query
         const {videoId} = httpRequest.params
         const comments = await this.getVideoCommentsService.get({videoId, page, rows})
-        if(!comments)
-            return forbidden(new Error("Video not found"))
         return ok(comments)
     }
     

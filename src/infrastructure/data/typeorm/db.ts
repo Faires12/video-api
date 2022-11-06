@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { CommentEntity, EvaluationEntity, UserEntity, VideoEntity } from "./entities";
+import { CommentEntity, EvaluationEntity, PlaylistEntity, UserEntity, VideoEntity } from "./entities";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -10,6 +10,6 @@ export const AppDataSource = new DataSource({
   database: "cleannode",
   synchronize: true,
   // logging: true,
-  entities: [UserEntity, VideoEntity, CommentEntity, EvaluationEntity],
+  entities: [UserEntity, VideoEntity, CommentEntity, EvaluationEntity, PlaylistEntity],
 });
 

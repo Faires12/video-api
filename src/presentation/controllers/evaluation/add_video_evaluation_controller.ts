@@ -1,11 +1,11 @@
-import { AddEvaluationService } from "../../../application/services"
+import { AddEvaluation } from "../../../domain/usecases"
 import { forbidden, ok } from "../../helpers/http"
 import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http"
 import { Validation } from "../../validations"
 
 
 export class AddVideoEvaluationController extends Controller{
-    constructor(validation : Validation, private readonly addEvaluationService : AddEvaluationService) {super(validation)}
+    constructor(validation : Validation, private readonly addEvaluationService : AddEvaluation) {super(validation)}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, videoId, isPositive} = httpRequest.body
@@ -16,8 +16,6 @@ export class AddVideoEvaluationController extends Controller{
             isPositive: isPositive,
             isVideo: true
         })
-        if(!evaluation)
-            return forbidden(new Error("Video not found!"))
 
         return ok("Evaluation created successfully")
     }

@@ -9,9 +9,9 @@ export function makeRegisterValidation() : Validation {
     }
     validations.push(new EmailValidation('email', new ValidatorAdapter()))
     for(const fieldname of ['password', 'name']){
-        validations.push(new StringValidation(fieldname, 3))
+        validations.push(new StringValidation(fieldname, 3, 50))
     }
-    validations.push(new FileValidation('avatar', 5000, ["image/jpeg", "image/png"], true))
+    validations.push(new FileValidation('avatar', 5000, ["image/jpeg", "image/png"]))
 
     return new ValidationComposite(validations)
 }

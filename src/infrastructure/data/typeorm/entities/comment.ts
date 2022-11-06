@@ -1,7 +1,7 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity, VideoEntity, EvaluationEntity } from "./";
 
-@Entity()
+@Entity("tb_comment")
 export class CommentEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
@@ -9,8 +9,12 @@ export class CommentEntity extends BaseEntity{
     @Column({type: "varchar", nullable: false})
     content: string 
 
-    @ManyToOne(() => UserEntity, (user) => user.comments, {eager: true})
+    @ManyToOne(() => UserEntity, (user) => user.videos, {eager: true})
+    @JoinColumn({name: 'user_id'})
     created_by: UserEntity
+
+    @Column({type: 'int', name: 'user_id', nullable: false})
+    userId: number
 
     @Column({type: "int", default: 0})
     likesCount: number 

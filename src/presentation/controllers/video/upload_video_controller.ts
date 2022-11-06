@@ -1,5 +1,5 @@
-import { FileInterface } from "../../../domain/entities";
 import { UploadVideo } from "../../../domain/usecases";
+import { FileInterface } from "../../../utils/file_interface";
 import { ok } from "../../helpers/http";
 import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http"
 import { Validation } from "../../validations";

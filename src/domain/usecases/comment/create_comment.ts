@@ -8,5 +8,5 @@ export interface CreateCommentInterface{
 }
 
 export interface CreateComment{
-    create(comment: CreateCommentInterface) : Promise<Comment | null>
+    create(comment: CreateCommentInterface) : Promise<Comment>
 }

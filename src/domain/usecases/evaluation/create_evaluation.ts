@@ -8,5 +8,5 @@ export interface AddEvaluationInterface{
 }
 
 export interface AddEvaluation{
-    create(evaluation: AddEvaluationInterface) : Promise<Evaluation | null>
+    create(evaluation: AddEvaluationInterface) : Promise<Evaluation>
 }

@@ -1,7 +1,7 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CommentEntity, EvaluationEntity, UserEntity } from "./";
 
-@Entity()
+@Entity("tb_video")
 export class VideoEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
@@ -16,7 +16,11 @@ export class VideoEntity extends BaseEntity{
     path: string 
 
     @ManyToOne(() => UserEntity, (user) => user.videos, {eager: true})
+    @JoinColumn({name: 'user_id'})
     created_by: UserEntity
+
+    @Column({type: 'int', name: 'user_id', nullable: false})
+    userId: number
 
     @Column({type: "int", default: 0})
     viewsCount: number 

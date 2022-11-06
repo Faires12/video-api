@@ -1,3 +1,4 @@
+import { HttpException } from "../../../utils/http";
 import { badRequest, ok, serverError } from "../../helpers/http";
 import { Validation } from "../../validations";
 
@@ -27,6 +28,13 @@ export abstract class Controller {
       if (error) return badRequest(error);
       return await this.perform(httpRequest);
     } catch (error) {
+      if(error instanceof HttpException){
+        return {
+          statusCode: error.statusCode,
+          body: {message: error.message}
+        }
+      }
+      
       console.log(error);
       return serverError();
     }
@@ -62,6 +70,13 @@ export abstract class Middleware {
 
       return await this.perform(httpRequest);
     } catch (error) {
+      if(error instanceof HttpException){
+        return {
+          statusCode: error.statusCode,
+          body: {message: error.message}
+        }
+      }
+      
       console.log(error);
       return serverError();
     }

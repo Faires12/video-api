@@ -20,7 +20,6 @@ export class CreateResponseCommentController extends Controller {
       content,
       isVideo: false,
     });
-    if (comment === null) return forbidden(new Error("Comment not found"));
 
     return ok("Reponse created successfully");
   }

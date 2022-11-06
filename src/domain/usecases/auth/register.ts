@@ -1,4 +1,5 @@
-import { FileInterface, User } from "../../entities";
+import { FileInterface } from "../../../utils/file_interface"
+import { User } from "../../entities"
 
 export interface RegisterInterface {
     email: string
@@ -8,5 +9,5 @@ export interface RegisterInterface {
 }
 
 export interface Register {
-    register(new_user: RegisterInterface) : Promise<User | null>
+    register(new_user: RegisterInterface) : Promise<User>
 }

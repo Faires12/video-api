@@ -9,4 +9,5 @@ export interface Comment{
     comment_id?: number
     likesCount?: number
     deslikesCount?: number
+    responses?: Comment[]
 }

@@ -1,6 +1,7 @@
 import { Evaluation } from "../../../domain/entities";
 import { CommentRepositoryInterface, EvaluationRepositoryInterface, VideoRepositoryInterface } from "../../../domain/repositories";
 import { AddEvaluation, AddEvaluationInterface } from "../../../domain/usecases";
+import { HttpException, HttpStatusCode } from "../../../utils/http";
 
 
 export class AddEvaluationService implements AddEvaluation {
@@ -10,17 +11,17 @@ export class AddEvaluationService implements AddEvaluation {
     private readonly commentRepository: CommentRepositoryInterface
   ) {}
 
-  async create(evaluation: AddEvaluationInterface): Promise<Evaluation | null> {
+  async create(evaluation: AddEvaluationInterface): Promise<Evaluation> {
     if (
       evaluation.isVideo &&
       !(await this.videoRepository.getById(evaluation.reference_id))
     )
-      return null;
+      throw new HttpException(HttpStatusCode.NotFound, "Video not found");
     else if (
       !evaluation.isVideo &&
       !(await this.commentRepository.getById(evaluation.reference_id))
     )
-      return null;
+      throw new HttpException(HttpStatusCode.NotFound, "Comment not found");
 
     const existingEvaluation = evaluation.isVideo
       ? await this.evaluationRepository.getByVideo(

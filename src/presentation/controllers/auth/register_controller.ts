@@ -1,5 +1,5 @@
-import { FileInterface } from "../../../domain/entities";
 import { Login, Register } from "../../../domain/usecases";
+import { FileInterface } from "../../../utils/file_interface";
 import { forbidden, ok } from "../../helpers/http";
 import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
@@ -22,17 +22,15 @@ export class RegisterController extends Controller  {
       avatar = httpRequest.files.avatar as FileInterface;
     }
 
-    const user = await this.registerService.register({
+    await this.registerService.register({
       email,
       name,
       password,
       avatarFile: avatar,
     });
-    if (!user) return forbidden(new Error("User with email already exists"));
-    const accessToken = await this.loginService.login(email, password);
-    if (!accessToken)
-      return forbidden(new Error("Incorrect email or password"));
 
+    const accessToken = await this.loginService.login(email, password);
+    
     return ok(accessToken);
   }
 }

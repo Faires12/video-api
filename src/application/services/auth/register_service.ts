@@ -1,6 +1,7 @@
 import { User } from "../../../domain/entities";
 import { UserRepositoryInterface } from "../../../domain/repositories";
 import { Register, RegisterInterface } from "../../../domain/usecases";
+import { HttpException, HttpStatusCode } from "../../../utils/http";
 import { Encrypter, SaveFileObject, UuidGenerator } from "../../interfaces";
 
 export class RegisterService implements Register {
@@ -11,9 +12,10 @@ export class RegisterService implements Register {
     private readonly uuidGenerator: UuidGenerator
   ) {}
 
-  async register(new_user: RegisterInterface): Promise<User | null> {
+  async register(new_user: RegisterInterface): Promise<User> {
     const existingUser = await this.userRepository.getByEmail(new_user.email);
-    if (existingUser) return null;
+    if (existingUser) 
+      throw new HttpException(HttpStatusCode.Forbidden, "User with email already exist");
 
     let avatar;
     if (new_user.avatarFile) {

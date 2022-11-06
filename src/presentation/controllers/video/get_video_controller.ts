@@ -11,8 +11,7 @@ export class GetVideoController extends Controller{
         const {id} = httpRequest.params
 
         const video = await this.getVideoService.get(id)
-        if(!video)
-            return forbidden(new Error("Video not found"))
+
         return ok(video)
     }
     

@@ -15,10 +15,7 @@ export interface GetVideoCommentsInterface{
 
 export interface CommentRepositoryInterface{
     create(comment: CreateCommentInterface) : Promise<Comment>
-    update(comment: Comment) : Promise<Comment>
-    getAll() : Promise<Comment[]>
     getById(id: number) : Promise<Comment | null>
-    delete(id: number) : Promise<Comment>
     changeEvaluations(id: number, isLike: boolean, isPositive: boolean, isChange?: boolean) : Promise<void>
     getByVideo(infos: GetVideoCommentsInterface) : Promise<Comment[]>
 }

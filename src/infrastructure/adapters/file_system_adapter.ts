@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import { SaveFileObject } from '../../application/interfaces'
-import { FileInterface } from '../../domain/entities'
+import { FileInterface } from '../../utils/file_interface'
 
 export class FileSystemAdapter implements SaveFileObject{
     constructor(private readonly publicPath: string) {}

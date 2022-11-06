@@ -8,12 +8,15 @@ import { adaptRoute, adaptMiddleware } from "./adapters";
 import {
   makeAddCommentEvaluationController,
   makeAddVideoEvaluationController,
+  makeAddVideoToPlaylistController,
+  makeCreatePlaylistController,
   makeCreateResponseCommentController,
   makeCreateVideoCommentController,
   makeGetVideoCommentsController,
   makeGetVideoController,
   makeLoginController,
   makeRegisterController,
+  makeRemoveVideoFromPlaylistController,
   makeUploadVideoController,
 } from "./factories/controllers";
 import { makeAuthMiddleware } from "./factories/middlewares/auth";
@@ -58,6 +61,24 @@ app.post(
   "/api/evaluation/comment",
   adaptMiddleware(makeAuthMiddleware(false)),
   adaptRoute(makeAddCommentEvaluationController())
+);
+
+app.post(
+  "/api/playlist",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeCreatePlaylistController())
+);
+
+app.post(
+  "/api/playlist/add",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeAddVideoToPlaylistController())
+);
+
+app.post(
+  "/api/playlist/remove",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeRemoveVideoFromPlaylistController())
 );
 
 export default app;

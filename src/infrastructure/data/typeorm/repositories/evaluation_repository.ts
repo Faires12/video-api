@@ -34,12 +34,6 @@ export class EvaluationRepository implements EvaluationRepositoryInterface{
             commentId: existingEvaluation.commentId,
         }
     }
-    getAll(): Promise<Evaluation[]> {
-        throw new Error("Method not implemented.");
-    }
-    getById(id: number): Promise<Evaluation | null> {
-        throw new Error("Method not implemented.");
-    }
     async delete(id: number): Promise<Evaluation> {
         const existingEvaluation = await EvaluationEntity.findOneBy({id})
         if(!existingEvaluation)

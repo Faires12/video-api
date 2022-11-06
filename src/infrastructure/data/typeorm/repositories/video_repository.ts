@@ -53,14 +53,6 @@ export class VideoRepository implements VideoRepositoryInterface {
     };
   }
 
-  update(video: Video): Promise<Video> {
-    throw new Error("Method not implemented.");
-  }
-
-  getAll(): Promise<Video[]> {
-    throw new Error("Method not implemented.");
-  }
-
   async getById(id: number): Promise<Video | null> {
     const video = await VideoEntity.findOneBy({ id });
     if (!video) return null;
@@ -80,9 +72,5 @@ export class VideoRepository implements VideoRepositoryInterface {
       likesCount: video.likesCount,
       deslikesCount: video.deslikesCount,
     };
-  }
-  
-  delete(id: number): Promise<Video> {
-    throw new Error("Method not implemented.");
   }
 }

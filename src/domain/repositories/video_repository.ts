@@ -10,9 +10,6 @@ export interface CreateVideoInterface{
 
 export interface VideoRepositoryInterface{
     create(video: CreateVideoInterface) : Promise<Video>
-    update(video: Video) : Promise<Video>
-    getAll() : Promise<Video[]>
     getById(id: number) : Promise<Video | null>
-    delete(id: number) : Promise<Video>
     changeEvaluations(id: number, isLike: boolean, isPositive: boolean, isChange?: boolean) : Promise<void>
 }

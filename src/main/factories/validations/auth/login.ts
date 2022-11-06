@@ -1,5 +1,5 @@
 import { ValidatorAdapter } from "../../../../infrastructure/adapters"
-import { EmailValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
+import { EmailValidation, RequiredFieldValidation, StringValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
 
 
 export function makeLoginValidation() : Validation {
@@ -8,6 +8,7 @@ export function makeLoginValidation() : Validation {
         validations.push(new RequiredFieldValidation(fieldname))
     }
     validations.push(new EmailValidation('email', new ValidatorAdapter()))
-
+    validations.push(new StringValidation('password', 3, 50))
+    
     return new ValidationComposite(validations)
 }
