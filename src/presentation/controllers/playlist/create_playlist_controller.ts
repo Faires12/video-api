@@ -8,7 +8,7 @@ export class CreatePlaylistController extends Controller{
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {title, userId, description, videoId} = httpRequest.body
-        const playlist = await this.createPlaylistService.create(title, userId, description, videoId)
+        const playlist = await this.createPlaylistService.create({title, userId, description, videoId})
         return ok(playlist)
     }
     

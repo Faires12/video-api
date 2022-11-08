@@ -1,3 +1,7 @@
+export interface LoginInterface{
+    email: string, password: string
+}
+
 export interface Login{
-    login(email: string, password: string) : Promise<string>
+    login(infos: LoginInterface) : Promise<string>
 }

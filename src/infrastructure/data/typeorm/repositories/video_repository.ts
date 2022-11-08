@@ -1,30 +1,28 @@
 import { Video } from "../../../../domain/entities";
 import { CreateVideoInterface, VideoRepositoryInterface } from "../../../../domain/repositories";
+import { ChangeEvaluationsInterface } from "../../../../domain/repositories/video_repository";
 import { UserEntity, VideoEntity } from "../entities";
 
 export class VideoRepository implements VideoRepositoryInterface {
   async changeEvaluations(
-    id: number,
-    isLike: boolean,
-    isPositive: boolean,
-    isChange?: boolean
+    infos: ChangeEvaluationsInterface
   ): Promise<void> {
-    const video = await VideoEntity.findOneBy({ id });
+    const video = await VideoEntity.findOneBy({ id: infos.id });
     if (!video) throw new Error("Comment not found");
-    if (isLike) {
-      if (isChange) {
+    if (infos.isLike) {
+      if (infos.isChange) {
         video.likesCount++;
         video.deslikesCount--;
       } else {
-        if (isPositive) video.likesCount++;
+        if (infos.isPositive) video.likesCount++;
         else video.likesCount--;
       }
     } else {
-      if (isChange) {
+      if (infos.isChange) {
         video.deslikesCount++;
         video.likesCount--;
       } else {
-        if (isPositive) video.deslikesCount++;
+        if (infos.isPositive) video.deslikesCount++;
         else video.deslikesCount--;
       }
     }

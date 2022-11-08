@@ -1,5 +1,5 @@
 import { Playlist } from "../../../../domain/entities";
-import { PlaylistRepositoryInterface } from "../../../../domain/repositories/playlist_repository";
+import { CreatePlaylistInterface, ManageVideosInPlaylistInterface, PlaylistRepositoryInterface } from "../../../../domain/repositories/playlist_repository";
 import { PlaylistEntity, UserEntity, VideoEntity } from "../entities";
 
 export class PlaylistRepository implements PlaylistRepositoryInterface {
@@ -39,18 +39,15 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
     };
   }
   async create(
-    title: string,
-    userId: number,
-    description?: string,
-    videoId?: number
+    playlist: CreatePlaylistInterface
   ): Promise<Playlist> {
     const newPlaylist = new PlaylistEntity();
-    newPlaylist.title = title;
-    const user = await UserEntity.findOneBy({ id: userId });
+    newPlaylist.title = playlist.title;
+    const user = await UserEntity.findOneBy({ id: playlist.userId });
     if (user) newPlaylist.created_by = user;
-    if (description) newPlaylist.description = description;
-    if (videoId) {
-      const video = await VideoEntity.findOneBy({ id: videoId });
+    if (playlist.description) newPlaylist.description = playlist.description;
+    if (playlist.videoId) {
+      const video = await VideoEntity.findOneBy({ id: playlist.videoId });
       if (video) {
         newPlaylist.videos = []
         newPlaylist.videos.push(video);
@@ -85,9 +82,9 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
         : [],
     };
   }
-  async addVideo(videoId: number, playlistId: number): Promise<void> {
-    const playlist = await PlaylistEntity.findOne({where: { id: playlistId }, relations: ['videos']});
-    const video = await VideoEntity.findOneBy({ id: videoId });
+  async addVideo(infos: ManageVideosInPlaylistInterface): Promise<void> {
+    const playlist = await PlaylistEntity.findOne({where: { id: infos.playlistId }, relations: ['videos']});
+    const video = await VideoEntity.findOneBy({ id: infos.videoId });
     if (playlist && video) {
       if(!playlist.videos)
         playlist.videos = []
@@ -96,11 +93,11 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
     }
   }
   
-  async removeVideo(videoId: number, playlistId: number): Promise<void> {
-    const playlist = await PlaylistEntity.findOne({where: { id: playlistId }, relations: ['videos']});
-    const video = await VideoEntity.findOneBy({ id: videoId });
+  async removeVideo(infos: ManageVideosInPlaylistInterface): Promise<void> {
+    const playlist = await PlaylistEntity.findOne({where: { id: infos.playlistId }, relations: ['videos']});
+    const video = await VideoEntity.findOneBy({ id: infos.videoId });
     if (playlist && video) {
-      const i = playlist.videos.findIndex((v) => v.id === videoId);
+      const i = playlist.videos.findIndex((v) => v.id === infos.videoId);
       playlist.videos.splice(i, 1);
       await playlist.save();
     }

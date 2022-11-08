@@ -12,7 +12,7 @@ export class AddCommentEvaluationController extends Controller{
         const evaluation = await this.addEvaluationService.create({
             created_by: userId,
             reference_id: commentId,
-            isPositive: isPositive,
+            isLike: isPositive,
             isVideo: false
         })
 

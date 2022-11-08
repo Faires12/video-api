@@ -1,5 +1,6 @@
 import { Comment } from "../../../../domain/entities";
 import {
+  ChangeEvaluationsInterface,
   CommentRepositoryInterface,
   CreateCommentInterface,
   GetVideoCommentsInterface,
@@ -50,27 +51,24 @@ export class CommentRepository implements CommentRepositoryInterface {
   }
 
   async changeEvaluations(
-    id: number,
-    isLike: boolean,
-    isPositive: boolean,
-    isChange?: boolean
+    infos: ChangeEvaluationsInterface
   ): Promise<void> {
-    const comment = await CommentEntity.findOneBy({ id });
+    const comment = await CommentEntity.findOneBy({ id: infos.id });
     if (!comment) throw new Error("Comment not found");
-    if (isLike) {
-      if (isChange) {
+    if (infos.isLike) {
+      if (infos.isChange) {
         comment.likesCount++;
         comment.deslikesCount--;
       } else {
-        if (isPositive) comment.likesCount++;
+        if (infos.isPositive) comment.likesCount++;
         else comment.likesCount--;
       }
     } else {
-      if (isChange) {
+      if (infos.isChange) {
         comment.deslikesCount++;
         comment.likesCount--;
       } else {
-        if (isPositive) comment.deslikesCount++;
+        if (infos.isPositive) comment.deslikesCount++;
         else comment.deslikesCount--;
       }
     }

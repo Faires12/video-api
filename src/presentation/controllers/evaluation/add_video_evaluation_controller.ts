@@ -13,7 +13,7 @@ export class AddVideoEvaluationController extends Controller{
         const evaluation = await this.addEvaluationService.create({
             created_by: userId,
             reference_id: videoId,
-            isPositive: isPositive,
+            isLike: isPositive,
             isVideo: true
         })
 

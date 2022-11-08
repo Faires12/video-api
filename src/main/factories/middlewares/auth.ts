@@ -1,8 +1,18 @@
 import { GetUserByTokenService } from "../../../application/services"
-import { JwtAdapter } from "../../../infrastructure/adapters"
+import { JwtAdapter, ValidatorAdapter } from "../../../infrastructure/adapters"
 import { UserRepository } from "../../../infrastructure/data/typeorm/repositories"
 import { AuthenticationMiddleware, AuthorizationMiddleware } from "../../../presentation/middlewares"
-import { makeAuthValidation } from "../validations"
+import { JwtValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../presentation/validations"
+
+
+export function makeAuthValidation() : Validation {
+    const validations : Validation[] = []
+    for(const fieldname of ['token']){
+        validations.push(new RequiredFieldValidation(fieldname))
+    }
+    validations.push(new JwtValidation('token', new ValidatorAdapter()))
+    return new ValidationComposite(validations)
+}
 
 export function makeAuthMiddleware(needAuthorization: boolean) : AuthenticationMiddleware {
     const userRepository = new UserRepository()

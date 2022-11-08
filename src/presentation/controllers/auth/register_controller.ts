@@ -29,7 +29,7 @@ export class RegisterController extends Controller  {
       avatarFile: avatar,
     });
 
-    const accessToken = await this.loginService.login(email, password);
+    const accessToken = await this.loginService.login({email, password});
     
     return ok(accessToken);
   }

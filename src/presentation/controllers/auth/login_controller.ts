@@ -13,7 +13,7 @@ export class LoginController extends Controller {
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {email, password} = httpRequest.body
 
-        const accessToken = await this.loginService.login(email, password)
+        const accessToken = await this.loginService.login({email, password})
         
         return ok(accessToken)
     }

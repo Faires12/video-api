@@ -1,5 +1,12 @@
 import { Playlist } from "../../entities";
 
-export interface CreatePlaylist{
-    create(title: string, userId: number, description?: string , videoId?: number) : Promise<Playlist>
+export interface CreatePlaylistInterface {
+  title: string;
+  userId: number;
+  description?: string;
+  videoId?: number;
+}
+
+export interface CreatePlaylist {
+  create(infos: CreatePlaylistInterface): Promise<Playlist>;
 }
