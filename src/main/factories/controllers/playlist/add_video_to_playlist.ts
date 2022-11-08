@@ -3,7 +3,7 @@ import { PlaylistRepository, VideoRepository } from "../../../../infrastructure/
 import { AddVideoToPlaylistController } from "../../../../presentation/controllers"
 import { NumberValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
 
-export function makeManageVideoInPlaylistValidation() : Validation {
+function makeManageVideoInPlaylistValidation() : Validation {
     const validations : Validation[] = []
     for(const fieldname of ['videoId', 'playlistId']){
         validations.push(new RequiredFieldValidation(fieldname))

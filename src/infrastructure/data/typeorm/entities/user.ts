@@ -1,5 +1,5 @@
 import { BaseEntity, PrimaryGeneratedColumn, Entity, Column, OneToMany } from "typeorm";
-import { CommentEntity, EvaluationEntity, VideoEntity } from "./";
+import { CommentEntity, EvaluationEntity, VideoEntity, PlaylistEntity, SubscriptionEntity } from "./";
 
 
 @Entity("tb_user")
@@ -27,4 +27,13 @@ export class UserEntity extends BaseEntity{
 
     @OneToMany(() => EvaluationEntity, (evaluation) => evaluation.created_by)
     evaluations: EvaluationEntity[]
+
+    @OneToMany(() => PlaylistEntity, (playlist) => playlist.created_by)
+    playlists: PlaylistEntity[]
+
+    @OneToMany(() => SubscriptionEntity, (subscription) => subscription.subscriber)
+    subscribers: SubscriptionEntity[]
+
+    @OneToMany(() => SubscriptionEntity, (subscription) => subscription.subscriptedTo)
+    subscriptions: SubscriptionEntity[]
 }

@@ -10,4 +10,5 @@ export * from './evaluation/add_video_evaluation'
 export * from './playlist/create_playlist'
 export * from './playlist/add_video_to_playlist'
 export * from './playlist/remove_video_from_playlist'
+export * from './subscription/manage_subscription'
 

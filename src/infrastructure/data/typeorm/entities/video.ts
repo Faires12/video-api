@@ -40,6 +40,6 @@ export class VideoEntity extends BaseEntity{
     @OneToMany(() => CommentEntity, (comment) => comment.video)
     comments: CommentEntity[]
 
-    @OneToMany(() => EvaluationEntity, (comment) => comment.video)
+    @OneToMany(() => EvaluationEntity, (evaluation) => evaluation.video)
     evaluations: EvaluationEntity[]
 }

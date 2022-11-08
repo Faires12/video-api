@@ -1,4 +1,5 @@
 import { Comment } from "../entities";
+import { ChangeEvaluationsInterface } from "./video_repository";
 
 export interface CreateCommentInterface {
   created_by: number;
@@ -11,13 +12,6 @@ export interface GetVideoCommentsInterface {
   videoId: number;
   page: number;
   rows: number;
-}
-
-export interface ChangeEvaluationsInterface {
-  id: number;
-  isLike: boolean;
-  isPositive: boolean;
-  isChange?: boolean;
 }
 
 export interface CommentRepositoryInterface {

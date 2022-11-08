@@ -15,6 +15,7 @@ import {
   makeGetVideoCommentsController,
   makeGetVideoController,
   makeLoginController,
+  makeManageSubscriptionController,
   makeRegisterController,
   makeRemoveVideoFromPlaylistController,
   makeUploadVideoController,
@@ -79,6 +80,12 @@ app.post(
   "/api/playlist/remove",
   adaptMiddleware(makeAuthMiddleware(false)),
   adaptRoute(makeRemoveVideoFromPlaylistController())
+);
+
+app.post(
+  "/api/subscription",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeManageSubscriptionController())
 );
 
 export default app;
