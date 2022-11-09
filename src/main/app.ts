@@ -9,9 +9,11 @@ import {
   makeAddCommentEvaluationController,
   makeAddVideoEvaluationController,
   makeAddVideoToPlaylistController,
+  makeCreateCommentReportController,
   makeCreatePlaylistController,
   makeCreateResponseCommentController,
   makeCreateVideoCommentController,
+  makeCreateVideoReportController,
   makeGetVideoCommentsController,
   makeGetVideoController,
   makeLoginController,
@@ -86,6 +88,18 @@ app.post(
   "/api/subscription",
   adaptMiddleware(makeAuthMiddleware(false)),
   adaptRoute(makeManageSubscriptionController())
+);
+
+app.post(
+  "/api/report/video",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeCreateVideoReportController())
+);
+
+app.post(
+  "/api/report/comment",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeCreateCommentReportController())
 );
 
 export default app;

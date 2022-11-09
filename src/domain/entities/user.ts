@@ -4,4 +4,5 @@ export interface User {
     password?: string
     id?: number
     avatar?: string
+    isAdmin?: boolean
 }

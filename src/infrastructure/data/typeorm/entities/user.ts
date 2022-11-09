@@ -1,5 +1,5 @@
 import { BaseEntity, PrimaryGeneratedColumn, Entity, Column, OneToMany } from "typeorm";
-import { CommentEntity, EvaluationEntity, VideoEntity, PlaylistEntity, SubscriptionEntity } from "./";
+import { CommentEntity, EvaluationEntity, VideoEntity, PlaylistEntity, SubscriptionEntity, ReportEntity } from "./";
 
 
 @Entity("tb_user")
@@ -19,6 +19,9 @@ export class UserEntity extends BaseEntity{
     @Column({type: "varchar", default: "default_avatar.png"})
     avatar: string 
 
+    @Column({type: "bool", default: false})
+    isAdmin: boolean 
+
     @OneToMany(() => VideoEntity, (video) => video.created_by)
     videos: VideoEntity[]
 
@@ -36,4 +39,7 @@ export class UserEntity extends BaseEntity{
 
     @OneToMany(() => SubscriptionEntity, (subscription) => subscription.subscriptedTo)
     subscriptions: SubscriptionEntity[]
+
+    @OneToMany(() => ReportEntity, (report) => report.created_by)
+    reports: ReportEntity[]
 }

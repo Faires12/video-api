@@ -1,5 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { UserEntity, VideoEntity, EvaluationEntity } from "./";
+import { UserEntity, VideoEntity, EvaluationEntity, ReportEntity } from "./";
 
 @Entity("tb_comment")
 export class CommentEntity extends BaseEntity{
@@ -42,4 +42,7 @@ export class CommentEntity extends BaseEntity{
 
     @OneToMany(() => EvaluationEntity, (evaluation => evaluation.comment))
     evaluations: EvaluationEntity[]
+
+    @OneToMany(() => ReportEntity, (report) => report.comment)
+    reports: ReportEntity[]
 }

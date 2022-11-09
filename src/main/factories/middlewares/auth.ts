@@ -21,6 +21,6 @@ export function makeAuthMiddleware(needAuthorization: boolean) : AuthenticationM
     const validations = makeAuthValidation()
     const authMiddleware = new AuthenticationMiddleware(validations, getUserByTokenService)
     if(needAuthorization)
-        authMiddleware.linkWith(new AuthorizationMiddleware())
+        authMiddleware.linkWith(new AuthorizationMiddleware(userRepository))
     return authMiddleware
 }

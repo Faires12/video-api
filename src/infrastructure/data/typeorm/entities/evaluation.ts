@@ -14,7 +14,7 @@ export class EvaluationEntity extends BaseEntity{
     @JoinColumn({name: "user_id"})
     created_by: UserEntity
 
-    @Column({type: "int", nullable: true, name: "user_id"})
+    @Column({type: "int", nullable: false, name: "user_id"})
     userId: number
 
     @ManyToOne(() => VideoEntity, (video) => video.evaluations)

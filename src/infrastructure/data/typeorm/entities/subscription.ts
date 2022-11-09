@@ -10,13 +10,13 @@ export class SubscriptionEntity extends BaseEntity{
     @JoinColumn({name: "subscriber_id"})
     subscriber: UserEntity
 
-    @Column({type: "int", nullable: true, name: "subscriber_id"})
+    @Column({type: "int", nullable: false, name: "subscriber_id"})
     subscriberId: number
 
     @ManyToOne(() => UserEntity, (user) => user.subscriptions)
     @JoinColumn({name: "subscripted_to_id"})
     subscriptedTo: UserEntity
 
-    @Column({type: "int", nullable: true, name: "subscripted_to_id"})
+    @Column({type: "int", nullable: false, name: "subscripted_to_id"})
     subscriptedToId: number
 }

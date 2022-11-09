@@ -13,14 +13,39 @@ export class UserRepository implements UserRepositoryInterface{
         if(user.avatar)
             userEntity.avatar = user.avatar
         await userEntity.save()
-        return userEntity
+        return {
+            id: userEntity.id,
+            name: userEntity.name,
+            isAdmin: userEntity.isAdmin,
+            email: userEntity.email,
+            avatar: userEntity.avatar,
+            password: userEntity.password
+        }
     }
     async getById(id: number): Promise<User | null> {
         const user = await UserEntity.findOneBy({id})
-        return user
+        if(!user)
+            return null
+        return {
+            id: user.id,
+            name: user.name,
+            isAdmin: user.isAdmin,
+            email: user.email,
+            avatar: user.avatar,
+            password: user.password
+        }
     }
     async getByEmail(email: string): Promise<User | null> {
         const user = await UserEntity.findOneBy({email})
-        return user
+        if(!user)
+            return null
+        return {
+            id: user.id,
+            name: user.name,
+            isAdmin: user.isAdmin,
+            email: user.email,
+            avatar: user.avatar,
+            password: user.password
+        }
     }
 }
