@@ -22,19 +22,14 @@ export class CreateReportService implements CreateReport{
           )
             throw new HttpException(HttpStatusCode.NotFound, "Comment not found");
 
-        let reportType = ""
-        if(infos.reportType === ReportType.Violencio)
-            reportType = "violencio"
-        else if(infos.reportType === ReportType.Explicito)
-            reportType = "explicito"
-        else
-            throw new HttpException(HttpStatusCode.BadRequest, "Invalid report type");
+        if(!(infos.reportType in ReportType))
+          throw new HttpException(HttpStatusCode.BadRequest, "Invalid report type");
 
         if(infos.isVideo)
-            await this.reportRepository.create({content: infos.content, created_by: infos.created_by, reportType, 
+            await this.reportRepository.create({content: infos.content, created_by: infos.created_by, reportType: ReportType[infos.reportType], 
             videoId: infos.referenceId})
         else
-            await this.reportRepository.create({content: infos.content, created_by: infos.created_by, reportType, 
+            await this.reportRepository.create({content: infos.content, created_by: infos.created_by, reportType: ReportType[infos.reportType], 
             commentId: infos.referenceId})
     }
     
