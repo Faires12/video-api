@@ -16,7 +16,7 @@ export class UploadVideoController extends Controller {
     const { title, userId, description } = httpRequest.body;
     const video = httpRequest.files.video as FileInterface;
     const thumbnail = httpRequest.files.thumbnail as FileInterface;
-    console.log(httpRequest.body)
+
     const newVideo = await this.UploadVideoService.upload({
       title,
       thumbnail,

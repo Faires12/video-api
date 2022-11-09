@@ -15,7 +15,6 @@ export class ManageSubscriptionService implements ManageSubscription {
   ) {}
 
   async manage(infos: ManageSubscriptionInterface): Promise<void> {
-    console.log(infos.userId === infos.subscribeTo)
     if (!(await this.userRepository.getById(infos.subscribeTo)))
       throw new HttpException(HttpStatusCode.NotFound, "Other user not found");
     if(infos.userId === infos.subscribeTo)

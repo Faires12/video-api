@@ -46,7 +46,7 @@ app.get(
   adaptRoute(makeGetVideoCommentsController())
 );
 app.post(
-  "/api/comment/video",
+  "/api/video/comment",
   adaptMiddleware(makeAuthMiddleware(false)),
   adaptRoute(makeCreateVideoCommentController())
 );
