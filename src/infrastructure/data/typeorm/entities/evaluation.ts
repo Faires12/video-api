@@ -1,12 +1,10 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { CommentEntity, UserEntity, VideoEntity  } from "./";
+import { AbstractEntity } from "./abstract_entity";
 
 
 @Entity("tb_evaluation")
-export class EvaluationEntity extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class EvaluationEntity extends AbstractEntity{
     @Column({type: "bool", nullable: false})
     isPositive: boolean 
 

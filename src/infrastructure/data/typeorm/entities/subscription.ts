@@ -1,11 +1,9 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { AbstractEntity } from "./abstract_entity";
 import { UserEntity } from "./user";
 
 @Entity("tb_subscription")
-export class SubscriptionEntity extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class SubscriptionEntity extends AbstractEntity{
     @ManyToOne(() => UserEntity, (user) => user.subscribers)
     @JoinColumn({name: "subscriber_id"})
     subscriber: UserEntity

@@ -1,21 +1,16 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {  Column,  Entity, JoinColumn, ManyToOne } from "typeorm";
+import { AbstractEntity } from "./abstract_entity";
 import { CommentEntity } from "./comment";
 import { UserEntity } from "./user";
 import { VideoEntity } from "./video";
 
 @Entity("tb_report")
-export class ReportEntity extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class ReportEntity extends AbstractEntity{
     @Column({type: "varchar", nullable: false})
     content: string
     
     @Column({type: "varchar", nullable: false})
     reportType: string
-
-    @CreateDateColumn()
-    createdAt: Date;
 
     @Column({type: "bool", default: false})
     read: boolean

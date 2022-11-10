@@ -1,11 +1,9 @@
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {  Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { UserEntity, VideoEntity } from "./";
+import { AbstractEntity } from "./abstract_entity";
 
 @Entity("tb_playlist")
-export class PlaylistEntity extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class PlaylistEntity extends AbstractEntity{
     @Column({type: "varchar", nullable: false})
     title: string 
 

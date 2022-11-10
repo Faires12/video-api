@@ -1,5 +1,6 @@
-export interface Evaluation{
-    id: number
+import { AbstractEntity } from "./abstract_entity"
+
+export interface Evaluation extends AbstractEntity{
     created_by: number  
     isPositive: boolean
     videoId?: number

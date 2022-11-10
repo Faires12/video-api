@@ -1,11 +1,9 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {  Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { CommentEntity, EvaluationEntity, UserEntity, ReportEntity } from "./";
+import { AbstractEntity } from "./abstract_entity";
 
 @Entity("tb_video")
-export class VideoEntity extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class VideoEntity extends AbstractEntity{
     @Column({type: "varchar", nullable: false})
     title: string 
     
@@ -30,9 +28,6 @@ export class VideoEntity extends BaseEntity{
 
     @Column({type: "int", default: 0})
     deslikesCount: number 
-
-    @CreateDateColumn()
-    createdAt: Date;
 
     @Column({type: "varchar", nullable: true})
     description: string 

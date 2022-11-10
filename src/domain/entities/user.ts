@@ -1,8 +1,9 @@
-export interface User {
+import { AbstractEntity } from "./abstract_entity"
+
+export interface User extends AbstractEntity{
     email?: string
     name?: string
     password?: string
-    id?: number
     avatar?: string
     isAdmin?: boolean
 }

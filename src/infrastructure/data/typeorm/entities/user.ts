@@ -1,12 +1,10 @@
-import { BaseEntity, PrimaryGeneratedColumn, Entity, Column, OneToMany } from "typeorm";
+import { Entity, Column, OneToMany } from "typeorm";
 import { CommentEntity, EvaluationEntity, VideoEntity, PlaylistEntity, SubscriptionEntity, ReportEntity } from "./";
+import { AbstractEntity } from "./abstract_entity";
 
 
 @Entity("tb_user")
-export class UserEntity extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class UserEntity extends AbstractEntity{
     @Column({type: "varchar", unique: true, nullable: false})
     email: string
 
