@@ -1,9 +1,20 @@
 import { Video } from "../../../../domain/entities";
 import { CreateVideoInterface, VideoRepositoryInterface } from "../../../../domain/repositories";
-import { ChangeEvaluationsInterface } from "../../../../domain/repositories/video_repository";
+import { ChangeCommentCountInterface, ChangeEvaluationsInterface } from "../../../../domain/repositories/video_repository";
 import { UserEntity, VideoEntity } from "../entities";
 
 export class VideoRepository implements VideoRepositoryInterface {
+  async changeCommentCount(infos: ChangeCommentCountInterface): Promise<void> {
+    const video = await VideoEntity.findOneBy({id: infos.id})
+    if(video){
+      if(infos.isPositive)  
+        video.commentCount++
+      else
+        video.commentCount--
+      await video.save()
+    }
+  }
+
   async changeEvaluations(
     infos: ChangeEvaluationsInterface
   ): Promise<void> {
@@ -63,12 +74,14 @@ export class VideoRepository implements VideoRepositoryInterface {
         name: video.created_by.name,
         email: video.created_by.email,
         avatar: video.created_by.avatar,
+        subsCount: video.created_by.subsCount
       },
       createdAt: video.createdAt,
       description: video.description,
       viewsCount: video.viewsCount,
       likesCount: video.likesCount,
       deslikesCount: video.deslikesCount,
+      commentCount: video.commentCount
     };
   }
 }

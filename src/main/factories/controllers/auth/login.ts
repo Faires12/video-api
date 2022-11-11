@@ -20,7 +20,7 @@ export function makeLoginValidation() : Validation {
 export function makeLoginController(): LoginController {
   const userRepository = new UserRepository();
   const bcryptAdapter = new BcryptAdapter(12);
-  const jwtAdapter = new JwtAdapter(process.env.SECRET || "adsas");
+  const jwtAdapter = new JwtAdapter(process.env.SECRET || "adsas", Number(process.env.EXP) || 3600000);
   const loginService = new LoginService(
     userRepository,
     bcryptAdapter,

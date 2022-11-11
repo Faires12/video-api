@@ -9,7 +9,7 @@ export class AddCommentEvaluationController extends Controller{
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, commentId, isPositive} = httpRequest.body
 
-        const evaluation = await this.addEvaluationService.create({
+        await this.addEvaluationService.create({
             created_by: userId,
             reference_id: commentId,
             isLike: isPositive,

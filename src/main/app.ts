@@ -23,6 +23,7 @@ import {
   makeUploadVideoController,
 } from "./factories/controllers";
 import { makeAuthMiddleware } from "./factories/middlewares/auth";
+import { makeGetLoggedUserDataController } from "./factories/controllers/user/get_logged_user_data";
 
 const app = express();
 
@@ -100,6 +101,12 @@ app.post(
   "/api/report/comment",
   adaptMiddleware(makeAuthMiddleware(false)),
   adaptRoute(makeCreateCommentReportController())
+);
+
+app.get(
+  "/api/user",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeGetLoggedUserDataController())
 );
 
 export default app;

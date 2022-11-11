@@ -6,4 +6,5 @@ export interface User extends AbstractEntity{
     password?: string
     avatar?: string
     isAdmin?: boolean
+    subsCount?: number
 }

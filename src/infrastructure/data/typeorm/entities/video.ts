@@ -29,6 +29,9 @@ export class VideoEntity extends AbstractEntity{
     @Column({type: "int", default: 0})
     deslikesCount: number 
 
+    @Column({type: "int", default: 0})
+    commentCount: number 
+
     @Column({type: "varchar", nullable: true})
     description: string 
 

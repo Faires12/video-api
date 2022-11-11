@@ -15,8 +15,15 @@ export interface ChangeEvaluationsInterface {
   isChange?: boolean;
 }
 
+export interface ChangeCommentCountInterface {
+  id: number;
+  isPositive: boolean;
+}
+
+
 export interface VideoRepositoryInterface {
   create(video: CreateVideoInterface): Promise<Video>;
   getById(id: number): Promise<Video | null>;
   changeEvaluations(infos: ChangeEvaluationsInterface): Promise<void>;
+  changeCommentCount(infos: ChangeCommentCountInterface): Promise<void>;
 }

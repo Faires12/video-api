@@ -14,11 +14,14 @@ export class UserEntity extends AbstractEntity{
     @Column({type: "varchar", nullable: false})
     name: string  
 
-    @Column({type: "varchar", default: "default_avatar.png"})
+    @Column({type: "varchar", default: "default_avatar.jpg"})
     avatar: string 
 
     @Column({type: "bool", default: false})
     isAdmin: boolean 
+
+    @Column({type: "int", default: 0})
+    subsCount: number 
 
     @OneToMany(() => VideoEntity, (video) => video.created_by)
     videos: VideoEntity[]

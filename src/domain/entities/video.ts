@@ -9,5 +9,6 @@ export interface Video extends AbstractEntity{
     viewsCount?: number
     likesCount?: number
     deslikesCount?: number
+    commentCount?: number
     description?: string
 }

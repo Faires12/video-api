@@ -24,12 +24,17 @@ export class ManageSubscriptionService implements ManageSubscription {
         subscriber: infos.userId,
         subscriptedTo: infos.subscribeTo,
       });
-    if (existingSubscription)
+    if (existingSubscription && existingSubscription.id){
       await this.subscriptionRepository.remove(existingSubscription.id);
-    else
+      await this.userRepository.changeSubsCount({id: infos.subscribeTo, isPositive: false})
+    }     
+    else {
       await this.subscriptionRepository.add({
         subscriber: infos.userId,
         subscriptedTo: infos.subscribeTo,
       });
+      await this.userRepository.changeSubsCount({id: infos.subscribeTo, isPositive: true})
+    }
+      
   }
 }

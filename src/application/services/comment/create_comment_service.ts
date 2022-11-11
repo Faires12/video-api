@@ -19,6 +19,9 @@ export class CreateCommentService implements CreateComment{
                 throw new HttpException(HttpStatusCode.BadRequest, "Only main comment can be responded");
         }
 
+        if(comment.isVideo)
+            await this.videoRepository.changeCommentCount({id: comment.referenceId, isPositive: true})
+
         return await this.commentRepository.create({
             created_by: comment.userId,
             content: comment.content,

@@ -16,7 +16,7 @@ export function makeAuthValidation() : Validation {
 
 export function makeAuthMiddleware(needAuthorization: boolean) : AuthenticationMiddleware {
     const userRepository = new UserRepository()
-    const jwtAdapter = new JwtAdapter(process.env.SECRET || "adsas")
+    const jwtAdapter = new JwtAdapter(process.env.SECRET || "adsas", Number(process.env.EXP) || 3600000)
     const getUserByTokenService = new GetUserByTokenService(userRepository, jwtAdapter)
     const validations = makeAuthValidation()
     const authMiddleware = new AuthenticationMiddleware(validations, getUserByTokenService)

@@ -17,7 +17,7 @@ export class AddEvaluationService implements AddEvaluation {
     private readonly commentRepository: CommentRepositoryInterface
   ) {}
 
-  async create(evaluation: AddEvaluationInterface): Promise<Evaluation> {
+  async create(evaluation: AddEvaluationInterface): Promise<void> {
     if (
       evaluation.isVideo &&
       !(await this.videoRepository.getById(evaluation.reference_id))
@@ -52,14 +52,14 @@ export class AddEvaluationService implements AddEvaluation {
             isPositive: true,
           });
 
-      return await this.evaluationRepository.create({
+      await this.evaluationRepository.create({
         created_by: evaluation.created_by,
         isPositive: evaluation.isLike,
         videoId: evaluation.isVideo ? evaluation.reference_id : undefined,
         commentId: !evaluation.isVideo ? evaluation.reference_id : undefined,
       });
-    } else {
-      if (existingEvaluation.isPositive === evaluation.isLike) {
+    } else if(existingEvaluation.id){
+      if (existingEvaluation.isPositive === evaluation.isLike ) {
         evaluation.isVideo
           ? await this.videoRepository.changeEvaluations({
               id: evaluation.reference_id,
@@ -71,7 +71,7 @@ export class AddEvaluationService implements AddEvaluation {
               isLike: evaluation.isLike,
               isPositive: true,
             });
-        return await this.evaluationRepository.delete(existingEvaluation.id);
+         await this.evaluationRepository.delete(existingEvaluation.id);
       } else {
         if (evaluation.isVideo) {
           await this.videoRepository.changeEvaluations({
@@ -80,7 +80,7 @@ export class AddEvaluationService implements AddEvaluation {
             isPositive: true,
             isChange: true,
           });
-        } else {
+        } else{
           await this.commentRepository.changeEvaluations({
             id: evaluation.reference_id,
             isLike: evaluation.isLike,
@@ -88,7 +88,7 @@ export class AddEvaluationService implements AddEvaluation {
             isChange: true,
           });
         }
-        return await this.evaluationRepository.update({
+        await this.evaluationRepository.update({
           id: existingEvaluation.id,
           isPositive: evaluation.isLike,
         });

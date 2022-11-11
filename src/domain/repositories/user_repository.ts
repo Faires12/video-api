@@ -7,8 +7,14 @@ export interface CreateUserInterface{
     avatar?: string
 }
 
+export interface ChangeSubsCountInterface{
+    id: number
+    isPositive: boolean
+}
+
 export interface UserRepositoryInterface{
     create(user: CreateUserInterface) : Promise<User>
     getById(id: number) : Promise<User | null>
     getByEmail(email: string) : Promise<User | null>
+    changeSubsCount(infos: ChangeSubsCountInterface) : Promise<void>
 }

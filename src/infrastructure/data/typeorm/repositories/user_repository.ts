@@ -1,8 +1,18 @@
 import { User } from "../../../../domain/entities"
-import { CreateUserInterface, UserRepositoryInterface } from "../../../../domain/repositories"
+import { ChangeSubsCountInterface, CreateUserInterface, UserRepositoryInterface } from "../../../../domain/repositories"
 import { UserEntity } from "../entities"
 
 export class UserRepository implements UserRepositoryInterface{
+    async changeSubsCount(infos: ChangeSubsCountInterface): Promise<void> {
+        const user = await UserEntity.findOneBy({id: infos.id})
+        if(user){
+            if(infos.isPositive)
+                user.subsCount++
+            else
+                user.subsCount--
+            await user.save()
+        }
+    }
     async create(user: CreateUserInterface): Promise<User> {
         const userEntity = new UserEntity()
         if(user.email && user.name && user.password){
