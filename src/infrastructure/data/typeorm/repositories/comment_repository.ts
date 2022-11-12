@@ -4,11 +4,39 @@ import {
   ChangeResponseCountInterface,
   CommentRepositoryInterface,
   CreateCommentInterface,
+  GetCommentResponsesInterface,
   GetVideoCommentsInterface,
 } from "../../../../domain/repositories";
 import { CommentEntity, UserEntity } from "../entities";
 
 export class CommentRepository implements CommentRepositoryInterface {
+  async getByComment(infos: GetCommentResponsesInterface): Promise<Comment[]> {
+    const comments = await CommentEntity.find({
+      where: { commentId: infos.commentId },
+      take: infos.rows,
+      skip: (infos.page - 1) * infos.rows,
+    });
+
+    return comments.map((c) => {
+      const res : Comment = {
+        id: c.id,
+        created_by: {
+          name: c.created_by.name,
+          email: c.created_by.email,
+          avatar: c.created_by.avatar,
+        },
+        content: c.content,
+        likesCount: c.likesCount,
+        deslikesCount: c.deslikesCount,
+        commentCount: c.commentCount,
+        createdAt: c.createdAt
+      };
+
+      if(c.videoId)
+        res.responses = []
+      return res
+    });
+  }
   async changeCommentCount(infos: ChangeResponseCountInterface): Promise<void> {
     const comment = await CommentEntity.findOneBy({id: infos.id})
     if(comment){
@@ -80,18 +108,25 @@ export class CommentRepository implements CommentRepositoryInterface {
     if (comment.comment_id) newComment.commentId = comment.comment_id;
 
     await newComment.save();
-    return {
+    
+    const c : Comment = {
       id: newComment.id,
-      content: newComment.content,
       created_by: {
         name: newComment.created_by.name,
         email: newComment.created_by.email,
         avatar: newComment.created_by.avatar,
       },
-      createdAt: newComment.createdAt,
-      video_id: newComment.videoId,
-      comment_id: newComment.commentId,
+      content: newComment.content,
+      likesCount: newComment.likesCount,
+      deslikesCount: newComment.deslikesCount,
+      commentCount: newComment.commentCount,
+      createdAt: newComment.createdAt
     };
+
+    if(newComment.videoId)
+      c.responses = []
+      
+    return c
   }
   async getById(id: number): Promise<Comment | null> {
     const comment = await CommentEntity.findOneBy({ id });

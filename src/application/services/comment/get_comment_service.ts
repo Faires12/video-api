@@ -1,11 +1,11 @@
 import { Comment } from "../../../domain/entities";
+import { CommentRepositoryInterface, EvaluationRepositoryInterface } from "../../../domain/repositories";
 import { GetComment } from "../../../domain/usecases";
-import { CommentRepository, EvaluationRepository } from "../../../infrastructure/data/typeorm/repositories";
 import { HttpException, HttpStatusCode } from "../../../utils/http";
 
 export class GetCommentService implements GetComment{
-    constructor(private readonly commentRepository: CommentRepository,
-        private readonly evaluationRepository: EvaluationRepository) {}
+    constructor(private readonly commentRepository: CommentRepositoryInterface,
+        private readonly evaluationRepository: EvaluationRepositoryInterface) {}
 
     async get(id: number, userId: number | null): Promise<Comment> {
         const comment = await this.commentRepository.getById(id)

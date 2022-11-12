@@ -21,6 +21,6 @@ export class CreateVideoCommentController extends Controller {
       isVideo: true,
     });
 
-    return ok("Comment created successfully");
+    return ok(comment);
   }
 }

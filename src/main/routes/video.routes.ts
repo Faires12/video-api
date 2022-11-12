@@ -7,6 +7,7 @@ import {
   makeCreateVideoCommentController,
   makeGetCommentController,
   makeGetCommentEvaluationController,
+  makeGetCommentResponsesController,
   makeGetVideoCommentsController,
   makeGetVideoController,
   makeGetVideoEvaluationController,
@@ -44,6 +45,12 @@ router.get(
   "/comments/:videoId",
   adaptMiddleware(makeAuthMiddleware(false, true)),
   adaptRoute(makeGetVideoCommentsController())
+);
+
+router.get(
+  "/comments/responses/:commentId",
+  adaptMiddleware(makeAuthMiddleware(false, true)),
+  adaptRoute(makeGetCommentResponsesController())
 );
 
 router.post(

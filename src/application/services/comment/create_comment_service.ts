@@ -15,7 +15,7 @@ export class CreateCommentService implements CreateComment{
             const existingComment = await this.commentRepository.getById(comment.referenceId)
             if(existingComment === null)
                 throw new HttpException(HttpStatusCode.NotFound, "Comment not found");
-            if(!existingComment.video_id)
+            if(!existingComment.responses)
                 throw new HttpException(HttpStatusCode.BadRequest, "Only main comment can be responded");
         }
 
