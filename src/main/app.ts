@@ -4,26 +4,12 @@ import cors from "cors";
 import fileUpload from "express-fileupload";
 import path from "path";
 
-import { adaptRoute, adaptMiddleware } from "./adapters";
-import {
-  makeAddCommentEvaluationController,
-  makeAddVideoEvaluationController,
-  makeAddVideoToPlaylistController,
-  makeCreateCommentReportController,
-  makeCreatePlaylistController,
-  makeCreateResponseCommentController,
-  makeCreateVideoCommentController,
-  makeCreateVideoReportController,
-  makeGetVideoCommentsController,
-  makeGetVideoController,
-  makeLoginController,
-  makeManageSubscriptionController,
-  makeRegisterController,
-  makeRemoveVideoFromPlaylistController,
-  makeUploadVideoController,
-} from "./factories/controllers";
-import { makeAuthMiddleware } from "./factories/middlewares/auth";
-import { makeGetLoggedUserDataController } from "./factories/controllers/user/get_logged_user_data";
+import AuthRoutes from './routes/auth.routes'
+import PlaylistRoutes from './routes/playlist.routes'
+import ReportRoutes from './routes/report.routes'
+import SubscriptionRoutes from './routes/subscription.routes'
+import UserRoutes from './routes/user.routes'
+import VideoRoutes from './routes/video.routes'
 
 const app = express();
 
@@ -34,79 +20,11 @@ app.use(express.static(path.resolve(__dirname + "/public")));
 
 app.set("port", process.env.PORT || 3000);
 
-app.post("/api/register", adaptRoute(makeRegisterController()));
-app.post("/api/login", adaptRoute(makeLoginController()));
-app.get("/api/video/:id", adaptRoute(makeGetVideoController()));
-app.post(
-  "/api/video",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeUploadVideoController())
-);
-app.get(
-  "/api/comment/video/:videoId",
-  adaptRoute(makeGetVideoCommentsController())
-);
-app.post(
-  "/api/video/comment",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreateVideoCommentController())
-);
-app.post(
-  "/api/comment/response",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreateResponseCommentController())
-);
-app.post(
-  "/api/evaluation/video",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeAddVideoEvaluationController())
-);
-app.post(
-  "/api/evaluation/comment",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeAddCommentEvaluationController())
-);
-
-app.post(
-  "/api/playlist",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreatePlaylistController())
-);
-
-app.post(
-  "/api/playlist/add",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeAddVideoToPlaylistController())
-);
-
-app.post(
-  "/api/playlist/remove",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeRemoveVideoFromPlaylistController())
-);
-
-app.post(
-  "/api/subscription",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeManageSubscriptionController())
-);
-
-app.post(
-  "/api/report/video",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreateVideoReportController())
-);
-
-app.post(
-  "/api/report/comment",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreateCommentReportController())
-);
-
-app.get(
-  "/api/user",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeGetLoggedUserDataController())
-);
+app.use("/api", AuthRoutes)
+app.use("/api/playlist", PlaylistRoutes)
+app.use("/api/report", ReportRoutes)
+app.use("/api/subscription", SubscriptionRoutes)
+app.use("/api/user", UserRoutes)
+app.use("/api/video", VideoRoutes)
 
 export default app;

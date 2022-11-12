@@ -20,6 +20,9 @@ export class CommentEntity extends AbstractEntity{
     @Column({type: "int", default: 0})
     deslikesCount: number 
 
+    @Column({type: "int", default: 0})
+    commentCount: number 
+
     @ManyToOne(() => VideoEntity, (video) => video.comments)
     video: VideoEntity
 

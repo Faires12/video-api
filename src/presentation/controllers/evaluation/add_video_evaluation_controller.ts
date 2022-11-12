@@ -10,14 +10,14 @@ export class AddVideoEvaluationController extends Controller{
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, videoId, isPositive} = httpRequest.body
 
-        await this.addEvaluationService.create({
+        const res = await this.addEvaluationService.create({
             created_by: userId,
             reference_id: videoId,
             isLike: isPositive,
             isVideo: true
         })
 
-        return ok("Evaluation created successfully")
+        return ok(res)
     }
     
 }

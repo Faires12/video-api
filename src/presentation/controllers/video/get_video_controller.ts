@@ -9,8 +9,8 @@ export class GetVideoController extends Controller{
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {id} = httpRequest.params
-
-        const video = await this.getVideoService.get(id)
+        const {userId} = httpRequest.body
+        const video = await this.getVideoService.get(id, userId)
 
         return ok(video)
     }

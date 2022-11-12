@@ -14,9 +14,15 @@ export interface GetVideoCommentsInterface {
   rows: number;
 }
 
+export interface ChangeResponseCountInterface {
+  id: number;
+  isPositive: boolean;
+}
+
 export interface CommentRepositoryInterface {
   create(comment: CreateCommentInterface): Promise<Comment>;
   getById(id: number): Promise<Comment | null>;
   changeEvaluations(infos: ChangeEvaluationsInterface): Promise<void>;
   getByVideo(infos: GetVideoCommentsInterface): Promise<Comment[]>;
+  changeCommentCount(infos: ChangeResponseCountInterface): Promise<void>;
 }

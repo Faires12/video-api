@@ -1,4 +1,4 @@
-import { Evaluation } from "../../entities";
+import { Comment, Video } from "../../entities"
 
 export interface AddEvaluationInterface{
     created_by: number
@@ -8,5 +8,5 @@ export interface AddEvaluationInterface{
 }
 
 export interface AddEvaluation{
-    create(evaluation: AddEvaluationInterface) : Promise<void>
+    create(evaluation: AddEvaluationInterface) : Promise<Video | Comment | null>
 }

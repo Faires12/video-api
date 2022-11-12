@@ -1,4 +1,4 @@
-import { Evaluation } from "../../../domain/entities";
+import { Comment, Video } from "../../../domain/entities";
 import {
   CommentRepositoryInterface,
   EvaluationRepositoryInterface,
@@ -17,7 +17,9 @@ export class AddEvaluationService implements AddEvaluation {
     private readonly commentRepository: CommentRepositoryInterface
   ) {}
 
-  async create(evaluation: AddEvaluationInterface): Promise<void> {
+  async create(
+    evaluation: AddEvaluationInterface
+  ): Promise<Video | Comment | null> {
     if (
       evaluation.isVideo &&
       !(await this.videoRepository.getById(evaluation.reference_id))
@@ -58,20 +60,48 @@ export class AddEvaluationService implements AddEvaluation {
         videoId: evaluation.isVideo ? evaluation.reference_id : undefined,
         commentId: !evaluation.isVideo ? evaluation.reference_id : undefined,
       });
-    } else if(existingEvaluation.id){
-      if (existingEvaluation.isPositive === evaluation.isLike ) {
+
+      if (evaluation.isVideo) {
+        const video = await this.videoRepository.getById(
+          evaluation.reference_id
+        );
+        if (video) video.evaluation = evaluation.isLike;
+        return video;
+      } else {
+        const comment = await this.commentRepository.getById(
+          evaluation.reference_id
+        );
+        if (comment) comment.evaluation = evaluation.isLike;
+        return comment;
+      }
+    } else if (existingEvaluation.id) {
+      if (existingEvaluation.isPositive === evaluation.isLike) {
         evaluation.isVideo
           ? await this.videoRepository.changeEvaluations({
               id: evaluation.reference_id,
               isLike: evaluation.isLike,
-              isPositive: true,
+              isPositive: false,
             })
           : await this.commentRepository.changeEvaluations({
               id: evaluation.reference_id,
               isLike: evaluation.isLike,
-              isPositive: true,
+              isPositive: false,
             });
-         await this.evaluationRepository.delete(existingEvaluation.id);
+        await this.evaluationRepository.delete(existingEvaluation.id);
+
+        if (evaluation.isVideo) {
+          const video = await this.videoRepository.getById(
+            evaluation.reference_id
+          );
+          if (video) video.evaluation = null;
+          return video;
+        } else {
+          const comment = await this.commentRepository.getById(
+            evaluation.reference_id
+          );
+          if (comment) comment.evaluation = null;
+          return comment;
+        }
       } else {
         if (evaluation.isVideo) {
           await this.videoRepository.changeEvaluations({
@@ -80,7 +110,7 @@ export class AddEvaluationService implements AddEvaluation {
             isPositive: true,
             isChange: true,
           });
-        } else{
+        } else {
           await this.commentRepository.changeEvaluations({
             id: evaluation.reference_id,
             isLike: evaluation.isLike,
@@ -92,7 +122,22 @@ export class AddEvaluationService implements AddEvaluation {
           id: existingEvaluation.id,
           isPositive: evaluation.isLike,
         });
+
+        if (evaluation.isVideo) {
+          const video = await this.videoRepository.getById(
+            evaluation.reference_id
+          );
+          if (video) video.evaluation = evaluation.isLike;
+          return video;
+        } else {
+          const comment = await this.commentRepository.getById(
+            evaluation.reference_id
+          );
+          if (comment) comment.evaluation = evaluation.isLike;
+          return comment;
+        }
       }
     }
+    return null;
   }
 }

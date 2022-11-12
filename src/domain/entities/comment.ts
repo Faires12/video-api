@@ -9,5 +9,7 @@ export interface Comment extends AbstractEntity{
     likesCount?: number
     deslikesCount?: number
     responses?: Comment[]
+    commentCount?: number
+    evaluation?: boolean | null
 }
 

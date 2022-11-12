@@ -9,7 +9,8 @@ export class GetVideoCommentsController extends Controller{
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {page, rows} = httpRequest.query
         const {videoId} = httpRequest.params
-        const comments = await this.getVideoCommentsService.get({videoId, page, rows})
+        const {userId} = httpRequest.body
+        const comments = await this.getVideoCommentsService.get({videoId, page, rows, userId})
         return ok(comments)
     }
     

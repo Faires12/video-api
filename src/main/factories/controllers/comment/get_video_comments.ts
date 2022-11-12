@@ -1,5 +1,5 @@
 import { GetVideoCommentsService } from "../../../../application/services"
-import { CommentRepository, VideoRepository } from "../../../../infrastructure/data/typeorm/repositories"
+import { CommentRepository, EvaluationRepository, VideoRepository } from "../../../../infrastructure/data/typeorm/repositories"
 import { GetVideoCommentsController } from "../../../../presentation/controllers"
 import { NumberValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
 
@@ -15,6 +15,7 @@ export const makeGetVideoCommentsValidation = () : Validation => {
 export const makeGetVideoCommentsController = () : GetVideoCommentsController => {
     const commentRepository = new CommentRepository()
     const videoRepository = new VideoRepository()
-    const getVideoCommentsService = new GetVideoCommentsService(commentRepository, videoRepository)
+    const evaluationRepository = new EvaluationRepository()
+    const getVideoCommentsService = new GetVideoCommentsService(commentRepository, videoRepository, evaluationRepository)
     return new GetVideoCommentsController(makeGetVideoCommentsValidation(), getVideoCommentsService)
 }

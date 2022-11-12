@@ -1,6 +1,7 @@
 import { Comment } from "../../../../domain/entities";
 import {
   ChangeEvaluationsInterface,
+  ChangeResponseCountInterface,
   CommentRepositoryInterface,
   CreateCommentInterface,
   GetVideoCommentsInterface,
@@ -8,22 +9,25 @@ import {
 import { CommentEntity, UserEntity } from "../entities";
 
 export class CommentRepository implements CommentRepositoryInterface {
+  async changeCommentCount(infos: ChangeResponseCountInterface): Promise<void> {
+    const comment = await CommentEntity.findOneBy({id: infos.id})
+    if(comment){
+      if(infos.isPositive)
+        comment.commentCount++
+      else
+        comment.commentCount--
+      comment.save()
+    }
+  }
   async getByVideo(infos: GetVideoCommentsInterface): Promise<Comment[]> {
     const comments = await CommentEntity.find({
       where: { videoId: infos.videoId },
       take: infos.rows,
       skip: (infos.page - 1) * infos.rows,
     });
-    for (const comment of comments) {
-      const responses = await CommentEntity.find({
-        where: { commentId: comment.id },
-        take: 3,
-        skip: 0,
-      })
-      comment.comments = responses;
-    }
+
     return comments.map((c) => {
-      return {
+      const res : Comment = {
         id: c.id,
         created_by: {
           name: c.created_by.name,
@@ -33,20 +37,13 @@ export class CommentRepository implements CommentRepositoryInterface {
         content: c.content,
         likesCount: c.likesCount,
         deslikesCount: c.deslikesCount,
-        responses: c.comments.map((c) => {
-          return {
-            id: c.id,
-            created_by: {
-              name: c.created_by.name,
-              email: c.created_by.email,
-              avatar: c.created_by.avatar,
-            },
-            content: c.content,
-            likesCount: c.likesCount,
-            deslikesCount: c.deslikesCount,
-          };
-        }),
+        commentCount: c.commentCount,
+        createdAt: c.createdAt
       };
+
+      if(c.videoId)
+        res.responses = []
+      return res
     });
   }
 
@@ -100,18 +97,23 @@ export class CommentRepository implements CommentRepositoryInterface {
     const comment = await CommentEntity.findOneBy({ id });
     if (!comment) return null;
 
-    return {
+    const c : Comment = {
       id: comment.id,
       created_by: {
         name: comment.created_by.name,
         email: comment.created_by.email,
         avatar: comment.created_by.avatar,
       },
-      video_id: comment.videoId,
-      comment_id: comment.commentId,
+      content: comment.content,
       likesCount: comment.likesCount,
       deslikesCount: comment.deslikesCount,
-      content: comment.content,
+      commentCount: comment.commentCount,
+      createdAt: comment.createdAt
     };
+
+    if(comment.videoId)
+      c.responses = []
+      
+    return c
   }
 }

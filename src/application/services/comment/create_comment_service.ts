@@ -21,7 +21,9 @@ export class CreateCommentService implements CreateComment{
 
         if(comment.isVideo)
             await this.videoRepository.changeCommentCount({id: comment.referenceId, isPositive: true})
-
+        else
+            await this.commentRepository.changeCommentCount({id: comment.referenceId, isPositive: true})
+            
         return await this.commentRepository.create({
             created_by: comment.userId,
             content: comment.content,
