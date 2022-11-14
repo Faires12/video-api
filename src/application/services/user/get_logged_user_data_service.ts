@@ -13,7 +13,8 @@ export class GetLoggedUserDataService implements GetLoggedUserData{
         return {
             email: user.email,
             name: user.name,
-            avatar: user.avatar
+            avatar: user.avatar,
+            subsCount: user.subsCount
         }
     }
     

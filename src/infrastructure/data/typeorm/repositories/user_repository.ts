@@ -42,7 +42,8 @@ export class UserRepository implements UserRepositoryInterface{
             isAdmin: user.isAdmin,
             email: user.email,
             avatar: user.avatar,
-            password: user.password
+            password: user.password,
+            subsCount: user.subsCount
         }
     }
     async getByEmail(email: string): Promise<User | null> {
