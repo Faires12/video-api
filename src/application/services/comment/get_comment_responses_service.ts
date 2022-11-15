@@ -4,6 +4,7 @@ import {
   EvaluationRepositoryInterface,
 } from "../../../domain/repositories";
 import {
+  CommentDTO,
   GetCommentResponses,
   GetCommentResponsesInterface,
 } from "../../../domain/usecases";
@@ -14,10 +15,10 @@ export class GetCommentResponsesService implements GetCommentResponses {
     private readonly commentRepository: CommentRepositoryInterface,
     private readonly evaluationRepository: EvaluationRepositoryInterface
   ) {}
-  async get(infos: GetCommentResponsesInterface): Promise<Comment[]> {
+  async get(infos: GetCommentResponsesInterface): Promise<CommentDTO[]> {
     const existingComment = await this.commentRepository.getById(
       infos.commentId
-    );
+    ) 
     if (existingComment === null)
       throw new HttpException(HttpStatusCode.NotFound, "Comment not found");
     if (!existingComment.responses)
@@ -30,7 +31,7 @@ export class GetCommentResponsesService implements GetCommentResponses {
       commentId: infos.commentId,
       page: infos.page,
       rows: infos.rows,
-    });
+    }) as CommentDTO[]
 
     if (!infos.userId) return comments;
 

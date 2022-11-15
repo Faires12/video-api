@@ -1,3 +1,4 @@
+import { VideoOrderEnum } from "../../utils/order_enums";
 import { Video } from "../entities";
 
 export interface CreateVideoInterface {
@@ -20,10 +21,14 @@ export interface ChangeCommentCountInterface {
   isPositive: boolean;
 }
 
+export interface GetUserVideoRepositoryInterface{
+  userId: number, page: number, rows: number, orderBy: number
+}
 
 export interface VideoRepositoryInterface {
   create(video: CreateVideoInterface): Promise<Video>;
   getById(id: number): Promise<Video | null>;
   changeEvaluations(infos: ChangeEvaluationsInterface): Promise<void>;
   changeCommentCount(infos: ChangeCommentCountInterface): Promise<void>;
+  getByUser(infos: GetUserVideoRepositoryInterface) : Promise<Video[]>
 }

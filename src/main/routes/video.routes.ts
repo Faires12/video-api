@@ -8,6 +8,7 @@ import {
   makeGetCommentController,
   makeGetCommentEvaluationController,
   makeGetCommentResponsesController,
+  makeGetUserVideosController,
   makeGetVideoCommentsController,
   makeGetVideoController,
   makeGetVideoEvaluationController,
@@ -21,6 +22,11 @@ router.get(
   "/:id",
   adaptMiddleware(makeAuthMiddleware(false, true)),
   adaptRoute(makeGetVideoController())
+);
+
+router.get(
+  "/user/:email",
+  adaptRoute(makeGetUserVideosController())
 );
 
 router.post(

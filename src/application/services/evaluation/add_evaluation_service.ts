@@ -7,6 +7,8 @@ import {
 import {
   AddEvaluation,
   AddEvaluationInterface,
+  CommentDTO,
+  VideoDTO,
 } from "../../../domain/usecases";
 import { HttpException, HttpStatusCode } from "../../../utils/http";
 
@@ -19,7 +21,7 @@ export class AddEvaluationService implements AddEvaluation {
 
   async create(
     evaluation: AddEvaluationInterface
-  ): Promise<Video | Comment | null> {
+  ): Promise<VideoDTO | CommentDTO | null> {
     if (
       evaluation.isVideo &&
       !(await this.videoRepository.getById(evaluation.reference_id))
@@ -64,13 +66,13 @@ export class AddEvaluationService implements AddEvaluation {
       if (evaluation.isVideo) {
         const video = await this.videoRepository.getById(
           evaluation.reference_id
-        );
+        ) as VideoDTO
         if (video) video.evaluation = evaluation.isLike;
         return video;
       } else {
         const comment = await this.commentRepository.getById(
           evaluation.reference_id
-        );
+        ) as CommentDTO
         if (comment) comment.evaluation = evaluation.isLike;
         return comment;
       }
@@ -92,13 +94,13 @@ export class AddEvaluationService implements AddEvaluation {
         if (evaluation.isVideo) {
           const video = await this.videoRepository.getById(
             evaluation.reference_id
-          );
+          ) as VideoDTO
           if (video) video.evaluation = null;
           return video;
         } else {
           const comment = await this.commentRepository.getById(
             evaluation.reference_id
-          );
+          ) as CommentDTO
           if (comment) comment.evaluation = null;
           return comment;
         }
@@ -126,13 +128,13 @@ export class AddEvaluationService implements AddEvaluation {
         if (evaluation.isVideo) {
           const video = await this.videoRepository.getById(
             evaluation.reference_id
-          );
+          ) as VideoDTO
           if (video) video.evaluation = evaluation.isLike;
           return video;
         } else {
           const comment = await this.commentRepository.getById(
             evaluation.reference_id
-          );
+          ) as CommentDTO
           if (comment) comment.evaluation = evaluation.isLike;
           return comment;
         }

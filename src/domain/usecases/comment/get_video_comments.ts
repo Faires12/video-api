@@ -7,6 +7,10 @@ export interface GetVideoCommentsServiceInterface {
   userId: number | null;
 }
 
+export interface CommentDTO extends Comment{
+  evaluation?: boolean | null
+}
+
 export interface GetVideoComments {
-  get(infos: GetVideoCommentsServiceInterface): Promise<Comment[]>;
+  get(infos: GetVideoCommentsServiceInterface): Promise<CommentDTO[]>;
 }

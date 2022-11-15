@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { adaptMiddleware, adaptRoute } from "../adapters";
-import { makeGetLoggedUserDataController } from "../factories/controllers/user/get_logged_user_data";
+import { makeGetLoggedUserDataController, makeGetUserDataByEmailController } from "../factories/controllers";
 import { makeAuthMiddleware } from "../factories/middlewares/auth";
 
 const router = Router();
@@ -9,6 +9,11 @@ router.get(
   "/",
   adaptMiddleware(makeAuthMiddleware(false)),
   adaptRoute(makeGetLoggedUserDataController())
+);
+
+router.get(
+  "/:email",
+  adaptRoute(makeGetUserDataByEmailController())
 );
 
 export default router

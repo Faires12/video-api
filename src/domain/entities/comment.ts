@@ -10,6 +10,5 @@ export interface Comment extends AbstractEntity{
     deslikesCount?: number
     responses?: Comment[]
     commentCount?: number
-    evaluation?: boolean | null
 }
 

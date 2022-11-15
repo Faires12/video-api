@@ -1,14 +1,14 @@
 import { Comment } from "../../../domain/entities";
 import { CommentRepositoryInterface, EvaluationRepositoryInterface } from "../../../domain/repositories";
-import { GetComment } from "../../../domain/usecases";
+import { CommentDTO, GetComment } from "../../../domain/usecases";
 import { HttpException, HttpStatusCode } from "../../../utils/http";
 
 export class GetCommentService implements GetComment{
     constructor(private readonly commentRepository: CommentRepositoryInterface,
         private readonly evaluationRepository: EvaluationRepositoryInterface) {}
 
-    async get(id: number, userId: number | null): Promise<Comment> {
-        const comment = await this.commentRepository.getById(id)
+    async get(id: number, userId: number | null): Promise<CommentDTO> {
+        const comment = await this.commentRepository.getById(id) as CommentDTO
         if(!comment)
             throw new HttpException(HttpStatusCode.NotFound, "Comment not found")
         

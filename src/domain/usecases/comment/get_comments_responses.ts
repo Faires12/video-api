@@ -1,4 +1,5 @@
 import { Comment } from "../../entities"
+import { CommentDTO } from "./get_video_comments"
 
 export interface GetCommentResponsesInterface{
     commentId: number
@@ -8,5 +9,5 @@ export interface GetCommentResponsesInterface{
 }
 
 export interface GetCommentResponses{
-    get(infos: GetCommentResponsesInterface) : Promise<Comment[]>
+    get(infos: GetCommentResponsesInterface) : Promise<CommentDTO[]>
 }

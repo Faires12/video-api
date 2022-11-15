@@ -1,23 +1,58 @@
 import { Video } from "../../../../domain/entities";
-import { CreateVideoInterface, VideoRepositoryInterface } from "../../../../domain/repositories";
-import { ChangeCommentCountInterface, ChangeEvaluationsInterface } from "../../../../domain/repositories/video_repository";
+import {
+  CreateVideoInterface,
+  VideoRepositoryInterface,
+} from "../../../../domain/repositories";
+import {
+  ChangeCommentCountInterface,
+  ChangeEvaluationsInterface,
+  GetUserVideoRepositoryInterface,
+} from "../../../../domain/repositories/video_repository";
+import { VideoOrderEnum } from "../../../../utils/order_enums";
 import { UserEntity, VideoEntity } from "../entities";
 
 export class VideoRepository implements VideoRepositoryInterface {
+  async getByUser(infos: GetUserVideoRepositoryInterface): Promise<Video[]> {
+    const videos = await VideoEntity.find({
+      where: { userId: infos.userId },
+      skip: (infos.page - 1) * infos.rows,
+      take: infos.rows,
+      order:
+        infos.orderBy === VideoOrderEnum.Views
+          ? { viewsCount: "DESC" }
+          : { createdAt: "DESC" },
+    });
+    return videos.map((video) => {
+      return {
+        id: video.id,
+        title: video.title,
+        thumbnail: video.thumbnail,
+        path: video.path,
+        created_by: {
+          name: video.created_by.name,
+          email: video.created_by.email,
+          avatar: video.created_by.avatar,
+          subsCount: video.created_by.subsCount,
+        },
+        createdAt: video.createdAt,
+        description: video.description,
+        viewsCount: video.viewsCount,
+        likesCount: video.likesCount,
+        deslikesCount: video.deslikesCount,
+        commentCount: video.commentCount,
+      };
+    });
+  }
   async changeCommentCount(infos: ChangeCommentCountInterface): Promise<void> {
-    const video = await VideoEntity.findOneBy({id: infos.id})
-    if(video){
-      if(infos.isPositive)  
-        video.commentCount++
-      else
-        video.commentCount--
-      await video.save()
+    const video = await VideoEntity.findOneBy({ id: infos.id });
+    if (video) {
+      if (infos.isPositive) video.commentCount++;
+      else video.commentCount--;
+      await video.save();
     }
   }
 
-  async changeEvaluations(
-    infos: ChangeEvaluationsInterface
-  ): Promise<void> {
+  async changeEvaluations(infos: ChangeEvaluationsInterface): Promise<void> {
     const video = await VideoEntity.findOneBy({ id: infos.id });
     if (!video) throw new Error("Comment not found");
     if (infos.isLike) {
@@ -74,14 +109,14 @@ export class VideoRepository implements VideoRepositoryInterface {
         name: video.created_by.name,
         email: video.created_by.email,
         avatar: video.created_by.avatar,
-        subsCount: video.created_by.subsCount
+        subsCount: video.created_by.subsCount,
       },
       createdAt: video.createdAt,
       description: video.description,
       viewsCount: video.viewsCount,
       likesCount: video.likesCount,
       deslikesCount: video.deslikesCount,
-      commentCount: video.commentCount
+      commentCount: video.commentCount,
     };
   }
 }
