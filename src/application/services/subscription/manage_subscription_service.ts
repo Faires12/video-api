@@ -14,26 +14,29 @@ export class ManageSubscriptionService implements ManageSubscription {
     private readonly subscriptionRepository: SubscriptionRepositoryInterface
   ) {}
 
-  async manage(infos: ManageSubscriptionInterface): Promise<void> {
-    if (!(await this.userRepository.getById(infos.subscribeTo)))
+  async manage(infos: ManageSubscriptionInterface): Promise<boolean> {
+    const otherUser = await this.userRepository.getByEmail(infos.subscribeTo)
+    if (!otherUser || !otherUser.id)
       throw new HttpException(HttpStatusCode.NotFound, "Other user not found");
-    if(infos.userId === infos.subscribeTo)
+    if(infos.userId === otherUser.id)
       throw new HttpException(HttpStatusCode.BadRequest, "Cannot subscribe to yourself");
     const existingSubscription =
       await this.subscriptionRepository.getSubscription({
         subscriber: infos.userId,
-        subscriptedTo: infos.subscribeTo,
+        subscriptedTo: otherUser.id,
       });
     if (existingSubscription && existingSubscription.id){
       await this.subscriptionRepository.remove(existingSubscription.id);
-      await this.userRepository.changeSubsCount({id: infos.subscribeTo, isPositive: false})
+      await this.userRepository.changeSubsCount({id: otherUser.id, isPositive: false})
+      return false
     }     
     else {
       await this.subscriptionRepository.add({
         subscriber: infos.userId,
-        subscriptedTo: infos.subscribeTo,
+        subscriptedTo: otherUser.id,
       });
-      await this.userRepository.changeSubsCount({id: infos.subscribeTo, isPositive: true})
+      await this.userRepository.changeSubsCount({id: otherUser.id, isPositive: true})
+      return true
     }
       
   }

@@ -9,8 +9,8 @@ export class ManageSubscriptionController extends Controller{
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, subscribeTo} = httpRequest.body
 
-        await this.manageSubscriptionService.manage({userId, subscribeTo})
+        const res = await this.manageSubscriptionService.manage({userId, subscribeTo})
 
-        return ok("subscription handled")
+        return ok(res)
     }
 }

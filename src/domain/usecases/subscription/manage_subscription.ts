@@ -1,8 +1,8 @@
 export interface ManageSubscriptionInterface{
     userId: number
-    subscribeTo: number
+    subscribeTo: string
 }
 
 export interface ManageSubscription{
-    manage(infos: ManageSubscriptionInterface) : Promise<void>
+    manage(infos: ManageSubscriptionInterface) : Promise<boolean>
 }
