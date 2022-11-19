@@ -8,7 +8,7 @@ export class RemoveVideoFromPlaylistController extends Controller{
     
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, videoId, playlistId} = httpRequest.body
-        await this.manageVideosInPlaylist.manage({userId, videoId, playlistId, addVideo: false})
-        return ok("Video removed from playlist")
+        const playlist = await this.manageVideosInPlaylist.manage({userId, videoId, playlistId, addVideo: false})
+        return ok(playlist)
     }
 }

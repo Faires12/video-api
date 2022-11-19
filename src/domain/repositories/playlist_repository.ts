@@ -10,7 +10,8 @@ export interface ManageVideosInPlaylistInterface{
 
 export interface PlaylistRepositoryInterface{
     create(playlist: CreatePlaylistInterface) : Promise<Playlist>
-    addVideo(infos: ManageVideosInPlaylistInterface) : Promise<void>
-    removeVideo(infos: ManageVideosInPlaylistInterface) : Promise<void>
+    addVideo(infos: ManageVideosInPlaylistInterface) : Promise<Playlist>
+    removeVideo(infos: ManageVideosInPlaylistInterface) : Promise<Playlist>
     getById(id: number) : Promise<Playlist | null>
+    getByUser(userId: number) : Promise<Playlist[]>
 }

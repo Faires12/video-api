@@ -10,7 +10,7 @@ export function makeCreatePlaylistValidation() : Validation {
     }
     validations.push(new NumberValidation('videoId', 1))
     validations.push(new StringValidation('title', 3, 20))
-    validations.push(new StringValidation('description', 5, 50))
+    validations.push(new StringValidation('description', 5, 25))
     return new ValidationComposite(validations)
 }
 

@@ -1,5 +1,5 @@
 import { ManageVideosInPlaylistService } from "../../../../application/services/"
-import { PlaylistRepository, VideoRepository } from "../../../../infrastructure/data/typeorm/repositories"
+import { PlaylistRepository, UserRepository, VideoRepository } from "../../../../infrastructure/data/typeorm/repositories"
 import { AddVideoToPlaylistController } from "../../../../presentation/controllers"
 import { NumberValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
 
@@ -15,7 +15,8 @@ function makeManageVideoInPlaylistValidation() : Validation {
 export const makeAddVideoToPlaylistController = () : AddVideoToPlaylistController => {
     const videoRepository = new VideoRepository()
     const playlistRepository = new PlaylistRepository()
-    const manageVideosInPlaylistService = new ManageVideosInPlaylistService(playlistRepository, videoRepository)
+    const userRepository = new UserRepository()
+    const manageVideosInPlaylistService = new ManageVideosInPlaylistService(playlistRepository, videoRepository, userRepository)
 
     return new AddVideoToPlaylistController(makeManageVideoInPlaylistValidation(), manageVideosInPlaylistService)
 }

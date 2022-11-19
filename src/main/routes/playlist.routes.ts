@@ -3,11 +3,18 @@ import { adaptMiddleware, adaptRoute } from "../adapters";
 import {
   makeAddVideoToPlaylistController,
   makeCreatePlaylistController,
+  makeGetUserPlaylistController,
   makeRemoveVideoFromPlaylistController,
 } from "../factories/controllers";
 import { makeAuthMiddleware } from "../factories/middlewares/auth";
 
 const router = Router();
+
+router.get(
+  "/",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeGetUserPlaylistController())
+);
 
 router.post(
   "/",

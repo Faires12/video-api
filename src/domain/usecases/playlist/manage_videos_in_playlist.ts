@@ -1,3 +1,5 @@
+import { Playlist } from "../../entities";
+
 export interface ManageVideosInPlaylistInterface {
   userId: number;
   videoId: number;
@@ -8,5 +10,5 @@ export interface ManageVideosInPlaylistInterface {
 export interface ManageVideosInPlaylist {
   manage(
     infos: ManageVideosInPlaylistInterface
-  ): Promise<void>;
+  ): Promise<Playlist>;
 }

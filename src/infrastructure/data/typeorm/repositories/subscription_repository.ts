@@ -6,6 +6,15 @@ import {
 import { SubscriptionEntity } from "../entities";
 
 export class SubscriptionRepository implements SubscriptionRepositoryInterface {
+  async getUserSubscriptions(userId: number): Promise<Subscription[]> {
+    const subscriptions = await SubscriptionEntity.findBy({subscriberId: userId})
+    return subscriptions.map(s => {
+      return {
+        subscriber: s.subscriberId,
+        subscriptedTo: s.subscriptedToId
+      }
+    })
+  }
   async getSubscription(
     infos: AddSubscriptionInterface
   ): Promise<Subscription | null> {

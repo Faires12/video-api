@@ -8,6 +8,7 @@ import {
   makeGetCommentController,
   makeGetCommentEvaluationController,
   makeGetCommentResponsesController,
+  makeGetRelatedVideosController,
   makeGetUserVideosController,
   makeGetVideoCommentsController,
   makeGetVideoController,
@@ -27,6 +28,11 @@ router.get(
 router.get(
   "/user/:email",
   adaptRoute(makeGetUserVideosController())
+);
+
+router.get(
+  "/related/:email",
+  adaptRoute(makeGetRelatedVideosController())
 );
 
 router.post(

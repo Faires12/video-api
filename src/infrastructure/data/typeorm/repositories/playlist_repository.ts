@@ -1,12 +1,56 @@
 import { Playlist } from "../../../../domain/entities";
-import { CreatePlaylistInterface, ManageVideosInPlaylistInterface, PlaylistRepositoryInterface } from "../../../../domain/repositories/playlist_repository";
+import {
+  CreatePlaylistInterface,
+  ManageVideosInPlaylistInterface,
+  PlaylistRepositoryInterface,
+} from "../../../../domain/repositories/playlist_repository";
 import { PlaylistEntity, UserEntity, VideoEntity } from "../entities";
 
 export class PlaylistRepository implements PlaylistRepositoryInterface {
+  async getByUser(userId: number): Promise<Playlist[]> {
+    const playlists = await PlaylistEntity.find({
+      where: { userId },
+      relations: ["videos"],
+    });
+    return playlists.map((playlist) => {
+      return {
+        id: playlist.id,
+        title: playlist.title,
+        description: playlist.description,
+        created_by: {
+          name: playlist.created_by.name,
+          email: playlist.created_by.email,
+          avatar: playlist.created_by.avatar,
+        },
+        videos: playlist.videos
+          ? playlist.videos.map((video) => {
+              return {
+                id: video.id,
+                title: video.title,
+                thumbnail: video.thumbnail,
+                path: video.path,
+                created_by: {
+                  name: video.created_by.name,
+                  email: video.created_by.email,
+                  avatar: video.created_by.avatar,
+                  subsCount: video.created_by.subsCount,
+                },
+                createdAt: video.createdAt,
+                description: video.description,
+                viewsCount: video.viewsCount,
+                likesCount: video.likesCount,
+                deslikesCount: video.deslikesCount,
+                commentCount: video.commentCount,
+              };
+            })
+          : [],
+      };
+    });
+  }
   async getById(id: number): Promise<Playlist | null> {
     const playlist = await PlaylistEntity.findOne({
       where: { id },
-      relations: ['videos']
+      relations: ["videos"],
     });
     if (!playlist) return null;
 
@@ -18,29 +62,32 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
         name: playlist.created_by.name,
         email: playlist.created_by.email,
         avatar: playlist.created_by.avatar,
-        id: playlist.created_by.id
       },
       videos: playlist.videos
-        ? playlist.videos.map((v) => {
+        ? playlist.videos.map((video) => {
             return {
-              id: v.id,
-              title: v.title,
-              description: v.description,
-              thumbnail: v.thumbnail,
-              path: v.path,
+              id: video.id,
+              title: video.title,
+              thumbnail: video.thumbnail,
+              path: video.path,
               created_by: {
-                name: v.created_by.name,
-                email: v.created_by.email,
-                avatar: v.created_by.avatar
+                name: video.created_by.name,
+                email: video.created_by.email,
+                avatar: video.created_by.avatar,
+                subsCount: video.created_by.subsCount,
               },
+              createdAt: video.createdAt,
+              description: video.description,
+              viewsCount: video.viewsCount,
+              likesCount: video.likesCount,
+              deslikesCount: video.deslikesCount,
+              commentCount: video.commentCount,
             };
           })
         : [],
     };
   }
-  async create(
-    playlist: CreatePlaylistInterface
-  ): Promise<Playlist> {
+  async create(playlist: CreatePlaylistInterface): Promise<Playlist> {
     const newPlaylist = new PlaylistEntity();
     newPlaylist.title = playlist.title;
     const user = await UserEntity.findOneBy({ id: playlist.userId });
@@ -49,12 +96,12 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
     if (playlist.videoId) {
       const video = await VideoEntity.findOneBy({ id: playlist.videoId });
       if (video) {
-        newPlaylist.videos = []
+        newPlaylist.videos = [];
         newPlaylist.videos.push(video);
       }
     }
     await newPlaylist.save();
-    console.log(newPlaylist.videos);
+
     return {
       id: newPlaylist.id,
       title: newPlaylist.title,
@@ -65,41 +112,122 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
         avatar: newPlaylist.created_by.avatar,
       },
       videos: newPlaylist.videos
-        ? newPlaylist.videos.map((v) => {
+        ? newPlaylist.videos.map((video) => {
             return {
-              id: v.id,
-              title: v.title,
-              description: v.description,
-              thumbnail: v.thumbnail,
-              path: v.path,
+              id: video.id,
+              title: video.title,
+              thumbnail: video.thumbnail,
+              path: video.path,
               created_by: {
-                name: v.created_by.name,
-                email: v.created_by.email,
-                avatar: v.created_by.avatar,
+                name: video.created_by.name,
+                email: video.created_by.email,
+                avatar: video.created_by.avatar,
+                subsCount: video.created_by.subsCount,
               },
+              createdAt: video.createdAt,
+              description: video.description,
+              viewsCount: video.viewsCount,
+              likesCount: video.likesCount,
+              deslikesCount: video.deslikesCount,
+              commentCount: video.commentCount,
             };
           })
         : [],
     };
   }
-  async addVideo(infos: ManageVideosInPlaylistInterface): Promise<void> {
-    const playlist = await PlaylistEntity.findOne({where: { id: infos.playlistId }, relations: ['videos']});
+  async addVideo(infos: ManageVideosInPlaylistInterface): Promise<Playlist> {
+    const playlist = await PlaylistEntity.findOne({
+      where: { id: infos.playlistId },
+      relations: ["videos"],
+    });
     const video = await VideoEntity.findOneBy({ id: infos.videoId });
     if (playlist && video) {
-      if(!playlist.videos)
-        playlist.videos = []
+      if (!playlist.videos) playlist.videos = [];
       playlist.videos.push(video);
-      await playlist.save(); 
+      await playlist.save();
+
+      return {
+        id: playlist.id,
+        title: playlist.title,
+        description: playlist.description,
+        created_by: {
+          name: playlist.created_by.name,
+          email: playlist.created_by.email,
+          avatar: playlist.created_by.avatar,
+        },
+        videos: playlist.videos
+          ? playlist.videos.map((video) => {
+              return {
+                id: video.id,
+                title: video.title,
+                thumbnail: video.thumbnail,
+                path: video.path,
+                created_by: {
+                  name: video.created_by.name,
+                  email: video.created_by.email,
+                  avatar: video.created_by.avatar,
+                  subsCount: video.created_by.subsCount,
+                },
+                createdAt: video.createdAt,
+                description: video.description,
+                viewsCount: video.viewsCount,
+                likesCount: video.likesCount,
+                deslikesCount: video.deslikesCount,
+                commentCount: video.commentCount,
+              };
+            })
+          : [],
+      };
     }
+
+    throw new Error("");
   }
-  
-  async removeVideo(infos: ManageVideosInPlaylistInterface): Promise<void> {
-    const playlist = await PlaylistEntity.findOne({where: { id: infos.playlistId }, relations: ['videos']});
+
+  async removeVideo(infos: ManageVideosInPlaylistInterface): Promise<Playlist> {
+    const playlist = await PlaylistEntity.findOne({
+      where: { id: infos.playlistId },
+      relations: ["videos"],
+    });
     const video = await VideoEntity.findOneBy({ id: infos.videoId });
     if (playlist && video) {
       const i = playlist.videos.findIndex((v) => v.id === infos.videoId);
       playlist.videos.splice(i, 1);
       await playlist.save();
+
+      return {
+        id: playlist.id,
+        title: playlist.title,
+        description: playlist.description,
+        created_by: {
+          name: playlist.created_by.name,
+          email: playlist.created_by.email,
+          avatar: playlist.created_by.avatar,
+        },
+        videos: playlist.videos
+          ? playlist.videos.map((video) => {
+              return {
+                id: video.id,
+                title: video.title,
+                thumbnail: video.thumbnail,
+                path: video.path,
+                created_by: {
+                  name: video.created_by.name,
+                  email: video.created_by.email,
+                  avatar: video.created_by.avatar,
+                  subsCount: video.created_by.subsCount,
+                },
+                createdAt: video.createdAt,
+                description: video.description,
+                viewsCount: video.viewsCount,
+                likesCount: video.likesCount,
+                deslikesCount: video.deslikesCount,
+                commentCount: video.commentCount,
+              };
+            })
+          : [],
+      };
     }
+
+    throw new Error("");
   }
 }

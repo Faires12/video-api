@@ -8,7 +8,7 @@ export class AddVideoToPlaylistController extends Controller{
     
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, videoId, playlistId} = httpRequest.body
-        await this.manageVideosInPlaylist.manage({userId, videoId, playlistId, addVideo: true})
-        return ok("Video added to playlist")
+        const playlist = await this.manageVideosInPlaylist.manage({userId, videoId, playlistId, addVideo: true})
+        return ok(playlist)
     }
 }
