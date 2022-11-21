@@ -3,6 +3,7 @@ import { adaptMiddleware, adaptRoute } from "../adapters";
 import {
   makeAddVideoToPlaylistController,
   makeCreatePlaylistController,
+  makeGetPlaylistByIdController,
   makeGetUserPlaylistController,
   makeRemoveVideoFromPlaylistController,
 } from "../factories/controllers";
@@ -14,6 +15,12 @@ router.get(
   "/",
   adaptMiddleware(makeAuthMiddleware(false)),
   adaptRoute(makeGetUserPlaylistController())
+);
+
+router.get(
+  "/:id",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeGetPlaylistByIdController())
 );
 
 router.post(
