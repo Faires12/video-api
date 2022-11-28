@@ -8,6 +8,7 @@ import {
   makeGetCommentController,
   makeGetCommentEvaluationController,
   makeGetCommentResponsesController,
+  makeGetHomeVideosController,
   makeGetRelatedVideosController,
   makeGetUserVideosController,
   makeGetVideoCommentsController,
@@ -18,6 +19,12 @@ import {
 import { makeAuthMiddleware } from "../factories/middlewares/auth";
 
 const router = Router();
+
+router.get(
+  "/home",
+  adaptMiddleware(makeAuthMiddleware(false, true)),
+  adaptRoute(makeGetHomeVideosController())
+);
 
 router.get(
   "/:id",
@@ -31,7 +38,7 @@ router.get(
 );
 
 router.get(
-  "/related/:email",
+  "/related/:videoId",
   adaptRoute(makeGetRelatedVideosController())
 );
 

@@ -7,10 +7,10 @@ export class GetRelatedVideosController extends Controller{
     constructor(validation: Validation, private readonly getRelatedVideosService: GetRelatedVideos) {super(validation)}
     
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
-        const {email} = httpRequest.params
+        const {videoId} = httpRequest.params
         const {rows, page} = httpRequest.query
 
-        const videos = await this.getRelatedVideosService.get({otherUserEmail: email, rows, page})
+        const videos = await this.getRelatedVideosService.get({videoId, rows, page})
         return ok(videos)
     }
     

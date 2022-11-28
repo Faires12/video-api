@@ -1,7 +1,7 @@
 import { Video } from "../../entities";
 
 export interface GetRelatedVideosInterface{
-    otherUserEmail: string, page: number, rows: number
+    videoId: number, page: number, rows: number
 }
 
 export interface GetRelatedVideos{

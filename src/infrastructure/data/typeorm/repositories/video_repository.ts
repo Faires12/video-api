@@ -7,33 +7,24 @@ import {
 import {
   ChangeCommentCountInterface,
   ChangeEvaluationsInterface,
-  GetRandomVideoRepositoryInterface,
   GetUserVideoRepositoryInterface,
+  GetVideoRepositoryInterface,
 } from "../../../../domain/repositories/video_repository";
 import { VideoOrderEnum } from "../../../../utils/order_enums";
 import { UserEntity, VideoEntity } from "../entities";
 
 export class VideoRepository implements VideoRepositoryInterface {
-  async getRandomVideos(
-    infos: GetRandomVideoRepositoryInterface
-  ): Promise<Video[]> {
-    const videos = await VideoEntity.createQueryBuilder("video")
-      .select()
-      .where(
-        infos.onlyUser && infos.userId
-          ? { userId: infos.userId }
-          : infos.userId
-          ? { userId: Not(infos.userId) }
-          : {}
-      )
-      .take(infos.amount)
-      .orderBy("RANDOM()")
-      .getMany();
-
-    for (const video of videos) {
-      const user = await UserEntity.findOneBy({ id: video.userId });
-      if (user) video.created_by = user;
-    }
+  async getVideos(infos: GetVideoRepositoryInterface): Promise<Video[]> {
+    const videos = await VideoEntity.find({
+      where: infos.excludeUserId ? { userId: Not(infos.excludeUserId) } : infos.excludeVideoId ? 
+      {id: Not(infos.excludeVideoId)} : {},
+      skip: (infos.page - 1) * infos.rows,
+      take: infos.rows,
+      order:
+        infos.orderBy === VideoOrderEnum.Views
+          ? { viewsCount: "DESC" }
+          : { createdAt: "DESC" },
+    });
     return videos.map((video) => {
       return {
         id: video.id,
@@ -55,6 +46,7 @@ export class VideoRepository implements VideoRepositoryInterface {
       };
     });
   }
+
   async getByUser(infos: GetUserVideoRepositoryInterface): Promise<Video[]> {
     const videos = await VideoEntity.find({
       where: { userId: infos.userId },

@@ -21,13 +21,18 @@ export interface ChangeCommentCountInterface {
 }
 
 export interface GetUserVideoRepositoryInterface{
-  userId: number, page: number, rows: number, orderBy: number
+  userId: number, 
+  page: number, 
+  rows: number, 
+  orderBy: number
 }
 
-export interface GetRandomVideoRepositoryInterface{
-  userId?: number
-  amount: number
-  onlyUser?: boolean
+export interface GetVideoRepositoryInterface{
+  orderBy: number
+  excludeUserId?: number
+  excludeVideoId?: number
+  page: number, 
+  rows: number
 }
 
 export interface VideoRepositoryInterface {
@@ -36,5 +41,6 @@ export interface VideoRepositoryInterface {
   changeEvaluations(infos: ChangeEvaluationsInterface): Promise<void>;
   changeCommentCount(infos: ChangeCommentCountInterface): Promise<void>;
   getByUser(infos: GetUserVideoRepositoryInterface) : Promise<Video[]>
-  getRandomVideos(infos: GetRandomVideoRepositoryInterface) : Promise<Video[]>
+  getVideos(infos: GetVideoRepositoryInterface) : Promise<Video[]>
+  
 }

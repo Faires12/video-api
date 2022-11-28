@@ -1,9 +1,26 @@
 import { Router } from "express";
 import { adaptMiddleware, adaptRoute } from "../adapters";
-import { makeGetSubscriptionController, makeManageSubscriptionController } from "../factories/controllers";
+import {
+  makeGetSubscriptionController,
+  makeGetSubscriptionsController,
+  makeGetSubscriptionsVideosController,
+  makeManageSubscriptionController,
+} from "../factories/controllers";
 import { makeAuthMiddleware } from "../factories/middlewares/auth";
 
 const router = Router();
+
+router.get(
+  "/",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeGetSubscriptionsController())
+);
+
+router.get(
+  "/videos",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeGetSubscriptionsVideosController())
+);
 
 router.get(
   "/:subscribeTo",
@@ -17,4 +34,4 @@ router.post(
   adaptRoute(makeManageSubscriptionController())
 );
 
-export default router
+export default router;
