@@ -9,7 +9,7 @@ import { PlaylistEntity, UserEntity, VideoEntity } from "../entities";
 export class PlaylistRepository implements PlaylistRepositoryInterface {
   async getByUser(userId: number): Promise<Playlist[]> {
     const playlists = await PlaylistEntity.find({
-      where: { userId },
+      where: { userId, active: true },
       relations: ["videos"],
     });
     return playlists.map((playlist) => {
@@ -49,7 +49,7 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
   }
   async getById(id: number): Promise<Playlist | null> {
     const playlist = await PlaylistEntity.findOne({
-      where: { id },
+      where: { id, active: true},
       relations: ["videos"],
     });
     if (!playlist) return null;
@@ -137,7 +137,7 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
   }
   async addVideo(infos: ManageVideosInPlaylistInterface): Promise<Playlist> {
     const playlist = await PlaylistEntity.findOne({
-      where: { id: infos.playlistId },
+      where: { id: infos.playlistId, active: true },
       relations: ["videos"],
     });
     const video = await VideoEntity.findOneBy({ id: infos.videoId });
@@ -185,7 +185,7 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
 
   async removeVideo(infos: ManageVideosInPlaylistInterface): Promise<Playlist> {
     const playlist = await PlaylistEntity.findOne({
-      where: { id: infos.playlistId },
+      where: { id: infos.playlistId, active: true },
       relations: ["videos"],
     });
     const video = await VideoEntity.findOneBy({ id: infos.videoId });

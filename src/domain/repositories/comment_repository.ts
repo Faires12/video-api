@@ -26,6 +26,11 @@ export interface ChangeResponseCountInterface {
   isPositive: boolean;
 }
 
+export interface EditCommentRepositoryInterface {
+  content: string;
+  id: number
+}
+
 export interface CommentRepositoryInterface {
   create(comment: CreateCommentInterface): Promise<Comment>;
   getById(id: number): Promise<Comment | null>;
@@ -33,4 +38,6 @@ export interface CommentRepositoryInterface {
   getByVideo(infos: GetVideoCommentsInterface): Promise<Comment[]>;
   getByComment(infos: GetCommentResponsesInterface): Promise<Comment[]>;
   changeCommentCount(infos: ChangeResponseCountInterface): Promise<void>;
+  delete(id: number) : Promise<void>
+  edit(infos: EditCommentRepositoryInterface) : Promise<Comment>
 }

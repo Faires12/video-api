@@ -10,6 +10,6 @@ export abstract class AbstractEntity extends BaseEntity{
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @Column({type: 'bool', default: false})
+    @Column({type: 'bool', default: true})
     active: boolean;
 }

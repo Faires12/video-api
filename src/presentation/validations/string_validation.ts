@@ -5,7 +5,7 @@ export class StringValidation implements Validation{
     constructor(private readonly fieldname: string, private readonly minLength: number, private readonly maxLength: number) {}
 
     validate(input: any): Error | null {
-        if(!input[this.fieldname])
+        if(!input.hasOwnProperty(this.fieldname))
             return null
         if(!(typeof input[this.fieldname] === 'string'))
             return new InvalidParamError(this.fieldname)

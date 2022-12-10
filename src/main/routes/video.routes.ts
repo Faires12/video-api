@@ -5,6 +5,10 @@ import {
   makeAddVideoEvaluationController,
   makeCreateResponseCommentController,
   makeCreateVideoCommentController,
+  makeDeleteCommentController,
+  makeDeleteVideoController,
+  makeEditCommentController,
+  makeEditVideoController,
   makeGetCommentController,
   makeGetCommentEvaluationController,
   makeGetCommentResponsesController,
@@ -14,6 +18,7 @@ import {
   makeGetVideoCommentsController,
   makeGetVideoController,
   makeGetVideoEvaluationController,
+  makeSearchVideosController,
   makeUploadVideoController,
 } from "../factories/controllers";
 import { makeAuthMiddleware } from "../factories/middlewares/auth";
@@ -26,10 +31,29 @@ router.get(
   adaptRoute(makeGetHomeVideosController())
 );
 
+router.post(
+  "/search",
+  adaptMiddleware(makeAuthMiddleware(false, true)),
+  adaptRoute(makeSearchVideosController())
+);
+
+
 router.get(
   "/:id",
   adaptMiddleware(makeAuthMiddleware(false, true)),
   adaptRoute(makeGetVideoController())
+);
+
+router.delete(
+  "/:id",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeDeleteVideoController())
+);
+
+router.put(
+  "/",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeEditVideoController())
 );
 
 router.get(
@@ -58,6 +82,18 @@ router.post(
   "/comment",
   adaptMiddleware(makeAuthMiddleware(false)),
   adaptRoute(makeCreateVideoCommentController())
+);
+
+router.put(
+  "/comment",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeEditCommentController())
+);
+
+router.delete(
+  "/comment/:id",
+  adaptMiddleware(makeAuthMiddleware(false)),
+  adaptRoute(makeDeleteCommentController())
 );
 
 router.get(

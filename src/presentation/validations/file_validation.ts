@@ -5,7 +5,7 @@ export class FileValidation implements Validation{
     constructor(private readonly fieldname: string, private readonly maxSize: number, private readonly mimeTypes: string[]) {}
 
     validate(input: any): Error | null {   
-        if(!input[this.fieldname])
+        if(!input.hasOwnProperty(this.fieldname))
             return null
         if(input[this.fieldname].size / 1000 > this.maxSize)
             return new InvalidParamError(this.fieldname)

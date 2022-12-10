@@ -20,19 +20,34 @@ export interface ChangeCommentCountInterface {
   isPositive: boolean;
 }
 
-export interface GetUserVideoRepositoryInterface{
-  userId: number, 
-  page: number, 
-  rows: number, 
-  orderBy: number
+export interface GetUserVideoRepositoryInterface {
+  userId: number;
+  page: number;
+  rows: number;
+  orderBy: number;
 }
 
-export interface GetVideoRepositoryInterface{
-  orderBy: number
-  excludeUserId?: number
-  excludeVideoId?: number
-  page: number, 
-  rows: number
+export interface GetVideoRepositoryInterface {
+  orderBy: number;
+  excludeUserId?: number;
+  excludeVideoId?: number;
+  page: number;
+  rows: number;
+}
+
+export interface EditVideoRepositoryInterface {
+  title?: string;
+  description?: string;
+  thumbnail?: string;
+  id: number;
+}
+
+export interface SearchVideosRepositoryInterface {
+  search: string;
+  page: number;
+  rows: number;
+  userId?: number;
+  orderBy?: number;
 }
 
 export interface VideoRepositoryInterface {
@@ -40,7 +55,10 @@ export interface VideoRepositoryInterface {
   getById(id: number): Promise<Video | null>;
   changeEvaluations(infos: ChangeEvaluationsInterface): Promise<void>;
   changeCommentCount(infos: ChangeCommentCountInterface): Promise<void>;
-  getByUser(infos: GetUserVideoRepositoryInterface) : Promise<Video[]>
-  getVideos(infos: GetVideoRepositoryInterface) : Promise<Video[]>
-  
+  getByUser(infos: GetUserVideoRepositoryInterface): Promise<Video[]>;
+  getAllUserVideos(userId: number): Promise<Video[]>;
+  getVideos(infos: GetVideoRepositoryInterface): Promise<Video[]>;
+  delete(id: number): Promise<void>;
+  edit(infos: EditVideoRepositoryInterface): Promise<Video>;
+  search(infos: SearchVideosRepositoryInterface): Promise<Video[]>
 }

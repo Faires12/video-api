@@ -5,7 +5,7 @@ export class NumberValidation implements Validation{
     constructor(private readonly fieldname : string, private readonly min?: number, private readonly max?: number){}
 
     validate(input: any): Error | null {
-        if(!input[this.fieldname])
+        if(!input.hasOwnProperty(this.fieldname))
             return null
         if(isNaN(input[this.fieldname]))
             return new InvalidParamError(this.fieldname)

@@ -4,15 +4,32 @@ import {
   ChangeResponseCountInterface,
   CommentRepositoryInterface,
   CreateCommentInterface,
+  EditCommentRepositoryInterface,
   GetCommentResponsesInterface,
   GetVideoCommentsInterface,
 } from "../../../../domain/repositories";
 import { CommentEntity, UserEntity } from "../entities";
 
 export class CommentRepository implements CommentRepositoryInterface {
+  async edit(infos: EditCommentRepositoryInterface): Promise<Comment> {
+    const comment = await CommentEntity.findOneBy({id: infos.id})
+    if(comment){
+      comment.content = infos.content
+      await comment.save()
+      return comment
+    }
+    throw new Error('Comment not found')
+  }
+  async delete(id: number): Promise<void> {
+    const comment = await CommentEntity.findOneBy({id})
+    if(comment){
+      comment.active = false
+      await comment.save()
+    }
+  }
   async getByComment(infos: GetCommentResponsesInterface): Promise<Comment[]> {
     const comments = await CommentEntity.find({
-      where: { commentId: infos.commentId },
+      where: { commentId: infos.commentId, active: true },
       take: infos.rows,
       skip: (infos.page - 1) * infos.rows,
     });
@@ -32,13 +49,18 @@ export class CommentRepository implements CommentRepositoryInterface {
         createdAt: c.createdAt
       };
 
-      if(c.videoId)
+      if(c.videoId){
         res.responses = []
+        res.video_id = c.videoId
+      }
+      else
+        res.comment_id = c.commentId
+        
       return res
     });
   }
   async changeCommentCount(infos: ChangeResponseCountInterface): Promise<void> {
-    const comment = await CommentEntity.findOneBy({id: infos.id})
+    const comment = await CommentEntity.findOneBy({id: infos.id, active: true})
     if(comment){
       if(infos.isPositive)
         comment.commentCount++
@@ -49,7 +71,7 @@ export class CommentRepository implements CommentRepositoryInterface {
   }
   async getByVideo(infos: GetVideoCommentsInterface): Promise<Comment[]> {
     const comments = await CommentEntity.find({
-      where: { videoId: infos.videoId },
+      where: { videoId: infos.videoId, active: true },
       take: infos.rows,
       skip: (infos.page - 1) * infos.rows,
     });
@@ -69,8 +91,13 @@ export class CommentRepository implements CommentRepositoryInterface {
         createdAt: c.createdAt
       };
 
-      if(c.videoId)
+      if(c.videoId){
         res.responses = []
+        res.video_id = c.videoId
+      }
+      else
+        res.comment_id = c.commentId
+
       return res
     });
   }
@@ -78,7 +105,7 @@ export class CommentRepository implements CommentRepositoryInterface {
   async changeEvaluations(
     infos: ChangeEvaluationsInterface
   ): Promise<void> {
-    const comment = await CommentEntity.findOneBy({ id: infos.id });
+    const comment = await CommentEntity.findOneBy({ id: infos.id, active: true });
     if (!comment) throw new Error("Comment not found");
     if (infos.isLike) {
       if (infos.isChange) {
@@ -123,13 +150,17 @@ export class CommentRepository implements CommentRepositoryInterface {
       createdAt: newComment.createdAt
     };
 
-    if(newComment.videoId)
+    if(newComment.videoId){
       c.responses = []
+      c.video_id = newComment.videoId
+    }
+    else
+      c.comment_id = newComment.commentId
       
     return c
   }
   async getById(id: number): Promise<Comment | null> {
-    const comment = await CommentEntity.findOneBy({ id });
+    const comment = await CommentEntity.findOneBy({ id, active: true });
     if (!comment) return null;
 
     const c : Comment = {
@@ -146,8 +177,12 @@ export class CommentRepository implements CommentRepositoryInterface {
       createdAt: comment.createdAt
     };
 
-    if(comment.videoId)
+    if(comment.videoId){
       c.responses = []
+      c.video_id = comment.videoId
+    }
+    else
+      c.comment_id = comment.commentId
       
     return c
   }
