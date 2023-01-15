@@ -1,31 +1,33 @@
 import { Router } from "express";
 import { adaptMiddleware, adaptRoute } from "../adapters";
-import { makeDeleteUserController, makeEditUserController, makeGetLoggedUserDataController, makeGetUserDataByEmailController } from "../factories/controllers";
-import { makeAuthMiddleware } from "../factories/middlewares/auth";
+import {
+  GetLoggedUserDataFactory,
+  EditUserFactory,
+  DeleteUserFactory,
+  GetUserDataByEmailFactory,
+} from "../factories/controllers";
+import { AuthenticationFactory } from "../factories/middlewares";
 
 const router = Router();
 
 router.get(
   "/",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeGetLoggedUserDataController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new GetLoggedUserDataFactory())
 );
 
 router.put(
   "/",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeEditUserController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new EditUserFactory())
 );
 
 router.delete(
   "/",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeDeleteUserController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new DeleteUserFactory())
 );
 
-router.get(
-  "/:email",
-  adaptRoute(makeGetUserDataByEmailController())
-);
+router.get("/:email", adaptRoute(new GetUserDataByEmailFactory()));
 
-export default router
+export default router;

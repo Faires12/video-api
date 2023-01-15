@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http"
 import { Validation } from "../../validations"
 
 export class GetCommentController extends Controller{
-    constructor(validation: Validation, private readonly getCommentService: GetComment) {super(validation)}
+    constructor(private readonly getCommentService: GetComment) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {commentId} = httpRequest.params

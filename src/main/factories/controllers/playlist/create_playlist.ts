@@ -1,23 +1,22 @@
 import { CreatePlaylistService } from "../../../../application/services"
 import { PlaylistRepository, VideoRepository } from "../../../../infrastructure/data/typeorm/repositories"
 import { CreatePlaylistController } from "../../../../presentation/controllers"
-import { NumberValidation, RequiredFieldValidation, StringValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
+import { Controller } from "../../../../presentation/interfaces/http"
+import { ControllerFactory } from "../../controller_factory"
 
-export function makeCreatePlaylistValidation() : Validation {
-    const validations : Validation[] = []
-    for(const fieldname of ['title']){
-        validations.push(new RequiredFieldValidation(fieldname))
+export class CreatePlaylistFactory extends ControllerFactory{  
+    validations(): (Error | null)[] {
+        return [
+            this.validation.builder.setField('title').string().minLength(3).maxLength(20).getError(),
+            this.validation.builder.setField('description').string().minLength(5).maxLength(25).optional().getError(),
+            this.validation.builder.setField('videoId').number().min(1).optional().getError()
+        ]
     }
-    validations.push(new NumberValidation('videoId', 1))
-    validations.push(new StringValidation('title', 3, 20))
-    validations.push(new StringValidation('description', 5, 25))
-    return new ValidationComposite(validations)
+    controller(): Controller {
+        const videoRepository = new VideoRepository()
+        const playlistRepository = new PlaylistRepository()
+        const createPlaylistService = new CreatePlaylistService(playlistRepository, videoRepository)
+        return new CreatePlaylistController(createPlaylistService)
+    }
 }
 
-export const makeCreatePlaylistController = () : CreatePlaylistController => {
-    const videoRepository = new VideoRepository()
-    const playlistRepository = new PlaylistRepository()
-    const createPlaylistService = new CreatePlaylistService(playlistRepository, videoRepository)
-
-    return new CreatePlaylistController(makeCreatePlaylistValidation(), createPlaylistService)
-}

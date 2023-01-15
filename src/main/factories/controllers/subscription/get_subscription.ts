@@ -1,21 +1,19 @@
 import { GetSubscriptionService } from "../../../../application/services"
-import { ValidatorAdapter } from "../../../../infrastructure/adapters"
 import { SubscriptionRepository, UserRepository } from "../../../../infrastructure/data/typeorm/repositories"
 import { GetSubscriptionController } from "../../../../presentation/controllers"
-import { EmailValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
+import { Controller } from "../../../../presentation/interfaces/http"
+import { ControllerFactory } from "../../controller_factory"
 
-export const makeGetSubscriptionValidation = () : Validation => {
-    const validations : Validation[] = []
-    for(const fieldname of ['subscribeTo']){
-        validations.push(new RequiredFieldValidation(fieldname))
-        validations.push(new EmailValidation(fieldname, new ValidatorAdapter()))
+export class GetSubscriptionFactory extends ControllerFactory{  
+    validations(): (Error | null)[] {
+        return [
+            this.validation.builder.setField('subscribeTo').string().email().getError(),
+        ]
     }
-    return new ValidationComposite(validations)
-}
-
-export const makeGetSubscriptionController = () : GetSubscriptionController => {
-    const userRepository = new UserRepository()
-    const subscriptionRepository = new SubscriptionRepository()
-    const getSubscriptionService = new GetSubscriptionService(userRepository, subscriptionRepository)
-    return new GetSubscriptionController(makeGetSubscriptionValidation(), getSubscriptionService)
+    controller(): Controller {
+        const userRepository = new UserRepository()
+        const subscriptionRepository = new SubscriptionRepository()
+        const getSubscriptionService = new GetSubscriptionService(userRepository, subscriptionRepository)
+        return new GetSubscriptionController(getSubscriptionService)
+    }
 }

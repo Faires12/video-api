@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
 export class RemoveVideoFromPlaylistController extends Controller{
-    constructor(validation : Validation, private readonly manageVideosInPlaylist: ManageVideosInPlaylist) {super(validation)}
+    constructor(private readonly manageVideosInPlaylist: ManageVideosInPlaylist) {super()}
     
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, videoId, playlistId} = httpRequest.body

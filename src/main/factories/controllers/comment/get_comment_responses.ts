@@ -1,20 +1,21 @@
-import { GetCommentResponsesService, GetVideoCommentsService } from "../../../../application/services"
-import { CommentRepository, EvaluationRepository, VideoRepository } from "../../../../infrastructure/data/typeorm/repositories"
-import { GetCommentResponsesController, GetVideoCommentsController } from "../../../../presentation/controllers"
-import { NumberValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
+import { GetCommentResponsesService } from "../../../../application/services"
+import { CommentRepository, EvaluationRepository } from "../../../../infrastructure/data/typeorm/repositories"
+import { GetCommentResponsesController } from "../../../../presentation/controllers"
+import { Controller } from "../../../../presentation/interfaces/http"
+import { ControllerFactory } from "../../controller_factory"
 
-export const makeGetCommentResponsesValidation = () : Validation => {
-    const validations : Validation[] = []
-    for(const fieldname of ['commentId', 'page', 'rows']){
-        validations.push(new RequiredFieldValidation(fieldname))
-        validations.push(new NumberValidation(fieldname, 1))
+export class GetCommentResponsesFactory extends ControllerFactory{  
+    validations(): (Error | null)[] {
+        return [
+            this.validation.builder.setField('commentId').number().min(1).getError(),
+            this.validation.builder.setField('page').number().min(1).getError(),
+            this.validation.builder.setField('rows').number().min(1).getError(),
+        ]
     }
-    return new ValidationComposite(validations)
-}
-
-export const makeGetCommentResponsesController = () : GetCommentResponsesController => {
-    const commentRepository = new CommentRepository()
-    const evaluationRepository = new EvaluationRepository()
-    const getCommentResponsesService = new GetCommentResponsesService(commentRepository, evaluationRepository)
-    return new GetCommentResponsesController(makeGetCommentResponsesValidation(), getCommentResponsesService)
+    controller(): Controller {
+        const commentRepository = new CommentRepository()
+        const evaluationRepository = new EvaluationRepository()
+        const getCommentResponsesService = new GetCommentResponsesService(commentRepository, evaluationRepository)
+        return new GetCommentResponsesController(getCommentResponsesService)
+    }
 }

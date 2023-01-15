@@ -3,25 +3,23 @@ import { UploadVideoService } from '../../../../application/services'
 import { FileSystemAdapter, UuidAdapter } from '../../../../infrastructure/adapters'
 import { VideoRepository } from '../../../../infrastructure/data/typeorm/repositories'
 import { UploadVideoController } from '../../../../presentation/controllers'
-import { FileValidation, RequiredFieldValidation, StringValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
+import { Controller } from "../../../../presentation/interfaces/http"
+import { ControllerFactory } from "../../controller_factory"
 
-export function makeUploadVideoValidation() : Validation {
-    const validations : Validation[] = []
-    for(const fieldname of ['title', 'video', 'thumbnail']){
-        validations.push(new RequiredFieldValidation(fieldname))
+export class UploadVideoFactory extends ControllerFactory{  
+    validations(): (Error | null)[] {
+        return [
+            this.validation.builder.setField('title').string().min(3).max(30).getError(),
+            this.validation.builder.setField('description').string().min(5).max(200).optional().getError(),
+            this.validation.builder.setField('thumbnail').file().maxSize(5).image().getError(),
+            this.validation.builder.setField('video').file().maxSize(100).video().getError()
+        ]
     }
-    validations.push(new FileValidation('video', 100000, ["video/mp4"]))
-    validations.push(new FileValidation('thumbnail', 5000, ["image/jpeg", "image/png", "image/gif"]))
-    validations.push(new StringValidation('title', 3, 30))
-    validations.push(new StringValidation('description', 5, 200))
-
-    return new ValidationComposite(validations)
-}
-
-export const makeUploadVideoController = () : UploadVideoController => {
-    const videoRepository = new VideoRepository()
-    const fileSystemAdapter = new FileSystemAdapter(path.join(__dirname, "../../../public/"))
-    const uuidAdapter = new UuidAdapter()
-    const uploadVideoService = new UploadVideoService(videoRepository, fileSystemAdapter, uuidAdapter)
-    return new UploadVideoController(makeUploadVideoValidation(), uploadVideoService)
+    controller(): Controller {
+        const videoRepository = new VideoRepository()
+        const fileSystemAdapter = new FileSystemAdapter(path.join(__dirname, "../../../public/"))
+        const uuidAdapter = new UuidAdapter()
+        const uploadVideoService = new UploadVideoService(videoRepository, fileSystemAdapter, uuidAdapter)
+        return new UploadVideoController(uploadVideoService)
+    }
 }

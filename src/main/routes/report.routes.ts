@@ -1,23 +1,23 @@
 import { Router } from "express";
 import { adaptMiddleware, adaptRoute } from "../adapters";
 import {
-  makeCreateCommentReportController,
-  makeCreateVideoReportController,
+  CreateVideoReportFactory,
+  CreateCommentReportFactory,
 } from "../factories/controllers";
-import { makeAuthMiddleware } from "../factories/middlewares/auth";
+import { AuthenticationFactory } from "../factories/middlewares";
 
 const router = Router();
 
 router.post(
   "/video",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreateVideoReportController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new CreateVideoReportFactory())
 );
 
 router.post(
   "/comment",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreateCommentReportController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new CreateCommentReportFactory())
 );
 
 export default router

@@ -1,19 +1,19 @@
 import { GetHomeVideosService } from "../../../../application/services"
 import { VideoRepository } from "../../../../infrastructure/data/typeorm/repositories"
 import { GetHomeVideosController } from "../../../../presentation/controllers"
-import { NumberValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
+import { Controller } from "../../../../presentation/interfaces/http"
+import { ControllerFactory } from "../../controller_factory"
 
-export const makeGetHomeVideosValidation = () : Validation => {
-    const validations : Validation[] = []
-    for(const fieldname of ['rows', 'page']){
-        validations.push(new RequiredFieldValidation(fieldname))
-        validations.push(new NumberValidation(fieldname, 1))
+export class GetHomeVideosFactory extends ControllerFactory{  
+    validations(): (Error | null)[] {
+        return [
+            this.validation.builder.setField('page').number().min(1).getError(),
+            this.validation.builder.setField('rows').number().min(1).getError(),
+        ]
     }
-    return new ValidationComposite(validations)
-}
-
-export const makeGetHomeVideosController = () : GetHomeVideosController => {
-    const videoRepository = new VideoRepository()
-    const getHomeVideosService = new GetHomeVideosService(videoRepository)
-    return new GetHomeVideosController(makeGetHomeVideosValidation(), getHomeVideosService)
+    controller(): Controller {
+        const videoRepository = new VideoRepository()
+        const getHomeVideosService = new GetHomeVideosService(videoRepository)
+        return new GetHomeVideosController(getHomeVideosService)
+    }
 }

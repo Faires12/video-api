@@ -6,10 +6,9 @@ import { Validation } from "../../validations";
 
 export class UploadVideoController extends Controller {
   constructor(
-    validation: Validation,
     private readonly UploadVideoService: UploadVideo
   ) {
-    super(validation);
+    super();
   }
 
   async perform(httpRequest: HttpRequest): Promise<HttpResponse> {

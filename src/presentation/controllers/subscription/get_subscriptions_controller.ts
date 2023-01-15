@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
 export class GetSubscriptionsController extends Controller{
-    constructor(validation: Validation, private readonly getSubscriptionsService: GetSubscriptions) {super(validation)}
+    constructor(private readonly getSubscriptionsService: GetSubscriptions) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId} = httpRequest.body

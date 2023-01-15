@@ -5,7 +5,7 @@ import { Validation } from "../../validations"
 
 
 export class AddVideoEvaluationController extends Controller{
-    constructor(validation : Validation, private readonly addEvaluationService : AddEvaluation) {super(validation)}
+    constructor(private readonly addEvaluationService : AddEvaluation) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, videoId, isPositive} = httpRequest.body

@@ -1,44 +1,44 @@
 import { Router } from "express";
 import { adaptMiddleware, adaptRoute } from "../adapters";
 import {
-  makeAddVideoToPlaylistController,
-  makeCreatePlaylistController,
-  makeGetPlaylistByIdController,
-  makeGetUserPlaylistController,
-  makeRemoveVideoFromPlaylistController,
+  GetUserPlaylistsFactory,
+  GetPlaylistByIdFactory,
+  CreatePlaylistFactory,
+  AddVideoToPlaylistFactory,
+  RemoveVideoFromPlaylistFactory,
 } from "../factories/controllers";
-import { makeAuthMiddleware } from "../factories/middlewares/auth";
+import { AuthenticationFactory } from "../factories/middlewares";
 
 const router = Router();
 
 router.get(
   "/",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeGetUserPlaylistController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new GetUserPlaylistsFactory())
 );
 
 router.get(
   "/:id",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeGetPlaylistByIdController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new GetPlaylistByIdFactory())
 );
 
 router.post(
   "/",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreatePlaylistController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new CreatePlaylistFactory())
 );
 
 router.post(
   "/add",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeAddVideoToPlaylistController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new AddVideoToPlaylistFactory())
 );
 
 router.post(
   "/remove",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeRemoveVideoFromPlaylistController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new RemoveVideoFromPlaylistFactory())
 );
 
 export default router

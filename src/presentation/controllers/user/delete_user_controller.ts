@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
 export class DeleteUserController extends Controller{
-    constructor(validation: Validation, private readonly deleteUserService: DeleteUser) {super(validation)}
+    constructor(private readonly deleteUserService: DeleteUser) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId} = httpRequest.body

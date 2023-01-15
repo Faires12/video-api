@@ -7,11 +7,10 @@ import { Validation } from "../../validations";
 
 export class RegisterController extends Controller  {
   constructor(
-    validation: Validation,
     private readonly registerService: Register,
     private readonly loginService: Login
   ) {
-    super(validation);
+    super();
   }
 
   async perform(httpRequest: HttpRequest): Promise<HttpResponse> {

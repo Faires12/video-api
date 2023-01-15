@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
 export class CreatePlaylistController extends Controller{
-    constructor(validation: Validation, private readonly createPlaylistService: CreatePlaylist){super(validation)}
+    constructor(private readonly createPlaylistService: CreatePlaylist){super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {title, userId, description, videoId} = httpRequest.body

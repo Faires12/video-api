@@ -1,141 +1,140 @@
 import { Router } from "express";
 import { adaptMiddleware, adaptRoute } from "../adapters";
 import {
-  makeAddCommentEvaluationController,
-  makeAddVideoEvaluationController,
-  makeCreateResponseCommentController,
-  makeCreateVideoCommentController,
-  makeDeleteCommentController,
-  makeDeleteVideoController,
-  makeEditCommentController,
-  makeEditVideoController,
-  makeGetCommentController,
-  makeGetCommentEvaluationController,
-  makeGetCommentResponsesController,
-  makeGetHomeVideosController,
-  makeGetRelatedVideosController,
-  makeGetUserVideosController,
-  makeGetVideoCommentsController,
-  makeGetVideoController,
-  makeGetVideoEvaluationController,
-  makeSearchVideosController,
-  makeUploadVideoController,
+  GetHomeVideosFactory,
+  SearchVideosFactory,
+  GetVideoFactory,
+  DeleteVideoFactory,
+  EditVideoFactory,
+  GetUserVideosFactory,
+  GetRelatedVideosFactory,
+  UploadVideoFactory,
+  GetCommentFactory,
+  CreateVideoCommentFactory,
+  EditCommentFactory,
+  DeleteCommentFactory,
+  GetVideoCommentsFactory,
+  GetCommentResponsesFactory,
+  CreateResponseCommentFactory,
+  AddCommentEvaluationFactory,
+  AddVideoEvaluationFactory,
+  GetCommentEvaluationFactory,
+  GetVideoEvaluationFactory
 } from "../factories/controllers";
-import { makeAuthMiddleware } from "../factories/middlewares/auth";
+import { AuthenticationFactory } from "../factories/middlewares";
 
 const router = Router();
 
 router.get(
   "/home",
-  adaptMiddleware(makeAuthMiddleware(false, true)),
-  adaptRoute(makeGetHomeVideosController())
+  adaptMiddleware(new AuthenticationFactory(true)),
+  adaptRoute(new GetHomeVideosFactory())
 );
 
 router.post(
   "/search",
-  adaptMiddleware(makeAuthMiddleware(false, true)),
-  adaptRoute(makeSearchVideosController())
+  adaptMiddleware(new AuthenticationFactory(true)),
+  adaptRoute(new SearchVideosFactory())
 );
-
 
 router.get(
   "/:id",
-  adaptMiddleware(makeAuthMiddleware(false, true)),
-  adaptRoute(makeGetVideoController())
+  adaptMiddleware(new AuthenticationFactory(true)),
+  adaptRoute(new GetVideoFactory())
 );
 
 router.delete(
   "/:id",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeDeleteVideoController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new DeleteVideoFactory())
 );
 
 router.put(
   "/",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeEditVideoController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new EditVideoFactory())
 );
 
 router.get(
   "/user/:email",
-  adaptRoute(makeGetUserVideosController())
+  adaptRoute(new GetUserVideosFactory())
 );
 
 router.get(
   "/related/:videoId",
-  adaptRoute(makeGetRelatedVideosController())
+  adaptRoute(new GetRelatedVideosFactory())
 );
 
 router.post(
   "/",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeUploadVideoController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new UploadVideoFactory())
 );
 
 router.get(
   "/comment/:commentId",
-  adaptMiddleware(makeAuthMiddleware(false, true)),
-  adaptRoute(makeGetCommentController())
+  adaptMiddleware(new AuthenticationFactory(true)),
+  adaptRoute(new GetCommentFactory())
 );
 
 router.post(
   "/comment",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreateVideoCommentController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new CreateVideoCommentFactory())
 );
 
 router.put(
   "/comment",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeEditCommentController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new EditCommentFactory())
 );
 
 router.delete(
   "/comment/:id",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeDeleteCommentController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new DeleteCommentFactory())
 );
 
 router.get(
   "/comments/:videoId",
-  adaptMiddleware(makeAuthMiddleware(false, true)),
-  adaptRoute(makeGetVideoCommentsController())
+  adaptMiddleware(new AuthenticationFactory(true)),
+  adaptRoute(new GetVideoCommentsFactory())
 );
 
 router.get(
   "/comments/responses/:commentId",
-  adaptMiddleware(makeAuthMiddleware(false, true)),
-  adaptRoute(makeGetCommentResponsesController())
+  adaptMiddleware(new AuthenticationFactory(true)),
+  adaptRoute(new GetCommentResponsesFactory())
 );
 
 router.post(
   "/comment/response",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeCreateResponseCommentController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new CreateResponseCommentFactory())
 );
 
 router.post(
   "/comment/evaluation",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeAddCommentEvaluationController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new AddCommentEvaluationFactory())
 );
 
 router.post(
   "/evaluation",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeAddVideoEvaluationController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new AddVideoEvaluationFactory())
 );
 
 router.get(
   "/comment/evaluation/:commentId",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeGetCommentEvaluationController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new GetCommentEvaluationFactory())
 );
 
 router.get(
   "/evaluation/:videoId",
-  adaptMiddleware(makeAuthMiddleware(false)),
-  adaptRoute(makeGetVideoEvaluationController())
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new GetVideoEvaluationFactory())
 );
 
 export default router;

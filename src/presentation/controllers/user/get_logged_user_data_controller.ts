@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
 export class GetLoggedUserDataController extends Controller{
-    constructor(validation: Validation, private readonly getLoggedUserDataService: GetLoggedUserData) {super(validation)}
+    constructor(private readonly getLoggedUserDataService: GetLoggedUserData) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId} = httpRequest.body

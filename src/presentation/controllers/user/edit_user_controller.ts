@@ -5,7 +5,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
 export class EditUserController extends Controller{
-    constructor(validation: Validation, private readonly editUserService: EditUser) {super(validation)}
+    constructor(private readonly editUserService: EditUser) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, name} = httpRequest.body

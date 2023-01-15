@@ -5,11 +5,9 @@ import { Validation } from "../validations";
 
 export class AuthenticationMiddleware extends Middleware {
   constructor(
-    validation: Validation,
     private readonly getUserByTokenService: GetUserByToken,
-    private readonly optional?: boolean
   ) {
-    super(validation);
+    super();
   }
 
   async perform(httpRequest: HttpRequest): Promise<HttpResponse> {

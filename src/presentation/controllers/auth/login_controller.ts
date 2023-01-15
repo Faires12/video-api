@@ -5,10 +5,7 @@ import { Validation } from "../../validations"
 
 
 export class LoginController extends Controller {
-    constructor(validation : Validation,
-        private readonly loginService : Login) {
-            super(validation)
-        }
+    constructor(private readonly loginService : Login) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {email, password} = httpRequest.body

@@ -3,19 +3,21 @@ import { EditUserService } from '../../../../application/services'
 import { FileSystemAdapter, UuidAdapter } from '../../../../infrastructure/adapters'
 import { UserRepository } from '../../../../infrastructure/data/typeorm/repositories'
 import { EditUserController } from '../../../../presentation/controllers'
-import { FileValidation, StringValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
+import { Controller } from "../../../../presentation/interfaces/http"
+import { ControllerFactory } from "../../controller_factory"
 
-export function makeEditUserValidation() : Validation {
-    const validations : Validation[] = []
-    validations.push(new StringValidation('name', 3, 50))
-    validations.push(new FileValidation('avatar', 5000, ["image/jpeg", "image/png", "image/gif"]))
-    return new ValidationComposite(validations)
-}
-
-export function makeEditUserController() : EditUserController {
-    const userRepository = new UserRepository()
-    const fileSystemAdapter = new FileSystemAdapter(path.join(__dirname, "../../../public/"))
-    const uuidAdapter = new UuidAdapter()
-    const editUserService = new EditUserService(userRepository, fileSystemAdapter, uuidAdapter)
-    return new EditUserController(makeEditUserValidation(), editUserService)
+export class EditUserFactory extends ControllerFactory{  
+    validations(): (Error | null)[] {
+        return [
+            this.validation.builder.setField('name').string().minLength(3).maxLength(50).optional().getError(),
+            this.validation.builder.setField('avatar').file().maxSize(5).image().getError()
+        ]
+    }
+    controller(): Controller {
+        const userRepository = new UserRepository()
+        const fileSystemAdapter = new FileSystemAdapter(path.join(__dirname, "../../../public/"))
+        const uuidAdapter = new UuidAdapter()
+        const editUserService = new EditUserService(userRepository, fileSystemAdapter, uuidAdapter)
+        return new EditUserController(editUserService)
+    }
 }

@@ -5,10 +5,9 @@ import { Validation } from "../../validations";
 
 export class GetSubscriptionController extends Controller {
   constructor(
-    validation: Validation,
     private readonly getSubscriptionService: GetSubscrption
   ) {
-    super(validation);
+    super();
   }
 
   async perform(httpRequest: HttpRequest): Promise<HttpResponse> {

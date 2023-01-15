@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
 export class DeleteVideoController extends Controller{
-    constructor(validation: Validation, private readonly deleteVideoService: DeleteVideo) {super(validation)}
+    constructor(private readonly deleteVideoService: DeleteVideo) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {id} = httpRequest.params

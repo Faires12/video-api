@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http";
 import { Validation } from "../../validations";
 
 export class GetRelatedVideosController extends Controller{
-    constructor(validation: Validation, private readonly getRelatedVideosService: GetRelatedVideos) {super(validation)}
+    constructor(private readonly getRelatedVideosService: GetRelatedVideos) {super()}
     
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {videoId} = httpRequest.params

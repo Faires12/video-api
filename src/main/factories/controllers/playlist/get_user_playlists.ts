@@ -1,11 +1,16 @@
 import { GetUserPlaylistsService } from "../../../../application/services"
 import { PlaylistRepository } from "../../../../infrastructure/data/typeorm/repositories"
 import { GetUserPlaylistsController } from "../../../../presentation/controllers"
-import { ValidationComposite } from "../../../../presentation/validations"
+import { Controller } from "../../../../presentation/interfaces/http"
+import { ControllerFactory } from "../../controller_factory"
 
-export const makeGetUserPlaylistController = () : GetUserPlaylistsController => {
-    const playlistRepository = new PlaylistRepository()
-    const getUserPlaylistsService = new GetUserPlaylistsService(playlistRepository)
-
-    return new GetUserPlaylistsController(new ValidationComposite([]), getUserPlaylistsService)
+export class GetUserPlaylistsFactory extends ControllerFactory{  
+    validations(): (Error | null)[] {
+        return []
+    }
+    controller(): Controller {
+        const playlistRepository = new PlaylistRepository()
+        const getUserPlaylistsService = new GetUserPlaylistsService(playlistRepository)
+        return new GetUserPlaylistsController(getUserPlaylistsService)
+    }
 }

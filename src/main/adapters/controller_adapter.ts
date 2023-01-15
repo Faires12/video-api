@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
-import { Controller, HttpRequest } from '../../presentation/interfaces/http'
+import { HttpRequest } from '../../presentation/interfaces/http'
+import { ControllerFactory } from '../factories/controller_factory'
 
-export const adaptRoute = (controller : Controller) => {
+export const adaptRoute = (factory : ControllerFactory) => {
     return async (req: Request, res : Response) => {
         const httpRequest : HttpRequest = {
             body: req.body,
@@ -10,6 +11,7 @@ export const adaptRoute = (controller : Controller) => {
             params: req.params
         }
 
+        const controller = factory.make()
         const httpResponse = await controller.handle(httpRequest)
         return res.status(httpResponse.statusCode).json(httpResponse.body)
     }

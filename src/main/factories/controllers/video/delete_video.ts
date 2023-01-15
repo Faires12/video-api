@@ -1,21 +1,20 @@
 import { DeleteVideoService } from "../../../../application/services"
 import { CommentRepository, UserRepository, VideoRepository } from "../../../../infrastructure/data/typeorm/repositories"
 import { DeleteVideoController } from "../../../../presentation/controllers"
-import { NumberValidation, RequiredFieldValidation, Validation, ValidationComposite } from "../../../../presentation/validations"
+import { Controller } from "../../../../presentation/interfaces/http"
+import { ControllerFactory } from "../../controller_factory"
 
-export const makeDeleteVideoValidation = () : Validation => {
-    const validations : Validation[] = []
-    for(const fieldname of ['id']){
-        validations.push(new RequiredFieldValidation(fieldname))
-        validations.push(new NumberValidation(fieldname, 1))
+export class DeleteVideoFactory extends ControllerFactory{  
+    validations(): (Error | null)[] {
+        return [
+            this.validation.builder.setField('id').number().min(1).getError()
+        ]
     }
-    return new ValidationComposite(validations)
-}
-
-export const makeDeleteVideoController = () : DeleteVideoController => {
-    const videoRepository = new VideoRepository()
-    const userRepository = new UserRepository()
-    const commentRepository = new CommentRepository()
-    const deleteVideoService = new DeleteVideoService(videoRepository, userRepository, commentRepository)
-    return new DeleteVideoController(makeDeleteVideoValidation(), deleteVideoService)
+    controller(): Controller {
+        const videoRepository = new VideoRepository()
+        const userRepository = new UserRepository()
+        const commentRepository = new CommentRepository()
+        const deleteVideoService = new DeleteVideoService(videoRepository, userRepository, commentRepository)
+        return new DeleteVideoController(deleteVideoService)
+    }
 }

@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from "../../interfaces/http"
 import { Validation } from "../../validations"
 
 export class GetVideoCommentsController extends Controller{
-    constructor(validation: Validation, private readonly getVideoCommentsService: GetVideoComments) {super(validation)}
+    constructor(private readonly getVideoCommentsService: GetVideoComments) {super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {page, rows} = httpRequest.query
