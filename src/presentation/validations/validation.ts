@@ -7,7 +7,7 @@ export class Validation {
 
     validate(input: any) : Error | null {
         this.builder.setInput(input)
-        const errors = this.builderConfig ? this.builderConfig() : []
+        const errors = this.builderConfig()
         for(const error of errors){
             if(error) return error
         }

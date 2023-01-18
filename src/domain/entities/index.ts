@@ -5,3 +5,7 @@ export * from './video'
 export * from './playlist'
 export * from './subscription'
 export * from './report'
+export * from './message'
+export * from './chat'
+
+

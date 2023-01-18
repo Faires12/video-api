@@ -17,7 +17,7 @@ export class ValidationBuilder{
     private opc : boolean = false
     private null : boolean = false
 
-    constructor(private readonly validator: Validator,input?: any) {
+    constructor(private readonly validator: Validator, input?: any) {
         if(input)
             this.input = input
     }
@@ -39,13 +39,17 @@ export class ValidationBuilder{
     }
 
     private isNumber(): boolean {
-        return typeof this.field === 'number'
+        return !isNaN(this.field)
     }
 
     private isFile(): boolean {
         if(!(typeof this.field === 'object'))
             return false
         return 'name' in this.field && 'data' in this.field && 'size' in this.field  && 'mimetype' in this.field
+    }
+
+    private isArray(): boolean {
+        return Array.isArray(this.field)
     }
 
     private checkExistence(){
@@ -74,6 +78,8 @@ export class ValidationBuilder{
         this.fieldname = fieldname
         this.error = null 
         this.errorPriority = this.ErrorPriorities.NOPRIORITY
+        this.opc = false
+        this.null = false
         return this
     }
 
@@ -188,6 +194,22 @@ export class ValidationBuilder{
             return this
         if(!["video/mp4"].includes(this.field.mimetype))
             this.setError(new InvalidParamError(this.fieldname, `needs to be a video`), this.ErrorPriorities.FIELDPROPERTIES)
+        return this
+    }
+
+    array(type?: "string" | "number") : this {
+        if(!this.hasProperty())
+            return this
+        if(!this.isArray()){
+            this.setError(new InvalidParamError(this.fieldname, 'needs to be a array'), this.ErrorPriorities.FIELDTYPE)
+            return this
+        }       
+        for(const field of this.field){
+            if(type === "number" && !(typeof field === "number"))
+                this.setError(new InvalidParamError(this.fieldname, 'needs to be a array of numbers'), this.ErrorPriorities.FIELDTYPE)
+            if(type === "string" && !(typeof field === "string"))
+                this.setError(new InvalidParamError(this.fieldname, 'needs to be a array of strings'), this.ErrorPriorities.FIELDTYPE)
+        }
         return this
     }
 }

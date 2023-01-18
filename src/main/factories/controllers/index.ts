@@ -35,4 +35,8 @@ export * from './user/get_logged_user_data'
 export * from './user/get_user_data_by_email'
 export * from './user/edit_user'
 export * from './user/delete_user'
+export * from './chat/create_chat'
+export * from './chat/get_user_chats'
+export * from './message/create_message'
+export * from './message/get_chat_messages'
 

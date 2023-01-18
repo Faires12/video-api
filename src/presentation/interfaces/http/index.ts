@@ -23,7 +23,7 @@ export abstract class Controller {
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    try {
+    try {      
       if(this.validation){
         const error = this.validation.validate({
           ...httpRequest.body,

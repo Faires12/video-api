@@ -1,5 +1,15 @@
 import { DataSource } from "typeorm";
-import { CommentEntity, EvaluationEntity, PlaylistEntity, SubscriptionEntity, UserEntity, VideoEntity, ReportEntity } from "./entities";
+import {
+  CommentEntity,
+  EvaluationEntity,
+  PlaylistEntity,
+  SubscriptionEntity,
+  UserEntity,
+  VideoEntity,
+  ReportEntity,
+  ChatEntity,
+  MessageEntity,
+} from "./entities";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -7,9 +17,18 @@ export const AppDataSource = new DataSource({
   port: 5432,
   username: "postgres",
   password: "123",
-  database: "cleannode3",
+  database: "cleannode4",
   synchronize: true,
   // logging: true,
-  entities: [UserEntity, VideoEntity, CommentEntity, EvaluationEntity, PlaylistEntity, SubscriptionEntity, ReportEntity],
+  entities: [
+    UserEntity,
+    VideoEntity,
+    CommentEntity,
+    EvaluationEntity,
+    PlaylistEntity,
+    SubscriptionEntity,
+    ReportEntity,
+    ChatEntity,
+    MessageEntity,
+  ],
 });
-

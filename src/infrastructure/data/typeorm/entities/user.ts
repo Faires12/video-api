@@ -1,7 +1,6 @@
 import { Entity, Column, OneToMany } from "typeorm";
-import { CommentEntity, EvaluationEntity, VideoEntity, PlaylistEntity, SubscriptionEntity, ReportEntity } from "./";
+import { CommentEntity, EvaluationEntity, VideoEntity, PlaylistEntity, SubscriptionEntity, ReportEntity, MessageEntity } from "./";
 import { AbstractEntity } from "./abstract_entity";
-
 
 @Entity("tb_user")
 export class UserEntity extends AbstractEntity{
@@ -43,4 +42,7 @@ export class UserEntity extends AbstractEntity{
 
     @OneToMany(() => ReportEntity, (report) => report.created_by)
     reports: ReportEntity[]
+
+    @OneToMany(() => MessageEntity, (message) => message.created_by)
+    messages: MessageEntity[]
 }

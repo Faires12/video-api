@@ -8,6 +8,7 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
+    "socket.io": "^4.5.4",
     "typeorm": "^0.3.10",
     "uuid": "^9.0.0",
     "validator": "^13.7.0"
