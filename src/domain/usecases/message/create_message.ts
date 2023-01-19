@@ -4,6 +4,7 @@ export interface CreateMessageInterface{
     content: string
     userId: number
     chatId: number
+    file?: string
 }
 
 export interface CreateMessage{

@@ -2,11 +2,14 @@ import { Message } from "../../../domain/entities";
 import { ChatRepositoryInterface, MessageRepositoryInterface, UserRepositoryInterface } from "../../../domain/repositories";
 import { CreateMessage, CreateMessageInterface } from "../../../domain/usecases";
 import { HttpException, HttpStatusCode } from "../../../utils/http";
+import { SaveFileObject, UuidGenerator } from "../../interfaces";
 
 export class CreateMessageService implements CreateMessage{
     constructor(private readonly userRepository: UserRepositoryInterface, 
         private readonly chatRepository: ChatRepositoryInterface, 
-        private readonly messageRepository: MessageRepositoryInterface
+        private readonly messageRepository: MessageRepositoryInterface,
+        private readonly saveFileObject: SaveFileObject,
+        private readonly uuidGenerator: UuidGenerator
         ) {}
     
     async create(infos: CreateMessageInterface): Promise<Message> {
@@ -29,10 +32,15 @@ export class CreateMessageService implements CreateMessage{
         if(!foundUser)
             throw new HttpException(HttpStatusCode.NotFound, 'User not in chat')
 
+        let fileRef : string | undefined = undefined
+        if(infos.file)
+            fileRef = await this.saveFileObject.saveBase64(infos.file, this.uuidGenerator.generate())
+
         return await this.messageRepository.create({
             chat: infos.chatId,
             user: infos.userId,
-            content: infos.content
+            content: infos.content,
+            fileRef: fileRef
         })
     }
 

@@ -4,6 +4,7 @@ export interface CreateMessageRepositoryInterface{
     content: string
     user: number
     chat: number
+    fileRef?: string
 }
 
 export interface GetChatMessagesRepositoryInterface{

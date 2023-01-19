@@ -35,7 +35,8 @@ const httpServer = createServer(app)
 const io = new Server(httpServer, {
     cors: {
         origin: '*'
-    }
+    },
+    maxHttpBufferSize: 1e8
 })
 
 Socket(io)

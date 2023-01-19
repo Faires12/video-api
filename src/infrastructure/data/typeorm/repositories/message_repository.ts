@@ -28,7 +28,9 @@ function MapToDomain(message: MessageEntity): Message{
             name: message.created_by.name,
             subsCount: message.created_by.subsCount
         },
-        createdAt: message.createdAt
+        createdAt: message.createdAt,
+        id: message.id,
+        fileRef: message.fileRef
     }
 }
 
@@ -37,7 +39,7 @@ export class MessageRepository implements MessageRepositoryInterface{
         const messages = await MessageEntity.find({
             where: {chatId: infos.chatId},
             take: infos.rows,
-            skip: (infos.page - 1) * infos.rows,
+            skip: Math.floor((infos.page - 1) * infos.rows),
             order: {createdAt: "DESC"}
         })
         const chat = await ChatEntity.findOne({
@@ -67,6 +69,8 @@ export class MessageRepository implements MessageRepositoryInterface{
             newMessage.created_by = user
         if(chat)
             newMessage.chat = chat
+        if(infos.fileRef)
+            newMessage.fileRef = infos.fileRef
 
         await newMessage.save()
 

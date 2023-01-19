@@ -14,6 +14,9 @@ export class MessageEntity extends AbstractEntity{
     @Column({type: "varchar", nullable: false})
     content: string 
 
+    @Column({type: "varchar", nullable: true})
+    fileRef: string 
+
     @ManyToOne(() => ChatEntity, (chat) => chat.messages)
     @JoinColumn({name: 'chat_id'})
     chat: ChatEntity

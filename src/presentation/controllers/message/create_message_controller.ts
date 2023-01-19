@@ -6,12 +6,13 @@ export class CreateMessageController extends Controller{
     constructor(private readonly createMessageService: CreateMessage){super()}
 
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
-        const {userId, chatId, content} = httpRequest.body
+        const {userId, chatId, content, file} = httpRequest.body
 
         const newMessage = await this.createMessageService.create({
             userId, 
             chatId,
-            content
+            content,
+            file
         })
 
         return ok(newMessage)
