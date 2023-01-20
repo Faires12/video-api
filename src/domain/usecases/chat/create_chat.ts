@@ -1,3 +1,4 @@
+import { FileInterface } from "../../../utils/file_interface"
 import { Chat } from "../../entities"
 
 export interface CreateChatInterface{
@@ -5,6 +6,7 @@ export interface CreateChatInterface{
     isPersonal: boolean
     otherUsersEmails: string[]
     groupName?: string
+    groupImage?: string
 }
 
 export interface CreateChat{

@@ -8,9 +8,9 @@ export class SearchVideosController extends Controller{
     
     async perform(httpRequest: HttpRequest): Promise<HttpResponse> {
         const {userId, search} = httpRequest.body
-        const {rows, page, orderBy} = httpRequest.query
+        const {rows, page, orderBy, includeUserVideos} = httpRequest.query
 
-        const videos = await this.searchVideosService.search({userId, rows, page, orderBy, search})
+        const videos = await this.searchVideosService.search({userId, rows, page, orderBy, search, includeUserVideos})
         return ok(videos)
     }
     

@@ -5,6 +5,7 @@ import {
   EditUserFactory,
   DeleteUserFactory,
   GetUserDataByEmailFactory,
+  SearchUsersFactory,
 } from "../factories/controllers";
 import { AuthenticationFactory } from "../factories/middlewares";
 
@@ -14,6 +15,12 @@ router.get(
   "/",
   adaptMiddleware(new AuthenticationFactory()),
   adaptRoute(new GetLoggedUserDataFactory())
+);
+
+router.post(
+  "/search",
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new SearchUsersFactory())
 );
 
 router.put(

@@ -10,7 +10,8 @@ export class SearchVideosFactory extends ControllerFactory{
             this.validation.builder.setField('page').number().min(1).getError(),
             this.validation.builder.setField('rows').number().min(1).getError(),
             this.validation.builder.setField('orderBy').number().min(1).optional().getError(),
-            this.validation.builder.setField('search').string().minLength(1).maxLength(50).getError()
+            this.validation.builder.setField('search').string().minLength(1).maxLength(50).getError(),
+            this.validation.builder.setField('includeUserVideos').boolean().optional().getError()
         ]
     }
     controller(): Controller {

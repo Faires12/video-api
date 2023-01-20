@@ -6,5 +6,7 @@ export interface Chat extends AbstractEntity{
     users: User[]
     isPersonal: boolean
     groupName?: string
+    groupImage?: string
     admins?: User[]
+    lastMessage?: Date
 }

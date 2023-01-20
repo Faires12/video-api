@@ -18,6 +18,13 @@ export interface EditUserRepositoryInterface{
     id: number
 }
 
+export interface SearchUsersRepositoryInterface{
+    userId: number
+    search: string
+    page: number
+    rows: number
+}
+
 export interface UserRepositoryInterface{
     create(user: CreateUserInterface) : Promise<User>
     getById(id: number) : Promise<User | null>
@@ -25,4 +32,5 @@ export interface UserRepositoryInterface{
     changeSubsCount(infos: ChangeSubsCountInterface) : Promise<void>
     edit(infos: EditUserRepositoryInterface) : Promise<User>
     delete(id: number): Promise<void>
+    search(infos: SearchUsersRepositoryInterface) : Promise<User[]>
 }

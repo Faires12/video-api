@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import { Chat, Message } from "../domain/entities";
 import { HttpRequest } from "../presentation/interfaces/http";
-import { CreateMessageFactory, GetLoggedUserDataFactory, GetUserDataByEmailFactory } from "./factories/controllers";
+import { CreateChatFactory, CreateMessageFactory, GetLoggedUserDataFactory, GetUserDataByEmailFactory } from "./factories/controllers";
 import { AuthenticationFactory } from "./factories/middlewares";
 
 interface SocketConnection {
@@ -35,6 +35,14 @@ interface TypingResponse{
     name: string
   }[]
   chat: Chat
+}
+
+interface CreateChatInterface {
+  isPersonal: boolean
+  otherUsersEmails: string[];
+  groupName?: string;
+  groupImage?: string;
+  errCallback(err: string): void
 }
 
 export function Socket(io: Server){
@@ -76,7 +84,6 @@ export function Socket(io: Server){
 
         socket.on("new_message", async (info: NewMessageInfo) => {
           const index = connectedClients.findIndex(client => client.socketId === socket.id)
-          console.log(info)
 
           const createMessage = new CreateMessageFactory().make()
           const request : HttpRequest = {
@@ -125,6 +132,31 @@ export function Socket(io: Server){
               })
             else
               typingUserInChat.control += 1
+          }
+        })
+
+        socket.on("new_chat", async (infos: CreateChatInterface, cb:(err: string, success: boolean) => void) => {
+          const index = connectedClients.findIndex(client => client.socketId === socket.id)
+          const createChat = new CreateChatFactory().make()
+          const res = await createChat.handle({
+            body: {
+              ...infos,
+              userId: connectedClients[index].userId
+            }
+          })
+
+          if(res.statusCode === 404 && res.body.message === "Personal chat already exists"){
+            cb && cb("This chat already exists", false)
+          }
+          if(res.statusCode === 200){
+            const chat = res.body as Chat
+            for(const user of chat.users){
+              const client = connectedClients.find(client => client.userEmail === user.email)
+              if(!client)
+                continue
+              io.to(client.socketId).emit("recieve_chat", chat)
+            }
+            cb && cb("", true)
           }
         })
     })    

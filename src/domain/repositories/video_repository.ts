@@ -48,6 +48,7 @@ export interface SearchVideosRepositoryInterface {
   rows: number;
   userId?: number;
   orderBy?: number;
+  includeUserVideos?: boolean
 }
 
 export interface VideoRepositoryInterface {

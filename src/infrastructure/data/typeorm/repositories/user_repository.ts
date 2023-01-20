@@ -1,13 +1,42 @@
+import { Like, Not } from "typeorm";
 import { User } from "../../../../domain/entities";
 import {
   ChangeSubsCountInterface,
   CreateUserInterface,
   EditUserRepositoryInterface,
+  SearchUsersRepositoryInterface,
   UserRepositoryInterface,
 } from "../../../../domain/repositories";
 import { UserEntity } from "../entities";
 
 export class UserRepository implements UserRepositoryInterface {
+  async search(infos: SearchUsersRepositoryInterface): Promise<User[]> {
+    const users = await UserEntity.find({
+      where: [
+        {
+          id: Not(infos.userId),
+          active: true,
+          email: Like(`%${infos.search}%`) 
+        },
+        {
+          id: Not(infos.userId),
+          active: true,
+          name: Like(`%${infos.search}%`)
+        },
+      ],
+      skip: (infos.page - 1) * infos.rows,
+      take: infos.rows
+    })
+
+    return users.map(user => {
+      return {
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        subsCount: user.subsCount
+      }
+    })
+  }
   async delete(id: number): Promise<void> {
     const user = await UserEntity.findOneBy({id})
     if(user){

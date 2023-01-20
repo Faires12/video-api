@@ -155,12 +155,14 @@ export class ValidationBuilder {
     if (!this.hasProperty() || !this.isString() || !this.isBase64())
       return this;
     const content = this.field.split(",").pop();
-    if (!content)
+    if (!content){
       this.setError(
         new InvalidParamError(this.fieldname, "needs to be a base64"),
         this.ErrorPriorities.FIELDPROPERTIES
       );
-
+      return this
+    }
+      
     const length = content.length;
     const fileSizeInBytes = Math.ceil(length / 4) * 3;
     const finalSize = content.endsWith("==")
@@ -181,11 +183,13 @@ export class ValidationBuilder {
     if (!this.hasProperty() || !this.isString() || !this.isBase64())
       return this;
     const mimetype = this.field.split(",").shift();
-    if (!mimetype)
+    if (!mimetype){  
       this.setError(
         new InvalidParamError(this.fieldname, "needs to be a base64"),
         this.ErrorPriorities.FIELDPROPERTIES
       );
+      return this
+    }
 
     if (
       mimetype !== "data:image/jpeg;base64" &&
@@ -198,6 +202,33 @@ export class ValidationBuilder {
         new InvalidParamError(
           this.fieldname,
           "needs to be a png, jpg, gif, mp4 or pdf"
+        ),
+        this.ErrorPriorities.FIELDSUBPROPERTIES
+      );
+    return this;
+  }
+
+  image_base64(): this {
+    if (!this.hasProperty() || !this.isString() || !this.isBase64())
+      return this;
+    const mimetype = this.field.split(",").shift();
+    if (!mimetype){  
+      this.setError(
+        new InvalidParamError(this.fieldname, "needs to be a base64"),
+        this.ErrorPriorities.FIELDPROPERTIES
+      );
+      return this
+    }
+
+    if (
+      mimetype !== "data:image/jpeg;base64" &&
+      mimetype !== "data:image/png;base64" &&
+      mimetype !== "data:image/gif;base64" 
+    )
+      this.setError(
+        new InvalidParamError(
+          this.fieldname,
+          "needs to be a png, jpg or gif"
         ),
         this.ErrorPriorities.FIELDSUBPROPERTIES
       );

@@ -5,5 +5,4 @@ export class UuidAdapter implements UuidGenerator{
     generate(): string {
         return v4()
     }
-    
 }

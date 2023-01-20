@@ -39,4 +39,5 @@ export * from './chat/create_chat'
 export * from './chat/get_user_chats'
 export * from './message/create_message'
 export * from './message/get_chat_messages'
+export * from './user/search_users'
 

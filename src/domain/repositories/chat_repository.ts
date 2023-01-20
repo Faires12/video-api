@@ -5,6 +5,7 @@ export interface CreateChatRepositoryInterface{
     isPersonal: boolean
     otherUsers: User[]
     groupName?: string
+    groupImage?: string
 }
 
 export interface GetPersonalChatInterface{

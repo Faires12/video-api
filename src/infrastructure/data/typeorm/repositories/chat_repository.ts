@@ -16,7 +16,8 @@ function MapToDomain(chat: ChatEntity) : Chat {
         }),
         messages: [],
         id: chat.id,
-        groupName: chat.groupName
+        groupName: chat.groupName,
+        groupImage: chat.groupImage
     }
 }
 
@@ -32,7 +33,8 @@ export class ChatRepository implements ChatRepositoryInterface{
 
     async getUserChats(userId: number): Promise<Chat[]> {
         let allUserChats = await ChatEntity.find({
-            relations: ["users"]
+            relations: ["users"],
+            order: {lastMessage: "DESC"}
         })
         const chats = allUserChats.filter(chat => {
             const user = chat.users.find(user => user.id === userId)
@@ -50,7 +52,7 @@ export class ChatRepository implements ChatRepositoryInterface{
         const chat = allUserChats.find(chat => {
             const actualUser = chat.users.find(user => user.id === infos.actualUser)
             const otherUser = chat.users.find(user => user.id === infos.otherUser.id)
-            if(actualUser && otherUser)
+            if(actualUser && otherUser && chat.isPersonal)
                 return true
             return false
         })
@@ -68,8 +70,10 @@ export class ChatRepository implements ChatRepositoryInterface{
         }
 
         chatEntity.isPersonal = infos.isPersonal
-        if(infos.groupName)
+        if(infos.groupName && !infos.isPersonal)
             chatEntity.groupName = infos.groupName
+        if(infos.groupImage && !infos.isPersonal)
+            chatEntity.groupImage = infos.groupImage
 
         await chatEntity.save()
         return MapToDomain(chatEntity)

@@ -10,6 +10,12 @@ export class ChatEntity extends AbstractEntity{
     @Column({type: "varchar", nullable: true})
     groupName: string 
 
+    @Column({type: "varchar", nullable: true})
+    groupImage: string 
+
+    @Column({type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
+    lastMessage: Date 
+
     @ManyToMany(() => UserEntity)
     @JoinTable({ 
         name: 'tb_chat_user',

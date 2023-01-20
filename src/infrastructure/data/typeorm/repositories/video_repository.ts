@@ -39,7 +39,7 @@ function MapToDomain(video: VideoEntity): Video {
 export class VideoRepository implements VideoRepositoryInterface {
   async search(infos: SearchVideosRepositoryInterface): Promise<Video[]> {
     const videos = await VideoEntity.find({
-      where: infos.userId
+      where: infos.userId && !infos.includeUserVideos
         ? {
             userId: Not(infos.userId),
             active: true,

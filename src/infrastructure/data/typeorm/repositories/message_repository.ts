@@ -14,7 +14,9 @@ function ChatMapToDomain(chat: ChatEntity) : Chat {
             }
         }),
         messages: [],
-        id: chat.id
+        id: chat.id,
+        groupName: chat.groupImage,
+        groupImage: chat.groupImage
     }
 }
 
@@ -72,7 +74,14 @@ export class MessageRepository implements MessageRepositoryInterface{
         if(infos.fileRef)
             newMessage.fileRef = infos.fileRef
 
+        if(chat){
+            chat.lastMessage = new Date()
+            await chat.save()
+        }
+        
+
         await newMessage.save()
+
 
         return MapToDomain(newMessage)
     }
