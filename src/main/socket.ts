@@ -42,7 +42,6 @@ interface CreateChatInterface {
   otherUsersEmails: string[];
   groupName?: string;
   groupImage?: string;
-  errCallback(err: string): void
 }
 
 export function Socket(io: Server){

@@ -15,7 +15,7 @@ function ChatMapToDomain(chat: ChatEntity) : Chat {
         }),
         messages: [],
         id: chat.id,
-        groupName: chat.groupImage,
+        groupName: chat.groupName,
         groupImage: chat.groupImage
     }
 }
