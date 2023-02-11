@@ -9,6 +9,7 @@ import {
   ReportEntity,
   ChatEntity,
   MessageEntity,
+  ChatNotificationEntity,
 } from "./entities";
 
 export const AppDataSource = new DataSource({
@@ -30,5 +31,6 @@ export const AppDataSource = new DataSource({
     ReportEntity,
     ChatEntity,
     MessageEntity,
+    ChatNotificationEntity
   ],
 });

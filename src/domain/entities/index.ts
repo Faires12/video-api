@@ -7,5 +7,6 @@ export * from './subscription'
 export * from './report'
 export * from './message'
 export * from './chat'
+export * from './chat_notification'
 
 

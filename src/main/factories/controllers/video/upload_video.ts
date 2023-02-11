@@ -9,8 +9,8 @@ import { ControllerFactory } from "../../controller_factory"
 export class UploadVideoFactory extends ControllerFactory{  
     validations(): (Error | null)[] {
         return [
-            this.validation.builder.setField('title').string().min(3).max(30).getError(),
-            this.validation.builder.setField('description').string().min(5).max(200).optional().getError(),
+            this.validation.builder.setField('title').string().minLength(3).maxLength(30).getError(),
+            this.validation.builder.setField('description').string().minLength(5).maxLength(200).optional().getError(),
             this.validation.builder.setField('thumbnail').file().maxSize(5).image().getError(),
             this.validation.builder.setField('video').file().maxSize(100).video().getError()
         ]

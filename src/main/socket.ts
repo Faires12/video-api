@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
-import { Chat, Message } from "../domain/entities";
+import { Chat, ChatNotification, Message } from "../domain/entities";
 import { HttpRequest } from "../presentation/interfaces/http";
-import { CreateChatFactory, CreateMessageFactory, GetLoggedUserDataFactory, GetUserDataByEmailFactory } from "./factories/controllers";
+import { CreateChatFactory, CreateChatNotificationsFactory, CreateMessageFactory, GetLoggedUserDataFactory, GetUserDataByEmailFactory } from "./factories/controllers";
 import { AuthenticationFactory } from "./factories/middlewares";
 
 interface SocketConnection {
@@ -9,6 +9,7 @@ interface SocketConnection {
     userId: string
     userEmail: string
     userName: string
+    connectedChat: number | null
 }
 
 const connectedClients : SocketConnection[] = []
@@ -67,18 +68,22 @@ export function Socket(io: Server){
             socketId: socket.id,
             userId: res.body.userId,
             userEmail: userRes.body.email,
-            userName: userRes.body.name
+            userName: userRes.body.name,
+            connectedChat: null
         })
-        console.log(connectedClients)
         next()  
       }  
     })
 
     io.on("connection", (socket) => {
+        socket.on("enter_chat", (chatId: number | null) => {
+          const client = connectedClients.find(client => client.socketId === socket.id)
+          if(client) client.connectedChat = chatId
+        })
+
         socket.on("disconnect", () => {
             const index = connectedClients.findIndex(client => client.socketId === socket.id)
             index >= 0 && connectedClients.splice(index, 1)
-            console.log(connectedClients)
         })
 
         socket.on("new_message", async (info: NewMessageInfo) => {
@@ -97,12 +102,41 @@ export function Socket(io: Server){
           const res = await createMessage.handle(request)
           if(res.statusCode === 200){
             const message = res.body as Message
-            for(const user of message.chat.users){
-              const client = connectedClients.find(client => client.userEmail === user.email)
-              if(!client)
-                continue
-              io.to(client.socketId).emit("recieve_message", message)
+            if(message.chat){
+              const excludeUsersEmails : string[] = []
+
+              for(const user of message.chat.users){
+                const client = connectedClients.find(client => client.userEmail === user.email 
+                  && client.connectedChat === message.chat?.id)
+                if(!client)
+                  continue
+                user.email && excludeUsersEmails.push(user.email)
+                io.to(client.socketId).emit("recieve_message", message)
+              }
+
+              const createNotifications = new CreateChatNotificationsFactory().make()
+              const res = await createNotifications.handle({
+                body: {
+                  chatId: message.chat.id,
+                  messageId: message.id,
+                  excludeUsersEmails: excludeUsersEmails
+                }
+              }) 
+
+              if(res.statusCode === 200){
+
+                const notifications = res.body as ChatNotification[]
+                for(const notification of notifications){
+                  const client = connectedClients.find(client => client.userEmail === notification.reciever 
+                    && client.connectedChat !== message.chat?.id)
+
+                  if(!client)
+                    continue 
+                  io.to(client.socketId).emit("recieve_notification", notification)
+                }
+              }
             }
+              
 
             const typingInChat = typingUsers.find(typ => typ.chat.id === info.chatId)
             if(typingInChat){

@@ -40,4 +40,7 @@ export * from './chat/get_user_chats'
 export * from './message/create_message'
 export * from './message/get_chat_messages'
 export * from './user/search_users'
+export * from './chat_notification/create_chat_notifications'
+export * from './chat_notification/get_chat_notifications'
+export * from './chat_notification/clear_chat_notifications'
 

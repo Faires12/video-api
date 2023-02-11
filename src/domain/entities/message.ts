@@ -5,7 +5,7 @@ import { Video } from "./video";
 
 export interface Message extends AbstractEntity {
     created_by: User
-    chat: Chat
+    chat?: Chat
     content: string
     fileRef?: string
     videoRef?: Video

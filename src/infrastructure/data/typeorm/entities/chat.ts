@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
-import { MessageEntity, UserEntity } from "./";
+import { ChatNotificationEntity, MessageEntity, UserEntity } from "./";
 import { AbstractEntity } from "./abstract_entity";
 
 @Entity("tb_chat")
@@ -34,4 +34,7 @@ export class ChatEntity extends AbstractEntity{
 
     @OneToMany(() => MessageEntity, (message) => message.chat)
     messages: MessageEntity[]
+
+    @OneToMany(() => ChatNotificationEntity, (chatNotification) => chatNotification.chat)
+    chatNotifications: ChatNotificationEntity[]
 }

@@ -4,7 +4,7 @@ import { GetUserChatsController } from "../../../../presentation/controllers"
 import { Controller } from "../../../../presentation/interfaces/http"
 import { ControllerFactory } from "../../controller_factory"
 
-export class GetUserChats extends ControllerFactory{  
+export class GetUserChatsFactory extends ControllerFactory{  
     validations(): (Error | null)[] {
         return []
     }

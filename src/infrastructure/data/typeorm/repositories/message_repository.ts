@@ -77,11 +77,9 @@ export class MessageRepository implements MessageRepositoryInterface{
         if(chat){
             chat.lastMessage = new Date()
             await chat.save()
-        }
-        
+        }    
 
         await newMessage.save()
-
 
         return MapToDomain(newMessage)
     }

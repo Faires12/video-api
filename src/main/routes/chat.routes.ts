@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import { adaptMiddleware, adaptRoute } from '../adapters';
-import { CreateChatFactory, GetChatMessagesFactory, GetUserChats } from '../factories/controllers';
+import { ClearChatNotificationsFactory, CreateChatFactory, GetChatMessagesFactory, GetChatNotificationsFactory, GetUserChatsFactory } from '../factories/controllers';
 import { AuthenticationFactory } from '../factories/middlewares';
 
 const router = Router()
@@ -8,7 +8,7 @@ const router = Router()
 router.get(
     "/",
     adaptMiddleware(new AuthenticationFactory()),
-    adaptRoute(new GetUserChats())
+    adaptRoute(new GetUserChatsFactory())
 );
 
 router.post(
@@ -21,6 +21,18 @@ router.get(
     "/messages/:chatId",
     adaptMiddleware(new AuthenticationFactory()),
     adaptRoute(new GetChatMessagesFactory())
+);
+
+router.get(
+    "/notifications",
+    adaptMiddleware(new AuthenticationFactory()),
+    adaptRoute(new GetChatNotificationsFactory())
+);
+
+router.post(
+    "/notifications/clear",
+    adaptMiddleware(new AuthenticationFactory()),
+    adaptRoute(new ClearChatNotificationsFactory())
 );
 
 export default router

@@ -58,6 +58,7 @@ export class ChatRepository implements ChatRepositoryInterface{
         })
         return chat ? MapToDomain(chat) : null
     }
+    
     async create(infos: CreateChatRepositoryInterface): Promise<Chat> {
         const chatEntity = new ChatEntity()
         const user = await UserEntity.findOneBy({id: infos.created_by})
