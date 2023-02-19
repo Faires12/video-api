@@ -1,6 +1,6 @@
-import { Chat, Message } from "../../../../domain/entities";
-import { CreateMessageRepositoryInterface, GetChatMessagesRepositoryInterface, MessageRepositoryInterface } from "../../../../domain/repositories";
-import { ChatEntity, MessageEntity, UserEntity } from "../entities";
+import { Chat, Message, Video } from "../../../../domain/entities";
+import { CreateMessageRepositoryInterface, EditMessageRepositoryInterface, GetChatMessagesRepositoryInterface, MessageRepositoryInterface } from "../../../../domain/repositories";
+import { ChatEntity, MessageEntity, UserEntity, VideoEntity } from "../entities";
 
 function ChatMapToDomain(chat: ChatEntity) : Chat {
     return {
@@ -20,9 +20,30 @@ function ChatMapToDomain(chat: ChatEntity) : Chat {
     }
 }
 
+function VideoMapToDomain(video: VideoEntity): Video {
+    return {
+      id: video.id,
+      title: video.title,
+      thumbnail: video.thumbnail,
+      path: video.path,
+      created_by: {
+        name: video.created_by.name,
+        email: video.created_by.email,
+        avatar: video.created_by.avatar,
+        subsCount: video.created_by.subsCount,
+      },
+      createdAt: video.createdAt,
+      description: video.description,
+      viewsCount: video.viewsCount,
+      likesCount: video.likesCount,
+      deslikesCount: video.deslikesCount,
+      commentCount: video.commentCount,
+    };
+  }
+
 function MapToDomain(message: MessageEntity): Message{
     return {
-        content: message.content,
+        content: message.content ?? undefined,
         chat: ChatMapToDomain(message.chat),
         created_by: {
             email: message.created_by.email,
@@ -32,11 +53,24 @@ function MapToDomain(message: MessageEntity): Message{
         },
         createdAt: message.createdAt,
         id: message.id,
-        fileRef: message.fileRef
+        fileRef: message.fileRef ?? undefined,
+        videoRef: message.videoRef ? VideoMapToDomain(message.videoRef) : undefined
     }
 }
 
 export class MessageRepository implements MessageRepositoryInterface{
+    async getById(id: number): Promise<Message | null> {
+        const existingMessage = await MessageEntity.findOneBy({id})
+        return existingMessage ? MapToDomain(existingMessage) : null 
+    }
+    async edit(infos: EditMessageRepositoryInterface): Promise<Message> {
+        const existingMessage = await MessageEntity.findOneBy({id: infos.messageId})
+        if(!existingMessage)
+            throw new Error()
+        existingMessage.content = infos.content
+        await existingMessage.save()
+        return existingMessage
+    }
     async getChatMessages(infos: GetChatMessagesRepositoryInterface): Promise<Message[]> {
         const messages = await MessageEntity.find({
             where: {chatId: infos.chatId},
@@ -73,6 +107,10 @@ export class MessageRepository implements MessageRepositoryInterface{
             newMessage.chat = chat
         if(infos.fileRef)
             newMessage.fileRef = infos.fileRef
+        if(infos.videoId){
+            const existingVideo = await VideoEntity.findOneBy({id: infos.videoId})
+            if(existingVideo) newMessage.videoRef = existingVideo
+        }
 
         if(chat){
             chat.lastMessage = new Date()

@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import { Chat, ChatNotification, Message } from "../domain/entities";
 import { HttpRequest } from "../presentation/interfaces/http";
-import { CreateChatFactory, CreateChatNotificationsFactory, CreateMessageFactory, GetLoggedUserDataFactory, GetUserDataByEmailFactory } from "./factories/controllers";
+import { CreateChatFactory, CreateChatNotificationsFactory, CreateMessageFactory, EditMessageFactory, GetLoggedUserDataFactory, GetUserDataByEmailFactory } from "./factories/controllers";
 import { AuthenticationFactory } from "./factories/middlewares";
 
 interface SocketConnection {
@@ -18,6 +18,12 @@ interface NewMessageInfo{
   content: string
   chatId: number
   file?: string
+  videoId?: number
+}
+
+interface EditMessageInfo{
+  content: string
+  messageId: number
 }
 
 interface TypingUser{
@@ -93,13 +99,15 @@ export function Socket(io: Server){
           const request : HttpRequest = {
             body: {
               userId: connectedClients[index].userId,
-              content: info.content,
-              chatId: info.chatId
+              chatId: info.chatId,
             }
           }
-          if(info.file)
-            request.body.file = info.file
+          if(info.content) request.body.content = info.content
+          if(info.file) request.body.file = info.file
+          if(info.videoId) request.body.videoId = info.videoId
+          
           const res = await createMessage.handle(request)
+          console.log(res)
           if(res.statusCode === 200){
             const message = res.body as Message
             if(message.chat){
@@ -145,6 +153,33 @@ export function Socket(io: Server){
             }
           }
         })
+
+        socket.on("edit_message", async (infos: EditMessageInfo) => {
+          const client = connectedClients.find(c => c.socketId === socket.id)
+
+          const editMessageController = new EditMessageFactory().make()
+          const res = await editMessageController.handle({
+            body: {
+              userId: client?.userId,
+              messageId: infos.messageId,
+              content: infos.content
+            }
+          })
+
+          if(res.statusCode === 200){
+            const editedMessage : Message = res.body
+
+            if(editedMessage.chat){
+              for(const user of editedMessage.chat.users){
+                const client = connectedClients.find(c => c.userEmail === user.email &&
+                  c.connectedChat === editedMessage.chat?.id)
+                if(!client)
+                  continue
+                io.to(client.socketId).emit("recieve_edited_message", editedMessage)
+              }
+            }   
+          }
+      })
 
         socket.on("typing", (chat: Chat) => {
           const typingInChat = typingUsers.find(typ => typ.chat.id === chat.id)

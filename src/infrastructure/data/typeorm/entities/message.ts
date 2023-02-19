@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { ChatEntity, UserEntity } from "./";
+import { ChatEntity, UserEntity, VideoEntity } from "./";
 import { AbstractEntity } from "./abstract_entity";
 
 @Entity("tb_message")
@@ -11,7 +11,7 @@ export class MessageEntity extends AbstractEntity{
     @Column({type: 'int', name: 'user_id', nullable: false})
     userId: number
 
-    @Column({type: "varchar", nullable: false})
+    @Column({type: "varchar", nullable: true})
     content: string 
 
     @Column({type: "varchar", nullable: true})
@@ -23,4 +23,11 @@ export class MessageEntity extends AbstractEntity{
 
     @Column({type: 'int', name: 'chat_id', nullable: false})
     chatId: number
+
+    @ManyToOne(() => VideoEntity, (video) => video.messageRefs, {eager: true})
+    @JoinColumn({name: 'video_id'})
+    videoRef: VideoEntity
+
+    @Column({type: 'int', name: 'video_id', nullable: true})
+    videoId: number
 }

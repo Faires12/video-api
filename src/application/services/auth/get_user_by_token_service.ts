@@ -4,7 +4,6 @@ import { GetUserByToken } from "../../../domain/usecases"
 import { HttpException, HttpStatusCode } from "../../../utils/http"
 import { JwtDecrypter } from "../../interfaces"
 
-
 export class GetUserByTokenService implements GetUserByToken {
     constructor(
         private readonly userRepository: UserRepositoryInterface,

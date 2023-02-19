@@ -1,5 +1,5 @@
 import {  Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { CommentEntity, EvaluationEntity, UserEntity, ReportEntity } from "./";
+import { CommentEntity, EvaluationEntity, UserEntity, ReportEntity, MessageEntity } from "./";
 import { AbstractEntity } from "./abstract_entity";
 
 @Entity("tb_video")
@@ -43,4 +43,7 @@ export class VideoEntity extends AbstractEntity{
     
     @OneToMany(() => ReportEntity, (report) => report.video)
     reports: ReportEntity[]
+
+    @OneToMany(() => MessageEntity, (message) => message.videoRef)
+    messageRefs: MessageEntity[]
 }

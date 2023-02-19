@@ -13,13 +13,13 @@ export class CreateChatService implements CreateChat{
     
     async create(infos: CreateChatInterface): Promise<Chat> {
         if(infos.isPersonal && infos.otherUsersEmails.length !== 1)
-            throw new HttpException(HttpStatusCode.NotFound, 'Personal chat can only have 1 other user')
+            throw new HttpException(HttpStatusCode.BadRequest, 'Personal chat can only have 1 other user')
         if(!infos.isPersonal && infos.otherUsersEmails.length < 2)
-            throw new HttpException(HttpStatusCode.NotFound, 'Group chats need to be at least 3 users')
+            throw new HttpException(HttpStatusCode.BadRequest, 'Group chats need to be at least 3 users')
         if(!infos.isPersonal && !infos.groupName)
-            throw new HttpException(HttpStatusCode.NotFound, 'Group chats need to have groupName')
+            throw new HttpException(HttpStatusCode.BadRequest, 'Group chats need to have groupName')
         if(!infos.isPersonal && !infos.groupImage)
-            throw new HttpException(HttpStatusCode.NotFound, 'Group chats need to have groupImage')
+            throw new HttpException(HttpStatusCode.BadRequest, 'Group chats need to have groupImage')
             
         const otherUsers : User[] = []
         for(const userEmail of infos.otherUsersEmails){

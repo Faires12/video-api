@@ -5,6 +5,7 @@ export interface CreateMessageInterface{
     userId: number
     chatId: number
     file?: string
+    videoId?: number
 }
 
 export interface CreateMessage{
