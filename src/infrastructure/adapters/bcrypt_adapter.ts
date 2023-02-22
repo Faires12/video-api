@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt'
 import { Encrypter, HashComparer } from '../../application/interfaces'
 
-
 export class BcryptAdapter implements Encrypter, HashComparer{
     constructor(private readonly salt : number){}
 

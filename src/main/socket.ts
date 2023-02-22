@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
-import { Chat, ChatNotification, Message } from "../domain/entities";
+import { Chat, ChatNotification, Message, Video } from "../domain/entities";
 import { HttpRequest } from "../presentation/interfaces/http";
-import { CreateChatFactory, CreateChatNotificationsFactory, CreateMessageFactory, EditMessageFactory, GetLoggedUserDataFactory, GetUserDataByEmailFactory } from "./factories/controllers";
+import { AddViewFactory, CreateChatFactory, CreateChatNotificationsFactory, CreateMessageFactory, EditMessageFactory, GetLoggedUserDataFactory, GetVideoFactory } from "./factories/controllers";
 import { AuthenticationFactory } from "./factories/middlewares";
 
 interface SocketConnection {
@@ -51,7 +51,80 @@ interface CreateChatInterface {
   groupImage?: string;
 }
 
+interface CheckViewInterface{
+  socketId: string
+  video: Video
+  prevTime: number
+  totalViewed: number
+}
+
+interface PingViewInterface{
+  videoId: number
+  currentTime: number  
+  playbackRate: number
+}
+
+const usersViewing : CheckViewInterface[] = []
+
 export function Socket(io: Server){
+    io.of("/public").on("connection", (socket) => {
+      socket.on("disconnect", () => {
+        for(let i = 0; i < usersViewing.length; i++){
+          if(usersViewing[i].socketId === socket.id)
+            usersViewing.splice(i, 1)
+        }
+      })
+
+      socket.on("begin_video", async (videoId: number, cb: (ok: boolean) => void) => {
+        const getVideo = new GetVideoFactory().make() 
+        const res = await getVideo.handle({
+          params: {
+            id: videoId
+          },
+          body: {}
+        })
+
+        if(res.statusCode === 200 && !usersViewing.find(u => u.socketId === socket.id && u.video.id === videoId)){
+          usersViewing.push({
+            socketId: socket.id,
+            video: res.body,
+            prevTime: 0,
+            totalViewed: 0
+          })
+          cb(true)
+        } else {
+          cb(false)
+        }
+      })
+
+      socket.on("ping_video", async ({videoId, currentTime, playbackRate}: PingViewInterface, cb: (ended: boolean) => void) => {
+        const userView = usersViewing.find(u => u.socketId === socket.id && u.video.id === videoId)
+        if(!userView)
+          return
+        if(currentTime - userView.prevTime >= 0.9*playbackRate && currentTime - userView.prevTime <= 1.1*playbackRate)
+          userView.totalViewed += playbackRate
+        userView.prevTime = currentTime
+
+        if(userView.totalViewed >= userView.video.duration / 2){
+          const addView = new AddViewFactory().make()
+          await addView.handle({
+            body: {
+              videoId: videoId
+            }
+          })
+          cb(true)
+        } else {
+          cb(false)
+        }
+      })
+
+      socket.on("end_video", async (videoId: number) => {
+        const index = usersViewing.findIndex(u => u.socketId === socket.id && u.video.id === videoId)
+        if(index >= 0)
+          usersViewing.splice(index, 1)  
+      })
+    })
+
     io.use(async (socket, next) => {
       const auth = new AuthenticationFactory().make()
       const res = await auth.handle({
@@ -59,7 +132,6 @@ export function Socket(io: Server){
             token: socket.handshake.auth.token
         }
       })
-
       const userData = new GetLoggedUserDataFactory().make()
       const userRes = await userData.handle({
         body: {

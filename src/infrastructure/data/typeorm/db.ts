@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
   port: 5432,
   username: "postgres",
   password: "123",
-  database: "keyframe",
+  database: "keyframe2",
   synchronize: true,
   // logging: true,
   entities: [

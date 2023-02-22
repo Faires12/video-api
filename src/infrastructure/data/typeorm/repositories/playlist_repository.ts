@@ -1,10 +1,32 @@
-import { Playlist } from "../../../../domain/entities";
+import { Playlist, Video } from "../../../../domain/entities";
 import {
   CreatePlaylistInterface,
   ManageVideosInPlaylistInterface,
   PlaylistRepositoryInterface,
 } from "../../../../domain/repositories/playlist_repository";
 import { PlaylistEntity, UserEntity, VideoEntity } from "../entities";
+
+function VideoMapToDomain(video: VideoEntity): Video {
+  return {
+    id: video.id,
+    title: video.title,
+    thumbnail: video.thumbnail,
+    path: video.path,
+    created_by: {
+      name: video.created_by.name,
+      email: video.created_by.email,
+      avatar: video.created_by.avatar,
+      subsCount: video.created_by.subsCount,
+    },
+    createdAt: video.createdAt,
+    description: video.description,
+    viewsCount: video.viewsCount,
+    likesCount: video.likesCount,
+    deslikesCount: video.deslikesCount,
+    commentCount: video.commentCount,
+    duration: video.duration
+  };
+}
 
 export class PlaylistRepository implements PlaylistRepositoryInterface {
   async getByUser(userId: number): Promise<Playlist[]> {
@@ -24,24 +46,7 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
         },
         videos: playlist.videos
           ? playlist.videos.map((video) => {
-              return {
-                id: video.id,
-                title: video.title,
-                thumbnail: video.thumbnail,
-                path: video.path,
-                created_by: {
-                  name: video.created_by.name,
-                  email: video.created_by.email,
-                  avatar: video.created_by.avatar,
-                  subsCount: video.created_by.subsCount,
-                },
-                createdAt: video.createdAt,
-                description: video.description,
-                viewsCount: video.viewsCount,
-                likesCount: video.likesCount,
-                deslikesCount: video.deslikesCount,
-                commentCount: video.commentCount,
-              };
+              return VideoMapToDomain(video)
             })
           : [],
       };
@@ -65,24 +70,7 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
       },
       videos: playlist.videos
         ? playlist.videos.map((video) => {
-            return {
-              id: video.id,
-              title: video.title,
-              thumbnail: video.thumbnail,
-              path: video.path,
-              created_by: {
-                name: video.created_by.name,
-                email: video.created_by.email,
-                avatar: video.created_by.avatar,
-                subsCount: video.created_by.subsCount,
-              },
-              createdAt: video.createdAt,
-              description: video.description,
-              viewsCount: video.viewsCount,
-              likesCount: video.likesCount,
-              deslikesCount: video.deslikesCount,
-              commentCount: video.commentCount,
-            };
+            return VideoMapToDomain(video)
           })
         : [],
     };
@@ -113,24 +101,7 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
       },
       videos: newPlaylist.videos
         ? newPlaylist.videos.map((video) => {
-            return {
-              id: video.id,
-              title: video.title,
-              thumbnail: video.thumbnail,
-              path: video.path,
-              created_by: {
-                name: video.created_by.name,
-                email: video.created_by.email,
-                avatar: video.created_by.avatar,
-                subsCount: video.created_by.subsCount,
-              },
-              createdAt: video.createdAt,
-              description: video.description,
-              viewsCount: video.viewsCount,
-              likesCount: video.likesCount,
-              deslikesCount: video.deslikesCount,
-              commentCount: video.commentCount,
-            };
+            return VideoMapToDomain(video)
           })
         : [],
     };
@@ -141,46 +112,29 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
       relations: ["videos"],
     });
     const video = await VideoEntity.findOneBy({ id: infos.videoId });
-    if (playlist && video) {
-      if (!playlist.videos) playlist.videos = [];
-      playlist.videos.push(video);
-      await playlist.save();
+    
+    if (!playlist || !video) 
+      throw new Error("");
 
-      return {
-        id: playlist.id,
-        title: playlist.title,
-        description: playlist.description,
-        created_by: {
-          name: playlist.created_by.name,
-          email: playlist.created_by.email,
-          avatar: playlist.created_by.avatar,
-        },
-        videos: playlist.videos
-          ? playlist.videos.map((video) => {
-              return {
-                id: video.id,
-                title: video.title,
-                thumbnail: video.thumbnail,
-                path: video.path,
-                created_by: {
-                  name: video.created_by.name,
-                  email: video.created_by.email,
-                  avatar: video.created_by.avatar,
-                  subsCount: video.created_by.subsCount,
-                },
-                createdAt: video.createdAt,
-                description: video.description,
-                viewsCount: video.viewsCount,
-                likesCount: video.likesCount,
-                deslikesCount: video.deslikesCount,
-                commentCount: video.commentCount,
-              };
-            })
-          : [],
-      };
-    }
+    if (!playlist.videos) playlist.videos = [];
+    playlist.videos.push(video);
+    await playlist.save();
 
-    throw new Error("");
+    return {
+      id: playlist.id,
+      title: playlist.title,
+      description: playlist.description,
+      created_by: {
+        name: playlist.created_by.name,
+        email: playlist.created_by.email,
+        avatar: playlist.created_by.avatar,
+      },
+      videos: playlist.videos
+        ? playlist.videos.map((video) => {
+            return VideoMapToDomain(video)
+          })
+        : [],
+    };
   }
 
   async removeVideo(infos: ManageVideosInPlaylistInterface): Promise<Playlist> {
@@ -189,45 +143,28 @@ export class PlaylistRepository implements PlaylistRepositoryInterface {
       relations: ["videos"],
     });
     const video = await VideoEntity.findOneBy({ id: infos.videoId });
-    if (playlist && video) {
-      const i = playlist.videos.findIndex((v) => v.id === infos.videoId);
-      playlist.videos.splice(i, 1);
-      await playlist.save();
 
-      return {
-        id: playlist.id,
-        title: playlist.title,
-        description: playlist.description,
-        created_by: {
-          name: playlist.created_by.name,
-          email: playlist.created_by.email,
-          avatar: playlist.created_by.avatar,
-        },
-        videos: playlist.videos
-          ? playlist.videos.map((video) => {
-              return {
-                id: video.id,
-                title: video.title,
-                thumbnail: video.thumbnail,
-                path: video.path,
-                created_by: {
-                  name: video.created_by.name,
-                  email: video.created_by.email,
-                  avatar: video.created_by.avatar,
-                  subsCount: video.created_by.subsCount,
-                },
-                createdAt: video.createdAt,
-                description: video.description,
-                viewsCount: video.viewsCount,
-                likesCount: video.likesCount,
-                deslikesCount: video.deslikesCount,
-                commentCount: video.commentCount,
-              };
-            })
-          : [],
-      };
-    }
+    if (!playlist || !video) 
+      throw new Error("");
 
-    throw new Error("");
+    const i = playlist.videos.findIndex((v) => v.id === infos.videoId);
+    playlist.videos.splice(i, 1);
+    await playlist.save();
+
+    return {
+      id: playlist.id,
+      title: playlist.title,
+      description: playlist.description,
+      created_by: {
+        name: playlist.created_by.name,
+        email: playlist.created_by.email,
+        avatar: playlist.created_by.avatar,
+      },
+      videos: playlist.videos
+        ? playlist.videos.map((video) => {
+            return VideoMapToDomain(video)
+          })
+        : [],
+    };
   }
 }

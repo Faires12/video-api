@@ -38,6 +38,7 @@ function VideoMapToDomain(video: VideoEntity): Video {
       likesCount: video.likesCount,
       deslikesCount: video.deslikesCount,
       commentCount: video.commentCount,
+      duration: video.duration
     };
   }
 

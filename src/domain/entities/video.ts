@@ -11,4 +11,5 @@ export interface Video extends AbstractEntity{
     deslikesCount?: number
     commentCount?: number
     description?: string
+    duration: number
 }

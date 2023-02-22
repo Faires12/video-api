@@ -6,6 +6,7 @@ export interface CreateVideoInterface {
   path: string;
   thumbnail: string;
   created_by: number;
+  duration: number
 }
 
 export interface ChangeEvaluationsInterface {
@@ -62,4 +63,5 @@ export interface VideoRepositoryInterface {
   delete(id: number): Promise<void>;
   edit(infos: EditVideoRepositoryInterface): Promise<Video>;
   search(infos: SearchVideosRepositoryInterface): Promise<Video[]>
+  addView(videoId: number): Promise<void>
 }

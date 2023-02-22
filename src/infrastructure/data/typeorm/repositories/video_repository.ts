@@ -33,10 +33,19 @@ function MapToDomain(video: VideoEntity): Video {
     likesCount: video.likesCount,
     deslikesCount: video.deslikesCount,
     commentCount: video.commentCount,
+    duration: video.duration
   };
 }
 
 export class VideoRepository implements VideoRepositoryInterface {
+  async addView(videoId: number): Promise<void> {
+    const existingVideo = await VideoEntity.findOneBy({id: videoId})
+    if(existingVideo){
+      existingVideo.viewsCount++
+      await existingVideo.save()
+    }
+  }
+  
   async search(infos: SearchVideosRepositoryInterface): Promise<Video[]> {
     const videos = await VideoEntity.find({
       where: infos.userId && !infos.includeUserVideos
@@ -154,6 +163,7 @@ export class VideoRepository implements VideoRepositoryInterface {
     videoEntity.title = video.title;
     videoEntity.thumbnail = video.thumbnail;
     videoEntity.path = video.path;
+    videoEntity.duration = video.duration
     if (video.description) videoEntity.description = video.description;
     const userEntity = await UserEntity.findOneBy({ id: video.created_by });
     if (userEntity) videoEntity.created_by = userEntity;

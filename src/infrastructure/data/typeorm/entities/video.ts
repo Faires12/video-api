@@ -20,6 +20,9 @@ export class VideoEntity extends AbstractEntity{
     @Column({type: 'int', name: 'user_id', nullable: false})
     userId: number
 
+    @Column({type: 'int', name: 'duration', nullable: false})
+    duration: number
+
     @Column({type: "int", default: 0})
     viewsCount: number 
 
