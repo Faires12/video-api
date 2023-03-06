@@ -8,5 +8,6 @@ export * from './report'
 export * from './message'
 export * from './chat'
 export * from './chat_notification'
+export * from './historic'
 
 

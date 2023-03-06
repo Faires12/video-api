@@ -45,4 +45,6 @@ export * from './user/search_users'
 export * from './chat_notification/create_chat_notifications'
 export * from './chat_notification/get_chat_notifications'
 export * from './chat_notification/clear_chat_notifications'
+export * from './historic/add_video_to_historic'
+export * from './historic/get_historic'
 

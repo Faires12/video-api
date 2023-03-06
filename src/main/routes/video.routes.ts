@@ -19,7 +19,8 @@ import {
   AddCommentEvaluationFactory,
   AddVideoEvaluationFactory,
   GetCommentEvaluationFactory,
-  GetVideoEvaluationFactory
+  GetVideoEvaluationFactory,
+  GetHistoricFactory
 } from "../factories/controllers";
 import { AuthenticationFactory } from "../factories/middlewares";
 
@@ -29,6 +30,12 @@ router.get(
   "/home",
   adaptMiddleware(new AuthenticationFactory(true)),
   adaptRoute(new GetHomeVideosFactory())
+);
+
+router.get(
+  "/historic",
+  adaptMiddleware(new AuthenticationFactory()),
+  adaptRoute(new GetHistoricFactory())
 );
 
 router.post(

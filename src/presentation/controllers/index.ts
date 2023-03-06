@@ -45,3 +45,6 @@ export * from './user/search_users_controller'
 export * from './chat_notification/create_chat_notification_controller'
 export * from './chat_notification/get_chat_notifications_controller'
 export * from './chat_notification/clear_chat_notifications_controller'
+export * from './historic/add_video_to_historic_controller'
+export * from './historic/get_historic_controller'
+

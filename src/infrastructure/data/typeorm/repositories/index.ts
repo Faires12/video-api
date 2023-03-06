@@ -8,3 +8,5 @@ export * from './report_repository'
 export * from './chat_repository'
 export * from './message_repository'
 export * from './chat_notification_repository'
+export * from './historic_repository'
+
